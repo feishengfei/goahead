@@ -33,13 +33,13 @@
 void	formDefineUserMgmt(void);
 #endif
 
-#include "nvram.h"
-#include "nvram_rule.h"
-
-
-
-
-
+#include <bcmnvram.h>
+#include "ezp-lib.h"
+#include	"../management.h"
+#include	"../qos.h"
+#include	"../firewall.h"
+#include	"../wireless.h"
+#include	"../internet.h"
 
 
 
@@ -71,9 +71,9 @@ typedef struct {
 #define RALINK_GPIO_0			0x00000001
 #define RALINK_GPIO_10			0x00000400
 #define RALINK_GPIO_REG_IRQ		0x0A
-//extern void WPSAPPBCStartAll(void);
-//extern void WPS5GAPPBCStartAll(void);
-//extern void WPSSingleTriggerHandler(int); //Steve patched 2010/09/30
+extern void WPSAPPBCStartAll(void);
+extern void WPS5GAPPBCStartAll(void);
+extern void WPSSingleTriggerHandler(int); //Steve patched 2010/09/30
 //
 
 static int 	initWebs();
@@ -122,12 +122,14 @@ int main(int argc, char** argv)
 	}
 
 	//Steve add
-//	if (initSystem() < 0)
-//		return -1;
+	if (initSystem() < 0)
+		return -1;
+
 #ifdef WEBS_SSL_SUPPORT
 	if(usehttps)
 		websSSLOpen(httpsport);
 #endif
+
 /*
  *	Basic event loop. SocketReady returns true when a socket is ready for
  *	service. SocketSelect will block until an event occurs. SocketProcess
@@ -161,7 +163,7 @@ int main(int argc, char** argv)
 	bclose();
 	return 0;
 }
-#if 0
+
 //Steve==================================================================================
 static void goaSigHandler(int signum)
 {
@@ -276,7 +278,7 @@ static int initSystem(void)
 
 	return 0;
 }
-#endif
+
 //Steve
 
 
@@ -432,7 +434,7 @@ system("/usr/sbin/cplange.sh");
 /*
  *	Define our functions
  */
-#if 0 // open it by developer later,add by bingley
+
 	formDefineManagement();
 	formDefineQoS();
 	formDefineFirewall();
@@ -440,7 +442,7 @@ system("/usr/sbin/cplange.sh");
 	formDefineWPS();
 	formDefineInternet();
 	formDefineUtilities();
-#endif
+
 /*
  *	Create the Form handlers for the User Management pages
  */

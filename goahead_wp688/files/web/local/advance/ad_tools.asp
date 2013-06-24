@@ -118,7 +118,7 @@ function to_adtool(F, cmd) {
         }
     }else {
 	     if(cmd == "ping"){
-		   if(checkIpAddr(E(cmd+'cnt'))==false)
+		   if(checkIpAddr(E(cmd+'host'))==false)
 		     return false;
 		 }
          if (isAllNum(E(cmd+'cnt').value) == 0) {

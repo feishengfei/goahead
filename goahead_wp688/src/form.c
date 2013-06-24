@@ -11,8 +11,7 @@
 /********************************** Description *******************************/
 
 /*
- *	This module implements the /goform handler. It emulates(Ä£Äâ,·ÂÕæ) 
-       CGI processing
+ *	This module implements the /goform handler. It emulates CGI processing
  *	but performs this in-process and not as an external process. This enables
  *	a very high performance implementation with easy parsing and decoding 
  *	of query strings and posted data.

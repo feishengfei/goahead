@@ -65,6 +65,29 @@ function isAllNum(str)
 	return 1;
 }
 
+function check127net(str, num)
+{
+       var k = 0;
+	 for (var i=0; i<str.length; i++) {
+		if (str.charAt(i) == '.')
+			k = k+1;
+		continue;
+	}
+	if(k > 3){
+	      alert("Error. IP address is not valid.");
+             return false;
+	}
+	d = atoi(str, num);
+	if (d ==127 )
+	{
+	       alert("Error. IP address is loopback address.");
+		return true;
+	}
+      
+	return false;
+}
+
+
 function checkIpAddr(field, ismask)
 {
 	if (field.value == "") {
@@ -73,7 +96,10 @@ function checkIpAddr(field, ismask)
 		field.focus();
 		return false;
 	}
-
+     
+	if(check127net(field.value,1)==true)
+	   return false;
+	   
 	if (isAllNum(field.value) == 0) {
 		alert('It should be a [0-9] number.');
 		field.value = field.defaultValue;

@@ -49,9 +49,9 @@ DASW	= -DDIGEST_ACCESS_SUPPORT
 
 #Alvin add
 SSLPATCHFILE =../websSSL.o
-SSLINC =../../openssl-1.0.1e/include #openssl header files
+SSLINC =../../../../build_dir/mipsel/openssl-0.9.8i/include #openssl header files
 #openssl static library files
-SSLLIB =../../openssl-1.0.1e/libssl.a ../../openssl-1.0.1e/libcrypto.a
+SSLLIB =../../../../build_dir/mipsel/openssl-0.9.8i/libssl.a ../../../../build_dir/mipsel/openssl-0.9.8i/libcrypto.a
 #add openssl macro compile and designate openssl header files path
 CFLAGS = -DWEBS -DUEMF -DOS="LINUX" -DLINUX -DWEBS_SSL_SUPPORT -DOPENSSL -I$(SSLINC)
 #add end
@@ -64,13 +64,14 @@ DEPEND_FILES	= ../md5_dgst.o ../asp.o ../balloc.o ../base64.o ../cgi.o ../defaul
 				  ../sock.o ../sockGen.o $(SSLPATCHFILE) \
 				  ../security.o ../sym.o ../uemf.o ../url.o ../value.o \
 				  ../md5c.o ../um.o ../umui.o ../websda.o ../emfdb.o \
-				  ../webrom.o ../webs.o ../websuemf.o main.o
+				  ../webrom.o ../webs.o ../websuemf.o ../wireless.o ../wps.o\
+				  ../management.o ../utils.o ../qos.o ../firewall.o ../internet.o main.o
 #CFLAGS	= -DWEBS -DUEMF -DOS="LINUX" -DLINUX $(UMSW) $(DASW) $(SSLSW) $(IFMODSW)
 OTHERS	= -DB_STATS -DB_FILL -DDEBUG
 DEBUG	= -g -Wall
 IFLAGS 	= -I.. 
 LDFLAGS	= $(SSLLIB) $(IFMODLIB)
-LDFLAGS	+= -L../../nvram -lnvram 
+LDFLAGS	+= -L../../ezp-nvram -lnvram -lshared
 #LDFLAGS	+= -L../ezp-nvram
 
 compile: $(NAME)
@@ -159,19 +160,19 @@ clean:
 
 ../websSSL.o:  ../websSSL.c ../websSSL.h ../wsIntrn.h ../ej.h ../ejIntrn.h ../uemf.h
 
+../management.o:  ../management.c ../management.h ../webs.h
 
+../utils.o: ../utils.c ../utils.h ../webs.h
 
+../qos.o: ../qos.h ../utils.h
 
+../firewall.o: ../firewall.c ../webs.h ../firewall.h
 
+../wireless.o: ../wireless.c ../wireless.h ../internet.h ../utils.h ../webs.h
 
+../wps.o: ../wps.c ../wps.h ../utils.h ../webs.h ../internet.h ../wireless.h
 
-
-
-
-
-
-
-
+../internet.o: ../internet.c ../internet.h ../utils.h ../webs.h
 
 main.o:  main.c ../wsIntrn.h ../webs.h ../ej.h ../ejIntrn.h ../uemf.h
 

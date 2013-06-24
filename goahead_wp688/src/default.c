@@ -21,8 +21,8 @@
 /********************************* Includes ***********************************/
 
 #include	"wsIntrn.h"
-#include "nvram.h"
-#include "nvram_rule.h"
+#include 	<bcmnvram.h>
+#include	<ezp-lib.h>
 
 /*********************************** Locals ***********************************/
 

@@ -18,9 +18,8 @@
 
 //Steve add
 #include  <sys/sysinfo.h>
-#include "nvram.h"
-#include "nvram_rule.h"
-
+#include 	<bcmnvram.h>
+#include	<ezp-lib.h>
 
 #include	"wsIntrn.h"
 #include	"um.h"
@@ -68,116 +67,6 @@ int g_Admin_inactivity_timer_stamp=0;
  */
 //2010/04/22 Steve patched base on NBG-419N
 #if 1//Arthur Chow 2008-12-17 : New sub-routine	
-char* prefix2mask(int idx)
-{ 
-    char *mask;
-    switch(idx) //Translate AXIM's netmask to AboCom's UI format
-    {
-        case 0:
-	        mask="0.0.0.0";
-	        break;
-	case 1:
-	        mask="128.0.0.0";
-	        break;
-	case 2:
-	        mask="192.0.0.0";
-	        break;
-	case 3:
-	        mask="224.0.0.0";
-	        break;
-	case 4:
-	        mask="240.0.0.0";
-	        break;
-	case 5:
-	        mask="248.0.0.0";
-	        break;
-	case 6:
-	        mask="252.0.0.0";
-	        break;
-	case 7:
-	        mask="254.0.0.0";
-	        break;    
-        case 8:
-	        mask="255.0.0.0";
-	        break;
-	case 9:
-	        mask="255.128.0.0";
-	        break;
-	case 10:
-	        mask="255.192.0.0";
-	        break;
-	case 11:
-	        mask="255.224.0.0";
-	        break;
-	case 12:
-	        mask="255.240.0.0";
-	        break;
-	case 13:
-	        mask="255.248.0.0";
-	        break;
-	case 14:
-	        mask="255.252.0.0";
-	        break;
-	case 15:
-	        mask="255.254.0.0";
-	        break;
-        case 16:
-	        mask="255.255.0.0";
-	        break;
-	case 17:
-	        mask="255.255.128.0";
-	        break;
-	case 18:
-	        mask="255.255.192.0";
-	        break;
-	case 19:
-	        mask="255.255.224.0";
-	        break;
-	case 20:
-	        mask="255.255.240.0";
-	        break;
-	case 21:
-	        mask="255.255.248.0";
-	        break;
-	case 22:
-	        mask="255.255.252.0";
-	        break;
-	case 23:
-	        mask="255.255.254.0";
-	        break;
-	case 24:
-	        mask="255.255.255.0";
-	        break;
-	case 25:
-	        mask="255.255.255.128";
-	        break;
-	case 26:
-	        mask="255.255.255.192";
-	        break;
-	case 27:
-	        mask="255.255.255.224";
-	        break;
-	case 28:
-	        mask="255.255.255.240";
-	        break;
-	case 29:
-	        mask="255.255.255.248";
-	        break;
-	case 30:
-	        mask="255.255.255.252";
-	        break;
-	case 31:
-	        mask="255.255.255.254";
-	        break;
-	case 32:
-	        mask="255.255.255.255";
-	        break;
-	default:
-	        mask="";
-    }
-          
-    return mask;
-}
 int CheckRootFile(char_t *url)
 {
 	int len=0;
