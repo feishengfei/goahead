@@ -1758,7 +1758,7 @@ function clickwlanguest()
 			<font id="GeneralWirelessSSID">Network Name(SSID) :</font>
 		</td>
 		<td width="150">
-			<input type=text name=ssid size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID1"); %>" />
+			<input type=text name=ssid size=20 maxlength=32 value="11-22-33-44-55-66" />
 		</td>        
 		<td width="*"><input type="checkbox" name=hidessid value="1" />
 			<font id ="GeneralHideSSID1"> Hide</font>
@@ -1780,7 +1780,7 @@ function clickwlanguest()
 	<td width="120">
 		<font id="GeneralWirelessSSID1">Name(SSID1) :</font></td>
 		<td width="150" nowrap >
-		<input type=text name=mssid_1 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID2"); %>" />
+		<input type=text name=mssid_1 size=20 maxlength=32 value="11-22-33-44-55-66" />
 	</td>
 	<td>
 		<input type="checkbox" name=hidemssid_1 value="1" />
@@ -1804,7 +1804,7 @@ function clickwlanguest()
 		<font id="GeneralWirelessSSID2"> Name(SSID2) :</font>
 	</td>
 	<td width="150" nowrap >
-		<input type=text name=mssid_2 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID3"); %>" />
+		<input type=text name=mssid_2 size=20 maxlength=32 value="11-22-33-44-55-66" />
 	</td>
 	<td>
 		<input type="checkbox" name=hidemssid_2 value="1" />
@@ -1828,7 +1828,7 @@ function clickwlanguest()
 	<td width="120">
 		<font id="GeneralWirelessSSID3">Name(SSID3) :</font></td>
 		<td width="150" nowrap >
-		<input type=text name=mssid_3 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID4"); %>" />
+		<input type=text name=mssid_3 size=20 maxlength=32 value="11-22-33-44-55-66" />
 	</td>
 	<td>
 		<input type="checkbox" name=hidemssid_3 value="1" />
@@ -1859,7 +1859,7 @@ function clickwlanguest()
 		<font id="wlanguestIP">IP Address : </font>
 	</td>
 	<td>
-		<input type=text name=wlanguestip size=20 maxlength=20 value="<% getCfgGeneral(1, "WlanGuestIP"); %>" />
+		<input type=text name=wlanguestip size=20 maxlength=20 value="192.168.1.254" />
 	</td>
 	<td></td>
 </tr>
@@ -1876,7 +1876,7 @@ function clickwlanguest()
 		<font id="wlanguestMASK"> IP Subnet Mask : </font>
 	</td>
 	<td>
-		<input type=text name=wlanguestmask size=20 maxlength=20 value="<% getCfgGeneral(1, "WlanGuestMASK"); %>" />
+		<input type=text name=wlanguestmask size=20 maxlength=20 value="11-11-11-11-11-11" />
 	</td>
 </tr>
 </table>
@@ -1903,7 +1903,7 @@ function clickwlanguest()
 		<font id="guetmaxBW">Maximum Bandwidth : </font>
 	</td>
 	<td>
-		<input type=text name=guestmaxbw size=6 maxlength=5 value="<% getCfgGeneral(1, "WlanGuestBWMax"); %>" />
+		<input type=text name=guestmaxbw size=6 maxlength=5 value="100Kbps" />
 		<font id="guetBW_unit">(kbps)</font>
 	</td>
 </tr>
@@ -1919,7 +1919,7 @@ function clickwlanguest()
 	<td id ="GeneralChannelSelect" width="180" nowrap>Channel Selection :</td>
 	<td width="150">
 		<select id="sz11gChannel" name="sz11gChannel" size="1">
-			<% getWlan11gChannelsFreq(); %>
+			getWlan11gChannelsFreq()
 		</select>                        
 	</td>
 	<td width="*">
@@ -1934,7 +1934,7 @@ function clickwlanguest()
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
 	<td id ="GeneralOperatingChannel" width="180" nowrap>Operating Channel :</td>
-	<td width="150"> <% getOpChannleASP(); %>  </td>                      
+	<td width="150"> getOpChannleASP()</td>                      
 	<td width="*">&nbsp;</td>
 </tr>
 </table>
@@ -2338,18 +2338,11 @@ function clickwlanguest()
 <li class="table_button">
 <input type=button value=Apply id="GeneralApply" onclick="submit_apply()" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input type=reset value=Reset id="GeneralReset" onClick="window.location.reload()">
-<input type=hidden name="lanIP" value="<% getCfgGeneral(1, "lan_ipaddr"); %>">
+<input type=hidden name="lanIP" value="192.168.1.29">
 </li>
 </center>
 
 </form>
 </body>
-<script>
-function alert(str)
-{
-	showWebMessage(1, str);
-}
-showWebMessage(<% getWebMessageFlag(); %>, _("<% getWebMessage(); %>"));
-</script> 
 </html>
  
