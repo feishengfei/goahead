@@ -67,8 +67,7 @@
 				<span class="password_word"> :&nbsp</span>
 			</td>
 			<td><span class="green">
-				<select name="langSelection" id="langSelection">
-				</select>
+				<a href="local/advance/wlan.asp">wlan</a>
 				</span>
 			</td>
 			<td>&nbsp;</td>
