@@ -23,7 +23,7 @@ void	formDefineUserMgmt(void);
 
 #include "nvram.h"
 #include <utils.h>  
-#include "shutils.h" 
+//#include "shutils.h" 
 //#include "nvram_ezpacket.h"
 #include "nvram_rule.h"
 #include  <syslog.h>
