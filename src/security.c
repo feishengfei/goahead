@@ -67,7 +67,7 @@ int g_Admin_inactivity_timer_stamp=0;
  *	Determine if this request should be honored
  */
 //2010/04/22 Steve patched base on NBG-419N
-#if 1//Arthur Chow 2008-12-17 : New sub-routine	
+#if 0//Arthur Chow 2008-12-17 : New sub-routine	
 char* prefix2mask(int idx)
 { 
     char *mask;
@@ -178,6 +178,8 @@ char* prefix2mask(int idx)
           
     return mask;
 }
+#endif
+#if 1
 int CheckRootFile(char_t *url)
 {
 	int len=0;

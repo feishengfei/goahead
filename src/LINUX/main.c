@@ -35,7 +35,7 @@ void	formDefineUserMgmt(void);
 
 #include "nvram.h"
 #include "nvram_rule.h"
-
+#include "../management.h"
 
 
 
@@ -432,14 +432,16 @@ system("/usr/sbin/cplange.sh");
 /*
  *	Define our functions
  */
-#if 0 // open it by developer later,add by bingley
+ 
 	formDefineManagement();
+	formDefineUtilities();
+
+#if 0 // open it by developer later,add by bingley
 	formDefineQoS();
 	formDefineFirewall();
 	formDefineWireless();
 	formDefineWPS();
 	formDefineInternet();
-	formDefineUtilities();
 #endif
 /*
  *	Create the Form handlers for the User Management pages
