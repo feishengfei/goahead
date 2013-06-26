@@ -49,11 +49,11 @@ DASW	= -DDIGEST_ACCESS_SUPPORT
 
 #Alvin add
 SSLPATCHFILE =../websSSL.o
-SSLINC =../../../../build_dir/target-powerpc-openwrt-linux-gnuspe/openssl-1.0.1e/include #openssl header files
+SSLINC =../../openssl-1.0.1e/include #openssl header files
 #openssl static library files
-SSLLIB =../../../../build_dir/target-powerpc-openwrt-linux-gnuspe/openssl-1.0.1e/libssl.a ../../../../build_dir/target-powerpc-openwrt-linux-gnuspe/openssl-1.0.1e/libcrypto.a
+SSLLIB =../../openssl-1.0.1e/libssl.a ../../openssl-1.0.1e/libcrypto.a
 #add openssl macro compile and designate openssl header files path
-CFLAGS = -DWEBS -DUEMF -DOS="LINUX" -DLINUX -DWEBS_SSL_SUPPORT -DOPENSSL -I$(SSLINC)
+CFLAGS = -g -DWEBS -DUEMF -DOS="LINUX" -DLINUX -DWEBS_SSL_SUPPORT -DOPENSSL -I$(SSLINC)
 #add end
 
 # Dependencies

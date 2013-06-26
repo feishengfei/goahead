@@ -516,7 +516,7 @@ static int websHomePageHandler(webs_t wp, char_t *urlPrefix, char_t *webDir,
 				websRedirect(wp, T("easy.asp"));
 			else
 		#endif
-				websRedirect(wp, T("wlan.asp"));
+				websRedirect(wp, T("index.asp"));
 		#else
 			websRedirect(wp, T("home.asp"));
 		#endif

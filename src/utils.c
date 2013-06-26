@@ -101,7 +101,7 @@ wfputs(char *buf, FILE * fp)
         return BIO_puts((BIO *) fp, buf);
     else
 #endif
-        printf("fputs started !!!!");
+        printf("fputs started !!!!\n");
 		return fputs(buf, fp);
 }
 
@@ -383,7 +383,7 @@ valid_range(webs_t wp, char *value, struct variable *v)
 	printf("valid range value=%d,start value=%d,end value=%d\n",n,start,end);
 
     if (!is_digit_str(value) || n < start || n > end) {
-		printf("value is not in the range!!!!");
+		printf("value is not in the range!!!!\n");
         return FALSE;
     }
 
@@ -1998,7 +1998,7 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 	}
 	
 	//Steve
-	printf("\n ---> getCfgGeneral(): type = %d & field = %s",type,field);
+	printf("---> getCfgGeneral(): type = %d & field = %s\n",type,field);
 	if (!strcmp(field, "Language")){
 		/* Get the setting of value from AXIMCom's nvram structure into reValue */
 		value = nvram_safe_get("lang");
@@ -3872,7 +3872,7 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 {
 	int type;
 	char_t *field;
-	char *value;
+	char *value = NULL;
 	char TempBuf[32];
 	char buf[TMP_LEN]; //aron add
 //	int ret; //aron add
@@ -3889,7 +3889,7 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 	}
 
     // Tommy for Debug	
-    printf("\n ---> getCfgZero(): type = %d & field = %s",type,field);
+    printf(" ---> getCfgZero(): type = %d & field = %s\n",type,field);
     if(!strcmp(field,"wisp_mode")){
         if (snprintf(device, 16, "wan0_device") >= 16)
             return -1;
@@ -5681,6 +5681,10 @@ printf("enable dhcp *********%s\n",value);
 	}
 	
 	if (1 == type) {
+		if (NULL == value){
+			return websWrite(wp, T("0"));
+		}
+		
 		if (!strcmp(value, "")){
 			return websWrite(wp, T("0"));
 		}
