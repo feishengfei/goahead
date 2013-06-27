@@ -1238,17 +1238,23 @@ static int getRadioStatusASP(int eid, webs_t wp, int argc, char_t **argv)
 static int getRadioStatusASP5G(int eid, webs_t wp, int argc, char_t **argv)
 {
 #if 1	
+printf("__%d:%s\r\n", __LINE__, __FUNCTION__);
 	char *Radio_OFF;
-    	char buf[TMP_LEN]; 
+    	char buf[TMP_LEN]={0}; 
 	 
 	
+printf("__%d:%s\r\n", __LINE__, __FUNCTION__);
 	ezplib_get_attr_val("wl5g_basic_rule", 0, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
+printf("__%d:%s\r\n", __LINE__, __FUNCTION__);
 	
 		   strcpy(Radio_OFF, buf);
+printf("__%d:%s\r\n", __LINE__, __FUNCTION__);
 
 	if (!strcmp(Radio_OFF, "0")){
+printf("__%d:%s\r\n", __LINE__, __FUNCTION__);
 		return websWrite(wp, T("OFF"));		
 	}else{
+printf("__%d:%s\r\n", __LINE__, __FUNCTION__);
 		return websWrite(wp, T("ON"));		
 	}
 #endif

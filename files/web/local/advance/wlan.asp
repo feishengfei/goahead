@@ -27,8 +27,9 @@ var wlan_guest_bw_priority  = <% getCfgZero(1, "WlanGuestBWPriority"); %>;
 
 var bm_en = <% getCfgZero(1, "RL_QoSEnable"); %>;
 
-var uBW = "<% QoSGetInfo("RL_QoSUploadBw"); %>";
-var dBW = "<% QoSGetInfo("RL_QoSDownloadBw"); %>";
+
+var uBW = 1;//TODO
+var dBW = 1;//TODO
 
 var changed = 0;
 var old_MBSSID;
@@ -1039,7 +1040,7 @@ function LoadFields(MBSSID)
 
 	sp_select.options.length = 0;
     
-	wpsenable = <% getWPSModeASP(); %>;
+	wpsenable = 0;//TODO 
 
 	if(wpsenable ==0){
 		// disable WPS
@@ -1744,6 +1745,8 @@ function clickwlanguest()
 </script>
 </head>
 <body onload="initAll()">
+This is wlan.asp
+
 <form method="post" name="security_form" action="/goform/wifiAPGeneral">
 <div id="table">
 <ul>

@@ -1982,7 +1982,7 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 {
 	int type;
 	char_t *field;
-	char *value;
+	char *value=NULL;
 	char TempBuf[32];
         char buf[TMP_LEN], tmp_SSID[TMP_LEN], *p_ssid, *p_SSID; //aron add
 	int ret; //aron add
@@ -3934,6 +3934,7 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 	else if(!strcmp(field, "board_model")){
 		ezplib_get_attr_val("board_model_rule", 0, "bd_model", TempBuf, SHORT_BUF_LEN, EZPLIB_USE_CLI);
 		strcpy(reValue, TempBuf);
+		value = reValue;
 	}
 	else if (!strcmp(field, "OP_Mode")){
 		/* Get the setting of value from AXIMCom's nvram structure into reValue */

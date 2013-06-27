@@ -307,12 +307,6 @@ function MM_showHideLayers() { //v6.0
 		//d.add(11,1,_('RIP'),'/local/advance/rip.asp', _('CONFIGURATION')+' > '+_('Network')+' > '+_('Routing')+' > '+_('RIP'), 'InfoFrame');
 		d.add(9,0,_('Security'),'');
 		d.add(10,9,_('Firewall'),'firewall.asp', _('CONFIGURATION')+' > '+_('Security')+' > '+_('Firewall')+' > '+_('SPI Firewall'), 'InfoFrame');
-		//d.add(15,9,_('Content Filter'),'SCFilter.asp', _('CONFIGURATION')+' > '+_('Security')+' > '+_('Content Filter'), 'InfoFrame');
-		//d.add(16,9,_('OpenDNS'),'opendns.asp', _('CONFIGURATION')+' > '+_('Security')+' > '+_('OpenDNS'), 'InfoFrame');
-		//william add for ipsec
-		//d.add(41,9,_('IPsec'),'vpn_ipsec_general.asp', _('CONFIGURATION')+' > '+_('Security')+' > '+_('IPsec')+' > '+_('General'), 'InfoFrame');
-		//d.add(42,9,_('PPTP Server'),'vpn_pptpd_general.asp', _('CONFIGURATION')+' > '+_('Security')+' > '+_('PPTP Server')+' > '+_('General'), 'InfoFrame');
-		//d.add(43,9,_('VPN Passthrough'),'vpn_passthrough.asp', _('CONFIGURATION')+' > '+_('Security')+' > '+_('VPN Passthrough')+' > '+_('General'), 'InfoFrame');
 
 		d.add(13,0,_('Management'),'');
 		//d.add(14,13,_('Bandwidth Management'),'bm.asp', _('CONFIGURATION')+' > '+_('Management')+' > '+_('Bandwidth Management')+' > '+_('General'), 'InfoFrame');
@@ -1666,6 +1660,8 @@ else if (opmode==7) // WISP + UR
 var current_url=location.href;
 var current_url_len=current_url.length;
 var index=current_url.charAt(current_url_len-1);
+
+
 if ((opmode==0) || (opmode==1)) // AP and Router Mode
 	if(board_type == "0A22")
 	{
@@ -1754,8 +1750,7 @@ current_submenu_index=5;
 onChangeHeadMenu(current_menu_id, current_submenu_index, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WPS'))
 d.s(2);
 }
-else
-if (index==2)
+else if (index==2)
 {
 current_menu_id=8;
 current_submenu_index=1;
