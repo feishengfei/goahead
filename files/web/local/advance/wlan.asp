@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Pragma" content="no-cache">
 <script type="text/javascript" src="/lang/b28n.js"></script>
-<title>.::Welcome to General Platform %>::.</title>
+<title>.::Welcome to <% getCfgGeneral(1, 'SystemName'); %>::.</title>
 <link href="images/inside.css" rel="stylesheet" type="text/css" />
 <link href="images/table.css" rel="stylesheet" type="text/css" />
 
@@ -15,7 +15,6 @@
 td {white-space: nowrap;}
 </style>
 <script language="JavaScript" type="text/javascript">
-/*
 Butterlate.setTextDomain("wireless");
 
 var wirelessmode  = <% getCfgZero(1, "OP_Mode"); %>;
@@ -155,6 +154,20 @@ function checkIpAddrX(field, ismask)
 		field.focus();
 		return false;
 	}
+    /*
+	if (ismask) {
+		if ((!checkRange(field.value, 1, 0, 256)) ||
+				(!checkRange(field.value, 2, 0, 256)) ||
+				(!checkRange(field.value, 3, 0, 256)) ||
+				(!checkRange(field.value, 4, 0, 256)))
+		{
+			alert('IP adress format error.');
+			field.value = field.defaultValue;
+			field.focus();
+			return false;
+		}
+	}
+	*/
 	//aron modify to limit max to 255
 	if (ismask) {
 		if ((!checkRange(field.value, 1, 0, 255)) ||
@@ -382,7 +395,7 @@ function parseAllData(str)
 
 		DefaultWEPKey[i] = wepdefaultkey.split(";",i+1);
 
-		// !!!! IMPORTANT !!!!
+		/* !!!! IMPORTANT !!!!*/
 		if(IEEE8021X[i] == "1")
 			AuthMode[i] = "IEEE8021X";
 
@@ -403,8 +416,7 @@ function checkData()
 	{
 		if(! check_Wep(securitymode) )
 			return false;
-	}
-	else if (securitymode == "WPAPSK" || securitymode == "WPA2PSK" || securitymode == "WPAPSKWPA2PSK" ){
+	}else if (securitymode == "WPAPSK" || securitymode == "WPA2PSK" || securitymode == "WPAPSKWPA2PSK" /* || security_mode == 5 */){
 		var keyvalue = document.security_form.passphrase.value;
 
 		if (keyvalue.length == 0){
@@ -998,6 +1010,11 @@ function submit_apply()
 			alert("Please set value between 64~"+ aaa);
 			return false;
 			}
+			/*
+			if (document.security_form.guestmaxbw.value < 64 || document.security_form.guestmaxbw.value > 32768 ){
+			alert("Please set value between 64~32768");
+			return false;
+			}*/
 		}
 		
 		if ( checkSubnet(document.security_form.wlanguestip.value, document.security_form.wlanguestmask.value, document.security_form.lanIP.value)) {
@@ -1209,6 +1226,9 @@ function selectMBSSIDChanged()
 	MBSSIDChange(selected);
 }
 
+/*
+ * When user select the different SSID, this function would be called.
+ */ 
 function MBSSIDChange(selected)
 {
 	// load wep/wpa/802.1x table for MBSSID[selected]
@@ -1221,6 +1241,7 @@ function MBSSIDChange(selected)
 
 	return true;
 }
+
 
 function delap(mbssid, num)
 {
@@ -1719,15 +1740,12 @@ function clickwlanguest()
 	}
 	parent.adjustMyFrameHeight();
 }
-*/
 
 </script>
 </head>
-<!--<body onload="initAll()">-->
-<body >
+<body onload="initAll()">
 <form method="post" name="security_form" action="/goform/wifiAPGeneral">
 <div id="table">
-
 <ul>
 <li class="table_content">
 <div class="data">
@@ -1746,73 +1764,76 @@ function clickwlanguest()
              
 
 <input type="hidden" name="bssid_num" value="1">
+
 <input type="hidden" name="bssid_num1" value="">
 <input type="hidden" name="bssid_num2" value="">
 <input type="hidden" name="bssid_num3" value="">
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="180" nowrap>
-			<font id="xxx"></font>
-			<font id="GeneralWirelessSSID">Network Name(SSID) :</font>
-		</td>
-		<td width="150">
-			<input type=text name=ssid size=20 maxlength=32 value="11-22-33-44-55-66" />
-		</td>        
-		<td width="*"><input type="checkbox" name=hidessid value="1" />
-			<font id ="GeneralHideSSID1"> Hide</font>
-			<input name="IntraBSS" type="checkbox" value="0" />
-			<font id ="IntraBSS_0"> Enable Intra-BSS Traffic</font> 
-		</td>
-	</tr>
+<tr>
+<td width="180" nowrap>
+<!--<font id="xxx">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>-->
+<font id="xxx"></font>
+<!--
+<font id="GeneralWirelessEnable">Enable</font>
+<input type="checkbox" name=enablessid value="1">
+-->
+<font id="GeneralWirelessSSID">Network Name(SSID) :</font></td>
+<td width="150">
+<input type=text name=ssid size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID1"); %>" />
+</td>        
+<td width="*"><input type="checkbox" name=hidessid value="1" />
+<font id ="GeneralHideSSID1"> Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS" type="checkbox" value="0" />
+<font id ="IntraBSS_0"> Enable Intra-BSS Traffic</font> 
+</td>
+</tr>
 </table>
 </li>                      
 
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="60" nowrap >
-		<input type="checkbox" name=enablessid1 value="1" />
-		<font id="GeneralWirelessEnable1">Enable </font>
-	</td>
-	<td width="120">
-		<font id="GeneralWirelessSSID1">Name(SSID1) :</font></td>
-		<td width="150" nowrap >
-		<input type=text name=mssid_1 size=20 maxlength=32 value="11-22-33-44-55-66" />
-	</td>
-	<td>
-		<input type="checkbox" name=hidemssid_1 value="1" />
-		<font id ="GeneralmSSIDHide1">Hide</font>
-		<!-- Intra-BSS/SSID checkbox -->
-		<input name="IntraBSS1" type="checkbox" value="0" />
-		<font id ="IntraBSS_1"> Enable Intra-BSS Traffic</font> 
-	</td>
-	</tr>
+<tr>
+<td width="60" nowrap >
+<input type="checkbox" name=enablessid1 value="1" />
+<font id="GeneralWirelessEnable1">Enable </font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID1">Name(SSID1) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_1 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID2"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_1 value="1" />
+<font id ="GeneralmSSIDHide1">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS1" type="checkbox" value="0" />
+<font id ="IntraBSS_1"> Enable Intra-BSS Traffic</font> 
+</td>
+</tr>
 </table>
 </li>
                 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="60" nowrap>
-		<input type="checkbox" name=enablessid2 value="1" >
-		<font id="GeneralWirelessEnable2">Enable</font>
-	</td>
-	<td width="120">
-		<font id="GeneralWirelessSSID2"> Name(SSID2) :</font>
-	</td>
-	<td width="150" nowrap >
-		<input type=text name=mssid_2 size=20 maxlength=32 value="11-22-33-44-55-66" />
-	</td>
-	<td>
-		<input type="checkbox" name=hidemssid_2 value="1" />
-		<font id ="GeneralmSSIDHide2">Hide</font>
-		<!-- Intra-BSS/SSID checkbox -->
-		<input name="IntraBSS2" type="checkbox" value="0" />
-		<font id ="IntraBSS_2"> Enable Intra-BSS Traffic</font> 
-	</td>
+<td width="60" nowrap>
+<input type="checkbox" name=enablessid2 value="1" >
+<font id="GeneralWirelessEnable2">Enable</font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID2"> Name(SSID2) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_2 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID3"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_2 value="1" />
+<font id ="GeneralmSSIDHide2">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS2" type="checkbox" value="0" />
+<font id ="IntraBSS_2"> Enable Intra-BSS Traffic</font> 
+</td>
 </tr>
 </table>
 </li>
@@ -1821,29 +1842,25 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="60" nowrap >
-		<input type="checkbox" name=enablessid3 value="1" />
-		<font id="GeneralWirelessEnable3">Enable</font>
-	</td>
-	<td width="120">
-		<font id="GeneralWirelessSSID3">Name(SSID3) :</font></td>
-		<td width="150" nowrap >
-		<input type=text name=mssid_3 size=20 maxlength=32 value="11-22-33-44-55-66" />
-	</td>
-	<td>
-		<input type="checkbox" name=hidemssid_3 value="1" />
-		<font id ="GeneralmSSIDHide3">Hide</font>
-		<!-- Intra-BSS/SSID checkbox -->
-		<input name="IntraBSS3" type="checkbox" value="0" />
-		<font id ="IntraBSS_3"> Enable Intra-BSS Traffic</font> 
-	</td>
+<td width="60" nowrap >
+<input type="checkbox" name=enablessid3 value="1" />
+<font id="GeneralWirelessEnable3">Enable</font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID3">Name(SSID3) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_3 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID4"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_3 value="1" />
+<font id ="GeneralmSSIDHide3">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS3" type="checkbox" value="0" />
+<font id ="IntraBSS_3"> Enable Intra-BSS Traffic</font> 
+</td>
 </tr>
 </table>
 </li>
-
-
 <li></li>
-
 <!-- add WLAN Guest -->
 <span id="div_wlanguest_id" class="off">
 <input type="checkbox" name=wlanguest value="1" onclick="clickwlanguest()"/>
@@ -1855,29 +1872,26 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="180" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<font id="wlanguestIP">IP Address : </font>
-	</td>
-	<td>
-		<input type=text name=wlanguestip size=20 maxlength=20 value="192.168.1.254" />
-	</td>
-	<td></td>
+<td width="180" nowrap>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font id="wlanguestIP">IP Address : </font></td>
+<td>
+<input type=text name=wlanguestip size=20 maxlength=20 value="<% getCfgGeneral(1, "WlanGuestIP"); %>" />
+</td>
+<td></td>
 </tr>
 </table>
 </li>
 </span>
 
-
 <span id="div_wlanguestMASK_id" class="off">
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="180" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<font id="wlanguestMASK"> IP Subnet Mask : </font>
-	</td>
-	<td>
-		<input type=text name=wlanguestmask size=20 maxlength=20 value="11-11-11-11-11-11" />
-	</td>
+<td width="180" nowrap>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font id="wlanguestMASK"> IP Subnet Mask : </font></td>
+<td>
+<input type=text name=wlanguestmask size=20 maxlength=20 value="<% getCfgGeneral(1, "WlanGuestMASK"); %>" />
+</td>
 </tr>
 </table>
 </li>
@@ -1887,25 +1901,42 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="40%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="wlanguestBW" type="checkbox" value="1" />
-		<font id ="Guest_BWControl">Enable Bandwidth Management for Guest WLAN</font> 
-	</td>
+<td width="40%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="wlanguestBW" type="checkbox" value="1" />
+<font id ="Guest_BWControl">Enable Bandwidth Management for Guest WLAN</font> 
+</td>
 </tr>
 </table>
 </li>                
 </span>
 
+<!--<span id="div_guestpriority_id" class="off">
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="180" nowrap>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font id="guestpriority"> Priority : </font></td>
+<td>
+<select name="guest_priority" size="1">
+<option value = 1 id="guestHigh">High</option>
+<option value = 2 id="guestMiddle">Middle</option>
+<option value = 3 id="guestLow">Low</option>
+</select>
+</td>
+</tr>
+</table>
+</li>
+</span>-->
+
 <span id="div_guetmaxBW_id" class="off">
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="180" nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<font id="guetmaxBW">Maximum Bandwidth : </font>
-	</td>
-	<td>
-		<input type=text name=guestmaxbw size=6 maxlength=5 value="100Kbps" />
-		<font id="guetBW_unit">(kbps)</font>
-	</td>
+<td width="180" nowrap>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font id="guetmaxBW">Maximum Bandwidth : </font></td>
+<td>
+<input type=text name=guestmaxbw size=6 maxlength=5 value="<% getCfgGeneral(1, "WlanGuestBWMax"); %>" />
+<font id="guetBW_unit">(kbps)</font>
+</td>
 </tr>
 </table>
 </li>                
@@ -1916,26 +1947,25 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td id ="GeneralChannelSelect" width="180" nowrap>Channel Selection :</td>
-	<td width="150">
-		<select id="sz11gChannel" name="sz11gChannel" size="1">
-			getWlan11gChannelsFreq()
-		</select>                        
-	</td>
-	<td width="*">
-		<input type="checkbox" name="Auto_Channel" value=1 onclick="clickAutoChannel()" />
-		<font id ="GeneralAutoChannelSelect">Auto Channel Selection</font> 
-	</td>
+<td id ="GeneralChannelSelect" width="180" nowrap>Channel Selection :</td>
+<td width="150">
+<select id="sz11gChannel" name="sz11gChannel" size="1">
+<% getWlan11gChannelsFreq(); %>
+</select>                        
+</td>
+<td width="*">
+<input type="checkbox" name="Auto_Channel" value=1 onclick="clickAutoChannel()" />
+<font id ="GeneralAutoChannelSelect">Auto Channel Selection</font> 
+</td>
 </tr>
 </table>
 </li>
-
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td id ="GeneralOperatingChannel" width="180" nowrap>Operating Channel :</td>
-	<td width="150"> getOpChannleASP()</td>                      
-	<td width="*">&nbsp;</td>
+<td id ="GeneralOperatingChannel" width="180" nowrap>Operating Channel :</td>
+<td width="150"> <% getOpChannleASP(); %>  </td>                      
+<td width="*">&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -1944,25 +1974,22 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="40%"><input name="MainIntraBSS" type="checkbox" value="0" />
-		<font id ="Main_IntraBSS">Communication between wireless clients with different SSIDs</font> 
-	</td>
-	<td>&nbsp;</td>
+<td width="40%"><input name="MainIntraBSS" type="checkbox" value="0" />
+<font id ="Main_IntraBSS">Communication between wireless clients with different SSIDs</font> 
+</td>
+<td>&nbsp;</td>
 </tr>
 </table>
 </li>
 
 <span id="div_hide_security_id" class="off">
-
 <li class="title" id="GeneralSecurityTitle">Security</li>
-
 <span id="div_ssidchoice" class="off">                                
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="40%" id="GeneralSSIDChoice">SSID choice</td>
-	<td>
-		<select name="ssidIndex" size="1" onchange="selectMBSSIDChanged()">
+<td width="40%" id="GeneralSSIDChoice">SSID choice</td>
+<td><select name="ssidIndex" size="1" onchange="selectMBSSIDChanged()">
 <!-- ....Javascript will update options.... -->
 </select>
 </td>
@@ -2028,9 +2055,7 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td>
-		<span class="i_note" id="GeneralNote1_1">Note:</span>
-	</td>
+<td><span class="i_note" id="GeneralNote1_1">Note:</span></td>
 </tr>
 </table>
 </li>
@@ -2045,25 +2070,14 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td>
-		<span class="i_note_a" id="GeneralNote1_3">
-			128-bit WEP: Enter 13 ASCII characters or 
-			26 hexadecimal characters ("0-9", "A-F") for each Key (1-4).
-		</span>
-	</td>
+<td><span class="i_note_a" id="GeneralNote1_3">128-bit WEP: Enter 13 ASCII characters or 26 hexadecimal characters ("0-9", "A-F") for each Key (1-4).</span></td>
 </tr>
 </table>
 </li>
-
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td>
-		<span class="i_note_a" id="GeneralNote1_4">
-			(Select one WEP key as an active key to 
-			encrypt wireless data transmission.)
-		</span>
-	</td>
+<td><span class="i_note_a" id="GeneralNote1_4">(Select one WEP key as an active key to encrypt wireless data transmission.)</span></td>
 </tr>
 </table>
 </li>                
@@ -2072,14 +2086,11 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="10%"></td>                    
-	<td width="15%"></td>
-	<td>
-		<input type="radio" name="WEPKey_Code" value="1" />
-		<font id="GeneralWEPASCII">ASCII </font>
-		<input type="radio" name="WEPKey_Code" value="0" />
-		<font id="GeneralWEPHex">Hex</font>
-	</td>
+<td width="10%"></td>                    
+<td width="15%"></td>
+<td>
+<input type="radio" name="WEPKey_Code" value="1" /><font id="GeneralWEPASCII">ASCII </font>
+<input type="radio" name="WEPKey_Code" value="0" /><font id="GeneralWEPHex">Hex</font></td>
 </tr>
 </table>
 </li>
@@ -2107,9 +2118,146 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="10%"></td>                    
-	<td width="15%" id="secureWEPKey3"><input type="radio" name="DefWEPKey" value="3" /><font id="GeneralWEPKEY3"> Key 3</font></td>
-	<td><input name="wep_key_3" id="WEP3" size="28" maxlength="26" value="" onKeyUp="setChange(1)"></td>
+<td width="10%"></td>                    
+<td width="15%" id="secureWEPKey3"><input type="radio" name="DefWEPKey" value="3" /><font id="GeneralWEPKEY3"> Key 3</font></td>
+<td><input name="wep_key_3" id="WEP3" size="28" maxlength="26" value="" onKeyUp="setChange(1)"></td>
+</tr>
+</table>
+</li>
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="10%"></td>                    
+<td width="15%" id="secureWEPKey4"><input type="radio" name="DefWEPKey" value="4" /><font id="GeneralWEPKEY4"> Key 4</font></td>
+<td><input name="wep_key_4" id="WEP4" size="28" maxlength="26" value="" onKeyUp="setChange(1)"></td>
+</tr>
+</table>
+</li>
+</span>
+
+<input id==wep_key128 name=wep_key128 size=26 type=hidden>
+              
+
+<span id="div_wpapsk_compatible" class="off">
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td><input name="wpapsk_compatible" type="checkbox" value=1 />
+<font id="GeneralWPAPSKCompatible">WPA Compatible</font>
+</td>
+</tr>
+</table>
+</li>
+</span>                
+
+<span id="div_wpa_compatible" class="off">
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td><input name="wpa_compatible" type="checkbox" value=1 />
+<font id="GeneralWPACompatible">WPA Compatible</font>
+</td>
+</tr>
+</table>
+</li>
+</span>                
+                
+<span id="wpa_passphrase" class="off">                
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="40%" id="GeneralWPAPSKPreSharedKey">Pre-Shared Key</td>
+<td>
+<input name="passphrase" id="passphrase" size="28" maxlength="64" value="" onKeyUp="setChange(1)">
+</td>
+</tr>
+</table>
+</li>
+</span>
+ 
+<span id="wpa_key_renewal_interval" class="off">                
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="40%" id="GeneralWPAKeyRenewInterval">Group Key Update Timer</td>
+<td>
+<input name="keyRenewalInterval" id="keyRenewalInterval" size="4" maxlength="4" value="3600" onKeyUp="setChange(1)"><font id="GeneralWPAkeyRenewalIntervalUnit"> seconds</font> 
+</td>
+</tr>
+</table>
+</li>
+</span>
+
+
+<span id="wpa_PMK_Cache_Period" class="off">                
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="40%" id="GeneralWPAPMKCachePeriod">PMK Cache Period</td>
+<td>
+<input name="PMKCachePeriod" id="PMKCachePeriod" size="4" maxlength="4" value="" onKeyUp="setChange(1)"><font id="GeneralWPAPMKCachePeriodUnit"> minute</font> 
+</td>
+</tr>
+</table>
+</li>
+</span>
+
+<span id="wpa_preAuthentication" class="off">                
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="40%" id="GeneralWPAPreAuth">Pre-Authentication</td>
+<td>
+<input name="PreAuthentication" id="PreAuthentication" value="0" type="radio" onClick="onPreAuthenticationClick(0)"><font id="GeneralWPAPreAuthDisable">Disable </font>
+<input name="PreAuthentication" id="PreAuthentication" value="1" type="radio" onClick="onPreAuthenticationClick(1)"><font id="GeneralWPAPreAuthEnable">Enable </font>
+</td>
+</tr>
+</table>
+</li>
+</span>                              
+
+
+<!-- IEEE 802.1x WEP  -->
+<span id="div_8021x_wep" class="off">
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="40%" id="GeneralIEEE8021xSettings">IEEE 802.1x Settings</td>
+</tr>
+</table>
+</li>                
+                
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="40%" id="General1XWEP">WEP</td>
+<td>
+<input name="ieee8021x_wep" id="ieee8021x_wep" value="0" type="radio" onClick="onIEEE8021XWEPClick(0)"><font id="General1XWEPDisable">Disable</font>
+<input name="ieee8021x_wep" id="ieee8021x_wep" value="1" type="radio" onClick="onIEEE8021XWEPClick(1)"><font id="General1XWEPEnable">Enable</font>
+</td>
+</tr>
+</table>
+</li>
+</span>                
+
+<!-- Radius Server  -->              
+<span id="div_radius_server" class="off">
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="40%" id="GeneralAuthServer">Authentication Server</td>
+</tr>
+</table>
+</li>
+                                
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="2%">&nbsp;</td>
+<td width="38%" id="GeneralRadiusIPAddr">IP Address </td>
+<td>
+<input name="RadiusServerIP" id="RadiusServerIP" size="16" maxlength="32" value="" onKeyUp="setChange(1)">
+</td>
 </tr>
 </table>
 </li>
@@ -2117,216 +2265,61 @@ function clickwlanguest()
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-	<td width="10%"></td>                    
-	<td width="15%" id="secureWEPKey4">
-		<input type="radio" name="DefWEPKey" value="4" />
-		<font id="GeneralWEPKEY4"> Key 4</font></td>
-	<td>
-		<input name="wep_key_4" id="WEP4" size="28" maxlength="26" value="" onKeyUp="setChange(1)">
-	</td>
+<td width="2%">&nbsp;</td>
+<td width="38%" id="GeneralRadiusPort">Port Number</td>
+<td>
+<input name="RadiusServerPort" id="RadiusServerPort" size="5" maxlength="5" value="" onKeyUp="setChange(1)">
+</td>
+</tr>
+</table>
+</li>
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="2%">&nbsp;</td>
+<td width="38%" id="GeneralRadiusSharedSecret">Shared Secret </td>
+<td>
+<input name="RadiusServerSecret" id="RadiusServerSecret" size="16" maxlength="64" value="" onKeyUp="setChange(1)">
+</td>
+</tr>
+</table>
+</li>
+                
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="2%">&nbsp;</td>
+<td width="38%" id="GeneralRadiusSessionTimeout">Session Timeout </td>
+<td>
+<input name="RadiusServerSessionTimeout" id="RadiusServerSessionTimeout" size="3" maxlength="4" value="0" onKeyUp="setChange(1)">
+</td>
+</tr>
+</table>
+</li>
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="2%">&nbsp;</td>
+<td width="38%" id="GeneralRadiusIdleTimeout">Idle Timeout </td>
+<td>
+<input name="RadiusServerIdleTimeout" id="RadiusServerIdleTimeout" size="3" maxlength="4" value="" onKeyUp="setChange(1)" readonly>
+</td>
 </tr>
 </table>
 </li>
 </span>
 
-
-	<input id==wep_key128 name=wep_key128 size=26 type=hidden>
-              
-
-	<span id="div_wpapsk_compatible" class="off">
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<input name="wpapsk_compatible" type="checkbox" value=1 />
-			<font id="GeneralWPAPSKCompatible">WPA Compatible</font>
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>                
-
-	<span id="div_wpa_compatible" class="off">
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<input name="wpa_compatible" type="checkbox" value=1 />
-			<font id="GeneralWPACompatible">WPA Compatible</font>
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>                
-                
-	<span id="wpa_passphrase" class="off">                
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="40%" id="GeneralWPAPSKPreSharedKey">Pre-Shared Key</td>
-		<td>
-			<input name="passphrase" id="passphrase" size="28" maxlength="64" value="" onKeyUp="setChange(1)">
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>
- 
-	<span id="wpa_key_renewal_interval" class="off">                
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="40%" id="GeneralWPAKeyRenewInterval">Group Key Update Timer</td>
-		<td>
-			<input name="keyRenewalInterval" id="keyRenewalInterval" size="4" maxlength="4" value="3600" onKeyUp="setChange(1)">
-			<font id="GeneralWPAkeyRenewalIntervalUnit"> seconds</font> 
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>
-
-
-	<span id="wpa_PMK_Cache_Period" class="off">                
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="40%" id="GeneralWPAPMKCachePeriod">PMK Cache Period</td>
-		<td>
-			<input name="PMKCachePeriod" id="PMKCachePeriod" size="4" maxlength="4" value="" onKeyUp="setChange(1)">
-			<font id="GeneralWPAPMKCachePeriodUnit"> minute</font> 
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>
-
-	<span id="wpa_preAuthentication" class="off">                
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="40%" id="GeneralWPAPreAuth">Pre-Authentication</td>
-		<td>
-			<input name="PreAuthentication" id="PreAuthentication" value="0" type="radio" onClick="onPreAuthenticationClick(0)">
-			<font id="GeneralWPAPreAuthDisable">Disable </font>
-			<input name="PreAuthentication" id="PreAuthentication" value="1" type="radio" onClick="onPreAuthenticationClick(1)">
-			<font id="GeneralWPAPreAuthEnable">Enable </font>
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>                              
-
-
-	<!-- IEEE 802.1x WEP  -->
-	<span id="div_8021x_wep" class="off">
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="40%" id="GeneralIEEE8021xSettings">IEEE 802.1x Settings</td>
-	</tr>
-	</table>
-	</li>                
-					
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="40%" id="General1XWEP">WEP</td>
-		<td>
-			<input name="ieee8021x_wep" id="ieee8021x_wep" value="0" type="radio" onClick="onIEEE8021XWEPClick(0)">
-			<font id="General1XWEPDisable">Disable</font>
-			<input name="ieee8021x_wep" id="ieee8021x_wep" value="1" type="radio" onClick="onIEEE8021XWEPClick(1)">
-			<font id="General1XWEPEnable">Enable</font>
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>                
-
-	<!-- Radius Server  -->              
-	<span id="div_radius_server" class="off">
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="40%" id="GeneralAuthServer">Authentication Server</td>
-	</tr>
-	</table>
-	</li>
-									
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="2%">&nbsp;</td>
-		<td width="38%" id="GeneralRadiusIPAddr">IP Address </td>
-		<td>
-			<input name="RadiusServerIP" id="RadiusServerIP" size="16" maxlength="32" value="" onKeyUp="setChange(1)">
-		</td>
-	</tr>
-	</table>
-	</li>
-
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="2%">&nbsp;</td>
-		<td width="38%" id="GeneralRadiusPort">Port Number</td>
-		<td>
-			<input name="RadiusServerPort" id="RadiusServerPort" size="5" maxlength="5" value="" onKeyUp="setChange(1)">
-		</td>
-	</tr>
-	</table>
-	</li>
-
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="2%">&nbsp;</td>
-		<td width="38%" id="GeneralRadiusSharedSecret">Shared Secret </td>
-		<td>
-			<input name="RadiusServerSecret" id="RadiusServerSecret" size="16" maxlength="64" value="" onKeyUp="setChange(1)">
-		</td>
-	</tr>
-	</table>
-	</li>
-					
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="2%">&nbsp;</td>
-		<td width="38%" id="GeneralRadiusSessionTimeout">Session Timeout </td>
-		<td>
-			<input name="RadiusServerSessionTimeout" id="RadiusServerSessionTimeout" size="3" maxlength="4" value="0" onKeyUp="setChange(1)">
-		</td>
-	</tr>
-	</table>
-	</li>
-
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="2%">&nbsp;</td>
-		<td width="38%" id="GeneralRadiusIdleTimeout">Idle Timeout </td>
-		<td>
-			<input name="RadiusServerIdleTimeout" id="RadiusServerIdleTimeout" size="3" maxlength="4" value="" onKeyUp="setChange(1)" readonly>
-		</td>
-	</tr>
-	</table>
-	</li>
-	</span>
-
-	<span id="div_note2_id" class="off">
-	<li class="w_text">
-	<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-	<tr>
-		<td>
-			<span id="GeneralNote2" class="i_note">
-				Note: WPA and WPA2 can be configured when WPS disabled
-			</span>
-		</td>
-	</tr>
-	</table>
-	</li>                
-	</span>
+<span id="div_note2_id" class="off">
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td><span id="GeneralNote2" class="i_note">Note: WPA and WPA2 can be configured when WPS disabled</span></td>
+</tr>
+</table>
+</li>                
+</span>
 </span> <!-- span id="div_hide_security_id" class="off> -->
 
 <li></li>
@@ -2338,11 +2331,18 @@ function clickwlanguest()
 <li class="table_button">
 <input type=button value=Apply id="GeneralApply" onclick="submit_apply()" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <input type=reset value=Reset id="GeneralReset" onClick="window.location.reload()">
-<input type=hidden name="lanIP" value="192.168.1.29">
+<input type=hidden name="lanIP" value="<% getCfgGeneral(1, "lan_ipaddr"); %>">
 </li>
 </center>
 
 </form>
 </body>
+<script>
+function alert(str)
+{
+	showWebMessage(1, str);
+}
+showWebMessage(<% getWebMessageFlag(); %>, _("<% getWebMessage(); %>"));
+</script> 
 </html>
  

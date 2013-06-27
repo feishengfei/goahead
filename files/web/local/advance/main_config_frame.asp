@@ -84,6 +84,7 @@ function show_radar()
                 show_div(false,"menu_33_1_radar");
                 }
        }
+
  }
  
 function initTranslation()
@@ -280,20 +281,6 @@ function MM_showHideLayers() { //v6.0
 					d.add(54,1,_('Wireless LAN'),'/local/advance/ur.asp', _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN')+' > '+_('UpLink'), 'InfoFrame');
 				}
 			}
-			/*5G
-			if (board_type != 0 && bridge_mode != 0)
-			{
-			    if (nv_radio_off == "ON"){
-				 if((radar_status == 2) || (radar_status == 1))
-				 {
-				   	d.add(33,1,_('Wireless LAN 5G'),'/local/advance/radar.asp', _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('General'), 'InfoFrame');
-				 }else{
-				   	d.add(33,1,_('Wireless LAN 5G'),'/local/advance/wlan_5g.asp', _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('General'), 'InfoFrame');
-				 }
-			   }else{
-				   d.add(33,1,_('Wireless LAN 5G'),'/local/advance/wlan_5g.asp', _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('General'), 'InfoFrame');
-			   }
-		   }*/
 		}
 		else if (opmode==7){ // WISP + UR
 			d.add(25,1,_('Wireless LAN 2.4G'),'/local/advance/wlan.asp', _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('General'), 'InfoFrame');
@@ -347,13 +334,6 @@ function MM_showHideLayers() { //v6.0
 	</script>
 </div></li></ul> 
   </div></li> 
-<!--   
-  <li class="floor">  <div class="r4"></div>
-      <div class="r3"></div>
-      <div class="r2"></div>
-      <div class="r1"></div>
-	  </li>
--->	  
 	  </ul> <br class="clearfloat" /></div>
 </li></ul> <br class="clearfloat" /></div>
 <div class="contenleft">
@@ -475,14 +455,6 @@ function MM_showHideLayers() { //v6.0
         <li><a target="InfoFrame" href="/local/advance/security.asp" title="Security" onclick="onChangeHeadMenu(4, 2, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('Security'))"><span><script>document.write(_("Security"))</script></span></a></li>
 </span>
 
-<!--
-<span id = "menu_4_3_hightline" class = "off" >
-        <li class="hightline"><a title="MAC Filter"><span><script>document.write(_("MAC Filter"))</script></span></a></li>
-</span>   
-<span id = "menu_4_3" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/mf.asp" title="MAC Filter" onclick="onChangeHeadMenu(4, 3, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('MAC Filter'))"><span><script>document.write(_("MAC Filter"))</script></span></a></li>
-</span>
--->
 <span id = "menu_4_3_hightline" class = "off" >
         <li class="hightline"><a title="Advanced"><span><script>document.write(_("Advanced"))</script></span></a></li>
 </span>    
@@ -495,26 +467,6 @@ function MM_showHideLayers() { //v6.0
 <span id = "menu_4_4" class = "off" >
         <li><a target="InfoFrame" href="/local/advance/qos.asp" title="QoS" onclick="onChangeHeadMenu(4, 4, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('QoS'))"><span><script>document.write(_("QoS"))</script></span></a></li>
 </span> 
-<!--
-<span id = "menu_4_6_hightline" class = "off" >
-        <li class="hightline"><a title="WPS"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span>    
-<span id = "menu_4_6" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps.asp" title="WPS" onclick="onChangeHeadMenu(4, 6, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WPS'))"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span> 
-<span id = "menu_4_7_hightline" class = "off" >
-        <li class="hightline"><a title="WPS Station"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span>    
-<span id = "menu_4_7" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps_station.asp" title="WPS Station" onclick="is_wps_init_page=1; onChangeHeadMenu(4, 7, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WPS Station'))"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span> 
-<span id = "menu_4_8_hightline" class = "off" >
-        <li class="hightline"><a title="Scheduling"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>    
-<span id = "menu_4_8" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/scheduling.asp" title="Scheduling" onclick="onChangeHeadMenu(4, 8, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('Scheduling'))"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>
--->
 
 <span id = "menu_4_5_hightline" class = "off" >
         <li class="hightline"><a title="Universal Repeater"><span><script>document.write(_("Universal Repeater"))</script></span></a></li>
@@ -523,14 +475,6 @@ function MM_showHideLayers() { //v6.0
         <li><a target="InfoFrame" href="/local/advance/apcli.asp" title="Universal Repeater" onclick="onChangeHeadMenu(4, 5, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('Universal Repeater'))"><span><script>document.write(_("Universal Repeater"))</script></span></a></li>
 </span>
 
-<!--
-<span id = "menu_4_10_hightline" class = "off" >
-        <li class="hightline"><a title="WDS"><span><script>document.write(_("WDS"))</script></span></a></li>
-</span>    
-<span id = "menu_4_10" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wds.asp" title="WDS" onclick="onChangeHeadMenu(4, 10, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WDS'))"><span><script>document.write(_("WDS"))</script></span></a></li>
-</span>
--->
 
 <span id = "menu_4_6_hightline" class = "off" >
         <li class="hightline"><a title="Client"><span><script>document.write(_("Client"))</script></span></a></li>
@@ -632,14 +576,6 @@ function MM_showHideLayers() { //v6.0
         <li><a target="InfoFrame" href="vpn_passthrough.asp" title="General" onclick="onChangeHeadMenu(43, 1, _('CONFIGURATION')+' > '+_('Security')+' > '+_('VPN Passthrough')+' > '+_('General'))"><span><script>document.write(_("General"))</script></span></a></li>
 </span>    
 
-<!--
-<span id = "menu_10_3_hightline" class = "off" >
-        <li class="hightline"><a title="SPI"><span><script>document.write(_("SPI"))</script></span></a></li>
-</span>    
-<span id = "menu_10_3" class = "off" >
-        <li><a target="InfoFrame" href="spi.asp" title="SPI" onclick="onChangeHeadMenu(10, 3, _('CONFIGURATION')+' > '+_('Security')+' > '+_('Firewall')+' > '+_('SPI'))"><span><script>document.write(_("SPI"))</script></span></a></li>
-</span>
--->    
 <!-- RIP -->    
 <span id = "menu_11_1_hightline" class = "off" >
         <li class="hightline"><a title="RIP"><span><script>document.write(_("RIP"))</script></span></a></li>
@@ -731,35 +667,6 @@ function MM_showHideLayers() { //v6.0
         <li><a target="InfoFrame" href="/local/advance/qos.asp" title="QoS" onclick="onChangeHeadMenu(20, 5, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('QoS'))"><span><script>document.write(_("QoS"))</script></span></a></li>
 </span> 
 
-<!--
-<span id = "menu_20_6_hightline" class = "off" >
-        <li class="hightline"><a title="WPS"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span>    
-<span id = "menu_20_6" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps.asp" title="WPS" onclick="onChangeHeadMenu(20, 6, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WPS'))"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span> 
-
-<span id = "menu_20_7_hightline" class = "off" >
-        <li class="hightline"><a title="WPS Station"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span>    
-<span id = "menu_20_7" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps_station.asp" title="WPS Station" onclick="is_wps_init_page=1; onChangeHeadMenu(20, 7, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WPS Station'))"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span> 
-
-<span id = "menu_20_8_hightline" class = "off" >
-        <li class="hightline"><a title="Scheduling"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>    
-<span id = "menu_20_8" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/scheduling.asp" title="Scheduling" onclick="onChangeHeadMenu(20, 8, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('Scheduling'))"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>
-
-<span id = "menu_20_9_hightline" class = "off" >
-        <li class="hightline"><a title="WDS"><span><script>document.write(_("WDS"))</script></span></a></li>
-</span>    
-<span id = "menu_20_9" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wds.asp" title="WDS" onclick="onChangeHeadMenu(20, 9, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WDS'))"><span><script>document.write(_("WDS"))</script></span></a></li>
-</span>
--->
 
 <span id = "menu_44_1_hightline" class = "off" >
         <li class="hightline"><a title="DownLink"><span><script>document.write(_("DownLink"))</script></span></a></li>
@@ -871,35 +778,6 @@ function MM_showHideLayers() { //v6.0
         <li><a target="InfoFrame" href="/local/advance/qos_5g.asp" title="QoS" onclick="onChangeHeadMenu(26, 5, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('QoS'))"><span><script>document.write(_("QoS"))</script></span></a></li>
 </span> 
 
-<!--
-<span id = "menu_26_6_hightline" class = "off" >
-        <li class="hightline"><a title="WPS"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span>    
-<span id = "menu_26_6" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps_5g.asp" title="WPS" onclick="onChangeHeadMenu(26, 6, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('WPS'))"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span> 
-
-<span id = "menu_26_7_hightline" class = "off" >
-        <li class="hightline"><a title="WPS Station"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span>    
-<span id = "menu_26_7" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps_station_5g.asp" title="WPS Station" onclick="is_wps_init_page=1; onChangeHeadMenu(26, 7, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('WPS Station'))"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span> 
-
-<span id = "menu_26_8_hightline" class = "off" >
-        <li class="hightline"><a title="Scheduling"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>    
-<span id = "menu_26_8" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/scheduling_5g.asp" title="Scheduling" onclick="onChangeHeadMenu(26, 8, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('Scheduling'))"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>
-
-<span id = "menu_26_9_hightline" class = "off" >
-        <li class="hightline"><a title="WDS"><span><script>document.write(_("WDS"))</script></span></a></li>
-</span>    
-<span id = "menu_26_9" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wds_5g.asp" title="WDS" onclick="onChangeHeadMenu(26, 9, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('WDS'))"><span><script>document.write(_("WDS"))</script></span></a></li>
-</span>
--->
 
 <!-- Client and WISP Mode -->
 <!--2.4G as Wan, 2.4G as Lan-->
@@ -1068,21 +946,8 @@ function MM_showHideLayers() { //v6.0
 <span id = "menu_27_7" class = "off" >
         <li><a target="InfoFrame" href="/local/advance/qos.asp" title="QoS" onclick="onChangeHeadMenu(27, 7, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN')+' > '+_('QoS'))"><span><script>document.write(_("QoS"))</script></span></a></li>
 </span> 
-<!--
-<span id = "menu_21_2_hightline" class = "off" >
-        <li class="hightline"><a title="Advanced"><span><script>document.write(_("Advanced"))</script></span></a></li>
-</span>    
-<span id = "menu_21_2" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wisp_advance.asp" title="Advanced" onclick="onChangeHeadMenu(21, 2, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN')+' > '+_('Advance'))"><span><script>document.write(_("Advanced"))</script></span></a></li>
-</span>
 
-<span id = "menu_21_3_hightline" class = "off" >
-        <li class="hightline"><a title="Site Survey"><span><script>document.write(_("Site Survey"))</script></span></a></li>
-</span>    
-<span id = "menu_21_3" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wisp_site_survey.asp" title="Site Survey" onclick="onChangeHeadMenu(21, 3, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN')+' > '+_('Site Survey'))"><span><script>document.write(_("Site Survey"))</script></span></a></li>
-</span>
--->
+
 <!-- WDS -->
 <span id = "menu_22_1_hightline" class = "off" >
         <li class="hightline"><a title="General"><span><script>document.write(_("General"))</script></span></a></li>
@@ -1257,15 +1122,6 @@ function MM_showHideLayers() { //v6.0
 <span id = "menu_24_2" class = "off" >
         <li><a target="InfoFrame" href="/local/advance/ur_site_waiting.asp" title="Site Survey" onclick="onChangeHeadMenu(24, 2, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN')+' > '+_('Site Survey'))"><span><script>document.write(_("Site Survey"))</script></span></a></li>
 </span>
-<!--
-<span id = "menu_24_3_hightline" class = "off" >
-        <li class="hightline"><a title="MAC Filter"><span><script>document.write(_("MAC Filter"))</script></span></a></li>
-</span>    
-<span id = "menu_24_3" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/mf.asp" title="MAC Filter" onclick="onChangeHeadMenu(24, 3, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('MAC Filter'))"><span><script>document.write(_("MAC Filter"))</script></span></a></li>
-</span>
-
--->
 <span id = "menu_24_3_hightline" class = "off" >
         <li class="hightline"><a title="Advanced"><span><script>document.write(_("Advanced"))</script></span></a></li>
 </span>    
@@ -1279,56 +1135,6 @@ function MM_showHideLayers() { //v6.0
 <span id = "menu_24_4" class = "off" >
         <li><a target="InfoFrame" href="/local/advance/qos.asp" title="QoS" onclick="onChangeHeadMenu(24, 4, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN')+' > '+_('QoS'))"><span><script>document.write(_("QoS"))</script></span></a></li>
 </span>
-<!-- 
-<span id = "menu_24_6_hightline" class = "off" >
-        <li class="hightline"><a title="WPS"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span>    
-<span id = "menu_24_6" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps.asp" title="WPS" onclick="onChangeHeadMenu(24, 6, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WPS'))"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span> 
-<span id = "menu_24_7_hightline" class = "off" >
-        <li class="hightline"><a title="WPS Station"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span>    
-<span id = "menu_24_7" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps_station.asp" title="WPS Station" onclick="is_wps_init_page=1; onChangeHeadMenu(24, 7, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('WPS Station'))"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span> 
-<span id = "menu_24_8_hightline" class = "off" >
-        <li class="hightline"><a title="Scheduling"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>    
-<span id = "menu_24_8" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/scheduling.asp" title="Scheduling" onclick="onChangeHeadMenu(24, 8, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('Scheduling'))"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>
-
-<span id = "menu_24_9_hightline" class = "off" >
-        <li class="hightline"><a title="Universal Repeater"><span><script>document.write(_("Universal Repeater"))</script></span></a></li>
-</span>    
-<span id = "menu_24_9" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/apcli.asp" title="Universal Repeater" onclick="onChangeHeadMenu(24, 9, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN')+' > '+_('Universal Repeater'))"><span><script>document.write(_("Universal Repeater"))</script></span></a></li>
-</span>
-
-<span id = "menu_24_5_hightline" class = "off" >
-        <li class="hightline"><a title="Downlink"><span><script>document.write(_("Downlink"))</script></span></a></li></span>   
-<span id = "menu_24_5" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wlan.asp" title="Downlink" onclick="onChangeHeadMenu(24, 5, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('Downlink'))"><span><script>document.write(_("Downlink"))</script></span></a></li></span>
-
-<span id = "menu_24_6_hightline" class = "off" >
-        <li class="hightline"><a title="Security"><span><script>document.write(_("Security"))</script></span></a></li></span>
-<span id = "menu_24_6" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/security.asp" title="Security" onclick="onChangeHeadMenu(24, 6, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 2.4G')+' > '+_('Security'))"><span><script>document.write(_("Security"))</script></span></a></li></span>
-
-
-<script type="text/javascript">
-if(bridge_mode != 0)
-{
-    //Downlink
-	document.write("<span id = 'menu_24_5_hightline' class = 'off' ><li class='hightline'><a title='Downlink'><span>Downlink</span></a></li></span>");
-	document.write("<span id = 'menu_24_5' class = 'off' ><li><a target='InfoFrame' href='/local/advance/wlan.asp' title='Downlink' onclick='onChangeHeadMenu(24, 5, CONFIGURATION + > + Network + > + Wireless LAN 2.4G + >  + Downlink)'><span>Downlink</span></a></li></span>");
-    //security
-	document.write("<span id = 'menu_24_6_hightline' class = 'off' ><li class='hightline'><a title='Security'><span>Security</span></a></li></span>");
-	document.write("<span id = 'menu_24_6' class = 'off' ><li><a target='InfoFrame' href='/local/advance/security.asp' title='Security' onclick='onChangeHeadMenu(24, 6, _(CONFIGURATION) + > + _(Network) + > + _(Wireless LAN 2.4G) + > + _(Security))'><span>Security</span></a></li></span>");
-}
-</script>
--->
 
 <span id = "menu_54_1_hightline" class = "off" >
         <li class="hightline"><a title="UpLink"><span><script>document.write(_("UpLink"))</script></span></a></li>
@@ -1504,26 +1310,6 @@ if(bridge_mode != 0)
 <span id = "menu_33_5" class = "off" >
         <li><a target="InfoFrame" href="/local/advance/qos_5g.asp" title="QoS" onclick="onChangeHeadMenu(33, 5, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('QoS'))"><span><script>document.write(_("QoS"))</script></span></a></li>
 </span>
-<!-- 
-<span id = "menu_33_6_hightline" class = "off" >
-        <li class="hightline"><a title="WPS"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span>    
-<span id = "menu_33_6" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps_5g.asp" title="WPS" onclick="onChangeHeadMenu(33, 6, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('WPS'))"><span><script>document.write(_("WPS"))</script></span></a></li>
-</span> 
-<span id = "menu_33_7_hightline" class = "off" >
-        <li class="hightline"><a title="WPS Station"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span>    
-<span id = "menu_33_7" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/wps_station_5g.asp" title="WPS Station" onclick="is_wps_init_page=1; onChangeHeadMenu(33, 7, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('WPS Station'))"><span><script>document.write(_("WPS Station"))</script></span></a></li>
-</span> 
-<span id = "menu_33_8_hightline" class = "off" >
-        <li class="hightline"><a title="Scheduling"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>    
-<span id = "menu_33_8" class = "off" >
-        <li><a target="InfoFrame" href="/local/advance/scheduling_5g.asp" title="Scheduling" onclick="onChangeHeadMenu(33, 8, _('CONFIGURATION')+' > '+_('Network')+' > '+_('Wireless LAN 5G')+' > '+_('Scheduling'))"><span><script>document.write(_("Scheduling"))</script></span></a></li>
-</span>
--->
 <span id = "menu_33_6_hightline" class = "off" >
         <li class="hightline"><a title="Universal Repeater"><span><script>document.write(_("Universal Repeater"))</script></span></a></li>
 </span>    
