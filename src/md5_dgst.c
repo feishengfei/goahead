@@ -66,7 +66,7 @@
 #include <sys/types.h>
 //#include "md5.h"
 
-char *MD5_version="MD5 part of SSLeay 0.8.1b 29-Jun-1998";
+char *_MD5_version="MD5 part of SSLeay 0.8.1b 29-Jun-1998";
 
 /* Implemented from RFC1321 The MD5 Message-Digest Algorithm
  */
@@ -82,7 +82,7 @@ static void md5_block(MD5_CTX *c, unsigned long *p);
 static void md5_block();
 #endif
 
-void MD5_Init(c)
+void _MD5_Init(c)
 MD5_CTX *c;
 {
 	c->A=INIT_DATA_A;
@@ -94,7 +94,7 @@ MD5_CTX *c;
 	c->num=0;
 }
 
-void MD5_Update(c, data, len)
+void _MD5_Update(c, data, len)
 MD5_CTX *c;
 register unsigned char *data;
 unsigned long len;
@@ -299,7 +299,7 @@ register ULONG *X;
 	c->D+=D&0xffffffffL;
 }
 
-void MD5_Final(md, c)
+void _MD5_Final(md, c)
 unsigned char *md;
 MD5_CTX *c;
 {
@@ -416,9 +416,9 @@ void Gen128BitsKey(u_char *genkey, char *keystr)
         Tempbuf[i] = keystr[j++];
     }
 
-    MD5_Init(&ctx);
-    MD5_Update(&ctx, Tempbuf, sizeof Tempbuf);
-    MD5_Final(Tempbuf, &ctx);
+    _MD5_Init(&ctx);
+    _MD5_Update(&ctx, Tempbuf, sizeof Tempbuf);
+    _MD5_Final(Tempbuf, &ctx);
 
     memcpy(genkey, Tempbuf, 20);
     for(i = 0; i < 13; i++) {

@@ -435,11 +435,11 @@ system("/usr/sbin/cplange.sh");
  
 	formDefineManagement();
 	formDefineUtilities();
+	formDefineWireless();
 
 #if 0 // open it by developer later,add by bingley
 	formDefineQoS();
 	formDefineFirewall();
-	formDefineWireless();
 	formDefineWPS();
 	formDefineInternet();
 #endif

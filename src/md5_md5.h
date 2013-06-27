@@ -79,9 +79,9 @@ typedef struct MD5state_st
 	} MD5_CTX;
 
 #ifndef NOPROTO
-void MD5_Init(MD5_CTX *c);
-void MD5_Update(MD5_CTX *c, unsigned char *data, unsigned long len);
-void MD5_Final(unsigned char *md, MD5_CTX *c);
+void _MD5_Init(MD5_CTX *c);
+void _MD5_Update(MD5_CTX *c, unsigned char *data, unsigned long len);
+void _MD5_Final(unsigned char *md, MD5_CTX *c);
 unsigned char *MD5(unsigned char *d, unsigned long n, unsigned char *md);
 #else
 void MD5_Init();

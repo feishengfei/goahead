@@ -64,7 +64,7 @@ DEPEND_FILES	= ../md5_dgst.o ../asp.o ../balloc.o ../base64.o ../cgi.o ../defaul
 				  ../sock.o ../sockGen.o $(SSLPATCHFILE) \
 				  ../security.o ../sym.o ../uemf.o ../url.o ../value.o \
 				  ../md5c.o ../um.o ../umui.o ../websda.o ../emfdb.o \
-				  ../webrom.o ../webs.o ../websuemf.o ../management.o ../utils.o main.o
+				  ../webrom.o ../webs.o ../websuemf.o ../wireless.o ../management.o ../utils.o main.o
 #CFLAGS	= -DWEBS -DUEMF -DOS="LINUX" -DLINUX $(UMSW) $(DASW) $(SSLSW) $(IFMODSW)
 OTHERS	= -DB_STATS -DB_FILL -DDEBUG
 DEBUG	= -g -Wall
@@ -164,6 +164,7 @@ clean:
 ../utils.o: ../utils.c ../utils.h ../webs.h
 
 
+../wireless.o: ../wireless.c ../wireless.h ../internet.h ../utils.h ../webs.h
 
 
 
