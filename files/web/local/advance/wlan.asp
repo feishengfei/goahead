@@ -404,6 +404,44 @@ function parseAllData(str)
 	}
 }
 
+function Channel_BandWidth_onClick()
+{
+
+	if (document.security_form.n_bandwidth[0].checked == true)
+	{
+		show_div(false, "div_extension_channel");	
+		document.security_form.n_extcha.disabled = true;
+		
+	}
+	else
+	{
+		show_div(true, "div_extension_channel");	
+		document.security_form.n_extcha.disabled = false;
+	}
+
+	parent.adjustMyFrameHeight();
+}
+
+function wirelessModeChange()
+{
+	show_div(false, "div_ht_phy_1_3");
+	show_div(false, "div_extension_channel");
+	show_div(false, "div_networkmode_id");
+
+	
+	if (wirelessmode == 3){ // WDS Mode
+		show_div(false, "div_ht_phy_1_3");
+		show_div(false, "div_extension_channel");
+	}else{
+		show_div(true, "div_ht_phy_1_3");
+		show_div(true, "div_extension_channel");
+	    show_div(true, "div_networkmode_id");
+	}
+
+	Channel_BandWidth_onClick();
+	parent.adjustMyFrameHeight();
+}
+
 function checkData()
 {
 
@@ -842,7 +880,7 @@ function check_Wep(securitymode)
 }
 
 function check_same_ssid(){
-      for (var i = 1; i < 4; i++){
+      for (var i = 1; i < 9; i++){
 		if (eval("document.security_form.mssid_"+i).value != ""){
 			if (i == 1){
 				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_1).value ){
@@ -854,15 +892,117 @@ function check_same_ssid(){
 				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_3).value ){
 					return false;	
 				}	
-			}else if (i == 2){
+				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_4).value ){
+					return false;	
+				}	
+				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_5).value ){
+					return false;	
+				}	
+				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_6).value ){
+					return false;	
+				}	
+				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_7).value ){
+					return false;	
+				}	
+				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_8).value ){
+					return false;	
+				}	
+			}
+			else if (i == 2){
 				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_2).value ){
 					return false;	
 				}
 				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_3).value ){
 					return false;	
 				}			
-			}else if (i == 3){
+				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_4).value ){
+					return false;	
+				}			
+				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_5).value ){
+					return false;	
+				}			
+				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_6).value ){
+					return false;	
+				}			
+				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_7).value ){
+					return false;	
+				}			
+				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_8).value ){
+					return false;	
+				}			
+			}
+			else if (i == 3){
 				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_3).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_4).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_5).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_6).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_7).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_8).value ){
+					return false;	
+				}
+			}
+			else if (i == 4){
+				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_4).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_5).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_6).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_7).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_8).value ){
+					return false;	
+				}
+			}
+			else if (i == 5){
+				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_5).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_6).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_7).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_8).value ){
+					return false;	
+				}
+			}
+			else if (i == 6){
+				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_6).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_7).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_8).value ){
+					return false;	
+				}
+			}
+			else if (i == 7){
+				if (eval(document.security_form.mssid_6).value == eval(document.security_form.mssid_7).value ){
+					return false;	
+				}
+				if (eval(document.security_form.mssid_6).value == eval(document.security_form.mssid_8).value ){
+					return false;	
+				}
+			}
+			else if (i == 8){
+				if (eval(document.security_form.mssid_7).value == eval(document.security_form.mssid_8).value ){
 					return false;	
 				}
 			}
@@ -882,7 +1022,12 @@ function submit_apply()
 	
 	if (((document.security_form.mssid_1.value == "") && (document.security_form.hidemssid_1.checked == true)) ||
 	    ((document.security_form.mssid_2.value == "") && (document.security_form.hidemssid_2.checked == true)) ||
-	    ((document.security_form.mssid_3.value == "") && (document.security_form.hidemssid_3.checked == true)) 
+	    ((document.security_form.mssid_3.value == "") && (document.security_form.hidemssid_3.checked == true)) ||
+	    ((document.security_form.mssid_4.value == "") && (document.security_form.hidemssid_4.checked == true)) ||
+	    ((document.security_form.mssid_5.value == "") && (document.security_form.hidemssid_5.checked == true)) ||
+	    ((document.security_form.mssid_6.value == "") && (document.security_form.hidemssid_6.checked == true)) ||
+	    ((document.security_form.mssid_7.value == "") && (document.security_form.hidemssid_7.checked == true)) ||
+	    ((document.security_form.mssid_8.value == "") && (document.security_form.hidemssid_8.checked == true)) 
 		 ){
 		alert("SSID field cannot empty when you select hide function");
 		return false;
@@ -890,7 +1035,12 @@ function submit_apply()
 		
 	if (((document.security_form.mssid_1.value == "") && (document.security_form.IntraBSS1.checked == true)) ||
 	    ((document.security_form.mssid_2.value == "") && (document.security_form.IntraBSS2.checked == true)) ||
-	    ((document.security_form.mssid_3.value == "") && (document.security_form.IntraBSS3.checked == true)) 
+	    ((document.security_form.mssid_3.value == "") && (document.security_form.IntraBSS3.checked == true)) ||
+	    ((document.security_form.mssid_4.value == "") && (document.security_form.IntraBSS4.checked == true)) ||
+	    ((document.security_form.mssid_5.value == "") && (document.security_form.IntraBSS5.checked == true)) ||
+	    ((document.security_form.mssid_6.value == "") && (document.security_form.IntraBSS6.checked == true)) ||
+	    ((document.security_form.mssid_7.value == "") && (document.security_form.IntraBSS7.checked == true)) ||
+	    ((document.security_form.mssid_8.value == "") && (document.security_form.IntraBSS8.checked == true))
 		 ){
 		alert("SSID field cannot empty");
 		return false;
@@ -916,6 +1066,26 @@ function submit_apply()
 		return false;
 	}
 	if(checkInjection(document.security_form.mssid_3.value) == false){
+		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
+		return false;
+	}	
+	if(checkInjection(document.security_form.mssid_4.value) == false){
+		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
+		return false;
+	}	
+	if(checkInjection(document.security_form.mssid_5.value) == false){
+		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
+		return false;
+	}	
+	if(checkInjection(document.security_form.mssid_6.value) == false){
+		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
+		return false;
+	}	
+	if(checkInjection(document.security_form.mssid_7.value) == false){
+		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
+		return false;
+	}	
+	if(checkInjection(document.security_form.mssid_8.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}	
@@ -958,7 +1128,41 @@ function submit_apply()
 	else
 		document.security_form.bssid_num3.value = "1";	
 
-	if((document.security_form.ssid.value == "") || (document.security_form.mssid_1.value == "") || (document.security_form.mssid_2.value == "") || (document.security_form.mssid_3.value == "")){
+	if(document.security_form.mssid_4.value == "")
+		document.security_form.bssid_num4.value = "0";
+	else
+		document.security_form.bssid_num4.value = "1";	
+
+	if(document.security_form.mssid_5.value == "")
+		document.security_form.bssid_num5.value = "0";
+	else
+		document.security_form.bssid_num5.value = "1";	
+
+	if(document.security_form.mssid_6.value == "")
+		document.security_form.bssid_num6.value = "0";
+	else
+		document.security_form.bssid_num6.value = "1";	
+
+	if(document.security_form.mssid_7.value == "")
+		document.security_form.bssid_num7.value = "0";
+	else
+		document.security_form.bssid_num7.value = "1";	
+
+	if(document.security_form.mssid_8.value == "")
+		document.security_form.bssid_num8.value = "0";
+	else
+		document.security_form.bssid_num8.value = "1";	
+
+	if(	(document.security_form.ssid.value == "") || 
+		(document.security_form.mssid_1.value == "") || 
+		(document.security_form.mssid_2.value == "") || 
+		(document.security_form.mssid_3.value == "") ||
+		(document.security_form.mssid_4.value == "") ||
+		(document.security_form.mssid_5.value == "") ||
+		(document.security_form.mssid_6.value == "") ||
+		(document.security_form.mssid_7.value == "") ||
+		(document.security_form.mssid_8.value == "") 
+	){
 		alert("Please enter SSID!");
 		return false;
 	}
@@ -1280,9 +1484,18 @@ function initTranslation()
 	e.innerHTML = _("general mssid hide");
 	e = document.getElementById("GeneralmSSIDHide8");
 	e.innerHTML = _("general mssid hide");
+
+	e = document.getElementById("AdvanceNetMode");
+	e.innerHTML = _("advance net mode");
+
+	e = document.getElementById("AdvanceHTChannelBW");
+	e.innerHTML = _("advance ht channelbw");
 	
 	e = document.getElementById("GeneralChannelSelect");
 	e.innerHTML = _("general channel select");
+
+	e = document.getElementById("AdvanceHTExtChannel");
+	e.innerHTML = _("advance ht extchannel");
 	
 	e = document.getElementById("GeneralAutoChannelSelect");
 	e.innerHTML = _("general autochannel select");
@@ -1537,8 +1750,28 @@ function initAll()
 	var broadcastssidEnable8  = '<% getCfgZero(1, "HideSSID8"); %>';
 	var nv_channel = <% getCfgZero(1, "Channel"); %>;
 	var MainIntra_BSS = "<% getCfgZero(1, "MainIntra_BSS"); %>";
-
 	var nv_radio_off = "<% getRadioStatusASP(); %>";
+	var PhyMode  = '<% getCfgZero(1, "WirelessMode"); %>';
+	var ht_bw = '<% getCfgZero(1, "HT_BW"); %>';
+
+	// HT BW
+	if (1*ht_bw == 0)
+	{
+		document.security_form.n_bandwidth[0].checked = true;
+		show_div(false, "div_extension_channel");		
+		document.security_form.n_extcha.disabled = true;
+	}
+	else
+	{
+		document.security_form.n_bandwidth[1].checked = true;
+		show_div(true, "div_extension_channel");		
+		document.security_form.n_extcha.disabled = false;
+	}
+
+	PhyMode = 1*PhyMode;
+	if (PhyMode == 9)
+		document.security_form.wirelessmode.options.selectedIndex = 0;
+
 	var t = document.getElementById("GeneralRadioStatus");		
 	if (nv_radio_off == "ON")
 		t.innerHTML = _("general on");
@@ -1689,6 +1922,7 @@ function initAll()
 		document.security_form.MainIntraBSS.checked = false;
 	}
 
+
 	if (nv_channel == 0){
 		document.security_form.Auto_Channel.checked = true;
 		document.security_form.sz11gChannel.disabled = true;
@@ -1716,7 +1950,8 @@ function initAll()
 		document.security_form.wlanguestBW.checked = true;		
 		
 	//document.security_form.guest_priority.selectedIndex = wlan_guest_bw_priority - 1;
-		
+	
+	//route mode
 	if (wirelessmode == 0){
 		show_div(false, "div_wlanguest_id");
 		if (wlan_guest_en == 1){
@@ -1734,7 +1969,8 @@ function initAll()
 			//show_div(false, "div_guestpriority_id");
 			show_div(false, "div_guetmaxBW_id");
 		}
-	}else{
+	}
+	else{
 		show_div(false, "div_wlanguest_id");
 		
 		show_div(false, "div_wlanguestIP_id");
@@ -1747,6 +1983,8 @@ function initAll()
 	show_div(true, "div_ssidchoice");	
 
 	show_div(true, "div_note2_id");
+
+	wirelessModeChange();
 	
 	makeRequest("/goform/wirelessGetSecurity", "n/a", securityHandler);
 	parent.adjustMyFrameHeight();
@@ -2098,6 +2336,7 @@ function clickwlanguest()
 </li>
 
 
+
 <li></li>
 <!-- add WLAN Guest -->
 <span id="div_wlanguest_id" class="off">
@@ -2180,24 +2419,70 @@ function clickwlanguest()
 </li>                
 </span>
              
-<!-- add WLAN Guest(End) -->
+<span id="div_networkmode_id"  class='off'>
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr> 
+<td id="AdvanceNetMode" width="180" nowrap>Network Mode :</td>
+<td width="150">
+<select name="wirelessmode" id="wirelessmode" size="1" onChange="wirelessModeChange()" >
+<option value=9>11b/g/n mixed mode</option>       
+</select>
+</td>
+<td width="*">&nbsp;</td>
+</tr>
+</table>
+</li>
+</span>
+
+<span id="div_ht_phy_1_3" class="off">  
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"> 
+<tr>
+<td id="AdvanceHTChannelBW" width="180" nowrap>Channel BandWidth :</td>
+<td width="150">
+<input type=radio id=n_bandwidth_0 name=n_bandwidth value="0" onClick="Channel_BandWidth_onClick()" checked>20&nbsp;
+<input type=radio id=n_bandwidth_1 name=n_bandwidth value="1" onClick="Channel_BandWidth_onClick()">20/40
+</td>
+<td width="*">&nbsp;</td>
+</tr>
+</table>
+</li>         
+</span>  
                 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
 <td id ="GeneralChannelSelect" width="180" nowrap>Channel Selection :</td>
 <td width="150">
-<select id="sz11gChannel" name="sz11gChannel" size="1">
-<% getWlan11gChannelsFreq(); %>
-</select>                        
+	<select id="sz11gChannel" name="sz11gChannel" size="1">
+	<% getWlan11gChannelsFreq(); %>
+	</select>                        
 </td>
 <td width="*">
-<input type="checkbox" name="Auto_Channel" value=1 onclick="clickAutoChannel()" />
-<font id ="GeneralAutoChannelSelect">Auto Channel Selection</font> 
+	<input type="checkbox" name="Auto_Channel" value=1 onclick="clickAutoChannel()" />
+	<font id ="GeneralAutoChannelSelect">Auto Channel Selection</font> 
 </td>
 </tr>
 </table>
 </li>
+
+<span id="div_extension_channel" class="off">
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"> 
+<tr>
+<td id="AdvanceHTExtChannel" width="180" nowrap>Extension Channel :</td>
+<td width="150">
+	<select id="n_extcha" name="n_extcha" size="1">
+	<% getWlan11gExtChannelsFreq(); %>
+	</select>
+</td>
+<td width="*">&nbsp;</td>
+</tr>
+</table>
+</li> 
+</span>
+
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
