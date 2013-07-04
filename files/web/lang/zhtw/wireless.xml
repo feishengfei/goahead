@@ -403,6 +403,11 @@
 	<message msgid="general wireless ssid1" msgstr="網路名稱 (SSID1)："/>
 	<message msgid="general wireless ssid2" msgstr="網路名稱 (SSID2)："/>
 	<message msgid="general wireless ssid3" msgstr="網路名稱 (SSID3)："/>
+	<message msgid="general wireless ssid4" msgstr="網路名稱 (SSID4)："/>
+	<message msgid="general wireless ssid5" msgstr="網路名稱 (SSID5)："/>
+	<message msgid="general wireless ssid6" msgstr="網路名稱 (SSID6)："/>
+	<message msgid="general wireless ssid7" msgstr="網路名稱 (SSID7)："/>
+	<message msgid="general wireless ssid8" msgstr="網路名稱 (SSID8)："/>
 	<message msgid="main advance intra bss" msgstr="不同 SSID 的無線用戶端通訊"/>
 	<message msgid="channel selection" msgstr="通道選擇"/>
 	<message msgid="encryption type" msgstr="加密方式"/>

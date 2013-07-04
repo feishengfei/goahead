@@ -391,6 +391,11 @@
 	<message msgid="general wireless ssid1" msgstr="Nombre de la red (SSID1):"/>
 	<message msgid="general wireless ssid2" msgstr="Nombre de la red (SSID2):"/>
 	<message msgid="general wireless ssid3" msgstr="Nombre de la red (SSID3):"/>
+	<message msgid="general wireless ssid4" msgstr="Nombre de la red (SSID4):"/>
+	<message msgid="general wireless ssid5" msgstr="Nombre de la red (SSID5):"/>
+	<message msgid="general wireless ssid6" msgstr="Nombre de la red (SSID6):"/>
+	<message msgid="general wireless ssid7" msgstr="Nombre de la red (SSID7):"/>
+	<message msgid="general wireless ssid8" msgstr="Nombre de la red (SSID8):"/>
 	<message msgid="main advance intra bss" msgstr="Comunicación entre clientes inalámbricos con diferentes SSIDs"/>
 	<message msgid="channel selection" msgstr="Selección del canal"/>
 	<message msgid="encryption type" msgstr="Tipo de cifrado"/>

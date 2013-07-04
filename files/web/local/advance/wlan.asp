@@ -1266,11 +1266,19 @@ function initTranslation()
 	
 	e = document.getElementById("GeneralmSSIDHide1");
 	e.innerHTML = _("general mssid hide");
-	
 	e = document.getElementById("GeneralmSSIDHide2");
 	e.innerHTML = _("general mssid hide");
-	
 	e = document.getElementById("GeneralmSSIDHide3");
+	e.innerHTML = _("general mssid hide");
+	e = document.getElementById("GeneralmSSIDHide4");
+	e.innerHTML = _("general mssid hide");
+	e = document.getElementById("GeneralmSSIDHide5");
+	e.innerHTML = _("general mssid hide");
+	e = document.getElementById("GeneralmSSIDHide6");
+	e.innerHTML = _("general mssid hide");
+	e = document.getElementById("GeneralmSSIDHide7");
+	e.innerHTML = _("general mssid hide");
+	e = document.getElementById("GeneralmSSIDHide8");
 	e.innerHTML = _("general mssid hide");
 	
 	e = document.getElementById("GeneralChannelSelect");
@@ -1422,6 +1430,17 @@ function initTranslation()
 	e.innerHTML = _("advance intra bss");	
 	e = document.getElementById("IntraBSS_3");
 	e.innerHTML = _("advance intra bss");	
+	e = document.getElementById("IntraBSS_4");
+	e.innerHTML = _("advance intra bss");	
+	e = document.getElementById("IntraBSS_5");
+	e.innerHTML = _("advance intra bss");	
+	e = document.getElementById("IntraBSS_6");
+	e.innerHTML = _("advance intra bss");	
+	e = document.getElementById("IntraBSS_7");
+	e.innerHTML = _("advance intra bss");	
+	e = document.getElementById("IntraBSS_8");
+
+	e.innerHTML = _("advance intra bss");	
 	e = document.getElementById("Main_IntraBSS");
 	e.innerHTML = _("main advance intra bss");		
 	e = document.getElementById("GeneralWirelessSSID1");
@@ -1467,6 +1486,16 @@ function initTranslation()
 	e = document.getElementById("GeneralWirelessEnable2");
 	e.innerHTML = _("wireless enable");
 	e = document.getElementById("GeneralWirelessEnable3");
+	e.innerHTML = _("wireless enable");
+	e = document.getElementById("GeneralWirelessEnable4");
+	e.innerHTML = _("wireless enable");
+	e = document.getElementById("GeneralWirelessEnable5");
+	e.innerHTML = _("wireless enable");
+	e = document.getElementById("GeneralWirelessEnable6");
+	e.innerHTML = _("wireless enable");
+	e = document.getElementById("GeneralWirelessEnable7");
+	e.innerHTML = _("wireless enable");
+	e = document.getElementById("GeneralWirelessEnable8");
 	e.innerHTML = _("wireless enable");
 }
 

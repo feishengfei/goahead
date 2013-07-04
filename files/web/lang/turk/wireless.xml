@@ -383,6 +383,11 @@
 	<message msgid="general wireless ssid1" msgstr="Ağ Adı (SSID1):"/>
 	<message msgid="general wireless ssid2" msgstr="Ağ Adı (SSID2):"/>
 	<message msgid="general wireless ssid3" msgstr="Ağ Adı (SSID3):"/>
+	<message msgid="general wireless ssid4" msgstr="Ağ Adı (SSID4):"/>
+	<message msgid="general wireless ssid5" msgstr="Ağ Adı (SSID5):"/>
+	<message msgid="general wireless ssid6" msgstr="Ağ Adı (SSID6):"/>
+	<message msgid="general wireless ssid7" msgstr="Ağ Adı (SSID7):"/>
+	<message msgid="general wireless ssid8" msgstr="Ağ Adı (SSID8):"/>
 	<message msgid="main advance intra bss" msgstr="Farklı SSID'li kablosuz istemciler arasında iletişim"/>
 	<message msgid="channel selection" msgstr="Kanal Seçimi"/>
 	<message msgid="encryption type" msgstr="Şifreleme Türü"/>

@@ -383,6 +383,11 @@
 	<message msgid="general wireless ssid1" msgstr="Netzwerkname (SSID1):"/>
 	<message msgid="general wireless ssid2" msgstr="Netzwerkname (SSID2):"/>
 	<message msgid="general wireless ssid3" msgstr="Netzwerkname (SSID3):"/>
+	<message msgid="general wireless ssid4" msgstr="Netzwerkname (SSID4):"/>
+	<message msgid="general wireless ssid5" msgstr="Netzwerkname (SSID5):"/>
+	<message msgid="general wireless ssid6" msgstr="Netzwerkname (SSID6):"/>
+	<message msgid="general wireless ssid7" msgstr="Netzwerkname (SSID7):"/>
+	<message msgid="general wireless ssid8" msgstr="Netzwerkname (SSID8):"/>
 	<message msgid="main advance intra bss" msgstr="Kommunikation zwischen Wireless Clients mit unterschiedlichen SSIDs"/>
 	<message msgid="channel selection" msgstr="Kanalauswahl"/>
 	<message msgid="encryption type" msgstr="Verschlüsselungstyp"/>
