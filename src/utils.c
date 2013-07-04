@@ -20,6 +20,8 @@
 #include	"webs.h"
 #include	"utils.h"
 #include	"wireless.h"
+#include 	"nvram.h"
+#include 	"nvram_rule.h"
 //#include	"wireless.h"
 //#include	"internet.h"
 
@@ -31,8 +33,6 @@
 //#include	"linux/autoconf.h"  //kernel config
 //#include	"config/autoconf.h" //user config
 
-#include "nvram.h"
-#include "nvram_rule.h"
 #define TMP_LEN 256 //aron patch for giga, from httpd common.h
 
 #if 1 //Steve2023
@@ -1982,7 +1982,7 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 {
 	int type;
 	char_t *field;
-	char *value;
+	char *value=NULL;
 	char TempBuf[32];
         char buf[TMP_LEN], tmp_SSID[TMP_LEN], *p_ssid, *p_SSID; //aron add
 	int ret; //aron add
@@ -2011,7 +2011,7 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 		value = reValue;	
 	}else if (!strcmp(field, "SystemName")){
 		value = nvram_safe_get("hostname");
-	}else if (!strcmp(field, "SSID1")){
+	}else if (!strcmp(field, "SSID")){
 		ezplib_get_attr_val("wl0_ssid_rule", 0, "ssid", buf, 33, EZPLIB_USE_CLI);
 		strcpy(reValue, buf);
 		char *str;
@@ -2022,19 +2022,48 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 		    free(str);
 		}
 		value = reValue;
-	}else if (!strcmp(field, "SSID2")){
+	}
+	else if (!strcmp(field, "SSID1")){
 		ezplib_get_attr_val("wl0_ssid_rule", 1, "ssid", buf, 33, EZPLIB_USE_CLI);
 		strcpy(reValue, buf); 
 		value = reValue;	
-	}else if (!strcmp(field, "SSID3")){
+	}
+	else if (!strcmp(field, "SSID2")){
 		ezplib_get_attr_val("wl0_ssid_rule", 2, "ssid", buf, 33, EZPLIB_USE_CLI);
 		strcpy(reValue, buf); 
 		value = reValue;	
-	}else if (!strcmp(field, "SSID4")){
+	}
+	else if (!strcmp(field, "SSID3")){
 		ezplib_get_attr_val("wl0_ssid_rule", 3, "ssid", buf, 33, EZPLIB_USE_CLI);
 		strcpy(reValue, buf); 
 		value = reValue;	
-	}else if (!strcmp(field, "SSID5G1")){
+	}
+	else if (!strcmp(field, "SSID4")){
+		ezplib_get_attr_val("wl0_ssid_rule", 4, "ssid", buf, 33, EZPLIB_USE_CLI);
+		strcpy(reValue, buf); 
+		value = reValue;	
+	}
+	else if (!strcmp(field, "SSID5")){
+		ezplib_get_attr_val("wl0_ssid_rule", 5, "ssid", buf, 33, EZPLIB_USE_CLI);
+		strcpy(reValue, buf); 
+		value = reValue;	
+	}
+	else if (!strcmp(field, "SSID6")){
+		ezplib_get_attr_val("wl0_ssid_rule", 6, "ssid", buf, 33, EZPLIB_USE_CLI);
+		strcpy(reValue, buf); 
+		value = reValue;	
+	}
+	else if (!strcmp(field, "SSID7")){
+		ezplib_get_attr_val("wl0_ssid_rule", 7, "ssid", buf, 33, EZPLIB_USE_CLI);
+		strcpy(reValue, buf); 
+		value = reValue;	
+	}
+	else if (!strcmp(field, "SSID8")){
+		ezplib_get_attr_val("wl0_ssid_rule", 8, "ssid", buf, 33, EZPLIB_USE_CLI);
+		strcpy(reValue, buf); 
+		value = reValue;	
+	}
+	else if (!strcmp(field, "SSID5G1")){
 		ezplib_get_attr_val("wl1_ssid_rule", 0, "ssid", buf, 33, EZPLIB_USE_CLI);
 		strcpy(reValue, buf); 
 		char *str;
@@ -3934,6 +3963,7 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 	else if(!strcmp(field, "board_model")){
 		ezplib_get_attr_val("board_model_rule", 0, "bd_model", TempBuf, SHORT_BUF_LEN, EZPLIB_USE_CLI);
 		strcpy(reValue, TempBuf);
+		value = reValue;
 	}
 	else if (!strcmp(field, "OP_Mode")){
 		/* Get the setting of value from AXIMCom's nvram structure into reValue */
@@ -5222,21 +5252,59 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 		strcpy(reValue, buf);
 	        value = reValue;	
 
-	}else if(!strcmp(field, "EnableSSID1")) //enable ssid1
+	}
+	else if(!strcmp(field, "EnableSSID1")) //enable ssid1
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 1, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 		
-	}else if(!strcmp(field, "EnableSSID2")) //enable ssid2
+	}
+	else if(!strcmp(field, "EnableSSID2")) //enable ssid2
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 2, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 		
-	}else if(!strcmp(field, "EnableSSID3")) //enable ssid3
+	}
+	else if(!strcmp(field, "EnableSSID3")) //enable ssid3
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 3, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "EnableSSID4")) //enable ssid4
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 4, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "EnableSSID5")) //enable ssid5
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 5, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "EnableSSID6")) //enable ssid6
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 6, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "EnableSSID7")) //enable ssid7
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 7, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "EnableSSID8")) //enable ssid8
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 8, "enable", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 		
@@ -5247,21 +5315,59 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 		strcpy(reValue, buf);
 	        value = reValue;	
 
-	}else if(!strcmp(field, "HideSSID1")) //hidden ssid2
+	}
+	else if(!strcmp(field, "HideSSID1")) //hidden ssid1
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 1, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 		
-	}else if(!strcmp(field, "HideSSID2")) //hidden ssid3
+	}
+	else if(!strcmp(field, "HideSSID2")) //hidden ssid2
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 2, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 		
-	}else if(!strcmp(field, "HideSSID3")) //hidden ssid4
+	}
+	else if(!strcmp(field, "HideSSID3")) //hidden ssid3
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 3, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "HideSSID4")) //hidden ssid4
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 4, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "HideSSID5")) //hidden ssid5
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 5, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "HideSSID6")) //hidden ssid6
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 6, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "HideSSID7")) //hidden ssid7
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 7, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;	
+		
+	}
+	else if(!strcmp(field, "HideSSID8")) //hidden ssid8
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 8, "hidden", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 		
@@ -5273,25 +5379,64 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 		strcpy(reValue, buf);
 	        value = reValue;
 	
-	}else if(!strcmp(field, "NoForwarding1")) //Intra_BSS2
+	}
+	else if(!strcmp(field, "NoForwarding1")) //Intra_BSS1
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 1, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 	
-	}else if(!strcmp(field, "NoForwarding2")) //Intra_BSS3
+	}
+	else if(!strcmp(field, "NoForwarding2")) //Intra_BSS2
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 2, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;	
 
-	}else if(!strcmp(field, "NoForwarding3")) //Intra_BSS4
+	}
+	else if(!strcmp(field, "NoForwarding3")) //Intra_BSS3
 	{
 		ezplib_get_attr_val("wl0_basic_rule", 3, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 	        value = reValue;
 		
-	}else if(!strcmp(field, "MainIntra_BSS")) //Main Intra_BSS
+	}
+	else if(!strcmp(field, "NoForwarding4")) //Intra_BSS4
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 4, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;
+		
+	}
+	else if(!strcmp(field, "NoForwarding5")) //Intra_BSS5
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 5, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;
+		
+	}
+	else if(!strcmp(field, "NoForwarding6")) //Intra_BSS6
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 6, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;
+		
+	}
+	else if(!strcmp(field, "NoForwarding7")) //Intra_BSS7
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 7, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;
+		
+	}
+	else if(!strcmp(field, "NoForwarding8")) //Intra_BSS8
+	{
+		ezplib_get_attr_val("wl0_basic_rule", 8, "isolation", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		strcpy(reValue, buf);
+	        value = reValue;
+		
+	}
+	else if(!strcmp(field, "MainIntra_BSS")) //Main Intra_BSS
 	{
 		if (!strcmp(ModeTmpBuf, "ap")){
 			ezplib_get_attr_val("wl_ap_basic_rule", 0, "bisolation", buf, TMP_LEN, EZPLIB_USE_CLI);

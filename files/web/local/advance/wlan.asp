@@ -1430,6 +1430,16 @@ function initTranslation()
 	e.innerHTML = _("general wireless ssid2");
 	e = document.getElementById("GeneralWirelessSSID3");
 	e.innerHTML = _("general wireless ssid3");	
+	e = document.getElementById("GeneralWirelessSSID4");
+	e.innerHTML = _("general wireless ssid4");	
+	e = document.getElementById("GeneralWirelessSSID5");
+	e.innerHTML = _("general wireless ssid5");	
+	e = document.getElementById("GeneralWirelessSSID6");
+	e.innerHTML = _("general wireless ssid6");	
+	e = document.getElementById("GeneralWirelessSSID7");
+	e.innerHTML = _("general wireless ssid7");	
+	e = document.getElementById("GeneralWirelessSSID8");
+	e.innerHTML = _("general wireless ssid8");	
 	
 	e = document.getElementById("enable_guest_wlan");
 	e.innerHTML = _("wlan guest enable");	
@@ -1473,18 +1483,33 @@ function initAll()
 	var Enable_SSID1 = '<% getCfgZero(1, "EnableSSID1"); %>';
 	var Enable_SSID2 = '<% getCfgZero(1, "EnableSSID2"); %>';	
 	var Enable_SSID3 = '<% getCfgZero(1, "EnableSSID3"); %>';	
+	var Enable_SSID4 = '<% getCfgZero(1, "EnableSSID4"); %>';	
+	var Enable_SSID5 = '<% getCfgZero(1, "EnableSSID5"); %>';	
+	var Enable_SSID6 = '<% getCfgZero(1, "EnableSSID6"); %>';	
+	var Enable_SSID7 = '<% getCfgZero(1, "EnableSSID7"); %>';	
+	var Enable_SSID8 = '<% getCfgZero(1, "EnableSSID8"); %>';	
 	var Intra_BSS = '<% getCfgZero(1, "NoForwarding"); %>';
 	var Intra_BSS1 = '<% getCfgZero(1, "NoForwarding1"); %>';
 	var Intra_BSS2 = '<% getCfgZero(1, "NoForwarding2"); %>';	
 	var Intra_BSS3 = '<% getCfgZero(1, "NoForwarding3"); %>';
+	var Intra_BSS4 = '<% getCfgZero(1, "NoForwarding4"); %>';
+	var Intra_BSS5 = '<% getCfgZero(1, "NoForwarding5"); %>';
+	var Intra_BSS6 = '<% getCfgZero(1, "NoForwarding6"); %>';
+	var Intra_BSS7 = '<% getCfgZero(1, "NoForwarding7"); %>';
+	var Intra_BSS8 = '<% getCfgZero(1, "NoForwarding8"); %>';
 	var broadcastssidEnable  = '<% getCfgZero(1, "HideSSID"); %>';
 	var broadcastssidEnable1  = '<% getCfgZero(1, "HideSSID1"); %>';
 	var broadcastssidEnable2  = '<% getCfgZero(1, "HideSSID2"); %>';
 	var broadcastssidEnable3  = '<% getCfgZero(1, "HideSSID3"); %>';
-        var nv_channel = <% getCfgZero(1, "Channel"); %>;
-	var nv_radio_off = "<% getRadioStatusASP(); %>";
+	var broadcastssidEnable4  = '<% getCfgZero(1, "HideSSID4"); %>';
+	var broadcastssidEnable5  = '<% getCfgZero(1, "HideSSID5"); %>';
+	var broadcastssidEnable6  = '<% getCfgZero(1, "HideSSID6"); %>';
+	var broadcastssidEnable7  = '<% getCfgZero(1, "HideSSID7"); %>';
+	var broadcastssidEnable8  = '<% getCfgZero(1, "HideSSID8"); %>';
+	var nv_channel = <% getCfgZero(1, "Channel"); %>;
 	var MainIntra_BSS = "<% getCfgZero(1, "MainIntra_BSS"); %>";
 
+	var nv_radio_off = "<% getRadioStatusASP(); %>";
 	var t = document.getElementById("GeneralRadioStatus");		
 	if (nv_radio_off == "ON")
 		t.innerHTML = _("general on");
@@ -1511,6 +1536,31 @@ function initAll()
 	}else{
 		document.security_form.enablessid3.checked = false;
 	}
+	if (Enable_SSID4 == "1"){
+		document.security_form.enablessid4.checked = true;
+	}else{
+		document.security_form.enablessid4.checked = false;
+	}
+	if (Enable_SSID5 == "1"){
+		document.security_form.enablessid5.checked = true;
+	}else{
+		document.security_form.enablessid5.checked = false;
+	}
+	if (Enable_SSID6 == "1"){
+		document.security_form.enablessid6.checked = true;
+	}else{
+		document.security_form.enablessid6.checked = false;
+	}
+	if (Enable_SSID7 == "1"){
+		document.security_form.enablessid7.checked = true;
+	}else{
+		document.security_form.enablessid7.checked = false;
+	}
+	if (Enable_SSID8 == "1"){
+		document.security_form.enablessid8.checked = true;
+	}else{
+		document.security_form.enablessid8.checked = false;
+	}
 		
 	if (broadcastssidEnable == "1"){
 		document.security_form.hidessid.checked = true;
@@ -1532,6 +1582,31 @@ function initAll()
 	}else{
 		document.security_form.hidemssid_3.checked = false;
 	}
+	if (broadcastssidEnable4 == "1"){
+		document.security_form.hidemssid_4.checked = true;
+	}else{
+		document.security_form.hidemssid_4.checked = false;
+	}
+	if (broadcastssidEnable5 == "1"){
+		document.security_form.hidemssid_5.checked = true;
+	}else{
+		document.security_form.hidemssid_5.checked = false;
+	}
+	if (broadcastssidEnable6 == "1"){
+		document.security_form.hidemssid_6.checked = true;
+	}else{
+		document.security_form.hidemssid_6.checked = false;
+	}
+	if (broadcastssidEnable7 == "1"){
+		document.security_form.hidemssid_7.checked = true;
+	}else{
+		document.security_form.hidemssid_7.checked = false;
+	}
+	if (broadcastssidEnable8 == "1"){
+		document.security_form.hidemssid_8.checked = true;
+	}else{
+		document.security_form.hidemssid_8.checked = false;
+	}
 	
 	if (Intra_BSS == "0"){
 		document.security_form.IntraBSS.checked = true;
@@ -1544,19 +1619,41 @@ function initAll()
 	}else{
 		document.security_form.IntraBSS1.checked = false;
 	}
-			
 	if (Intra_BSS2 == "0"){
 		document.security_form.IntraBSS2.checked = true;
 	}else{
 		document.security_form.IntraBSS2.checked = false;
 	}
-	
 	if (Intra_BSS3 == "0"){
 		document.security_form.IntraBSS3.checked = true;
 	}else{
 		document.security_form.IntraBSS3.checked = false;
 	}
-
+	if (Intra_BSS4 == "0"){
+		document.security_form.IntraBSS4.checked = true;
+	}else{
+		document.security_form.IntraBSS4.checked = false;
+	}
+	if (Intra_BSS5 == "0"){
+		document.security_form.IntraBSS5.checked = true;
+	}else{
+		document.security_form.IntraBSS5.checked = false;
+	}
+	if (Intra_BSS6 == "0"){
+		document.security_form.IntraBSS6.checked = true;
+	}else{
+		document.security_form.IntraBSS6.checked = false;
+	}
+	if (Intra_BSS7 == "0"){
+		document.security_form.IntraBSS7.checked = true;
+	}else{
+		document.security_form.IntraBSS7.checked = false;
+	}
+	if (Intra_BSS8 == "0"){
+		document.security_form.IntraBSS8.checked = true;
+	}else{
+		document.security_form.IntraBSS8.checked = false;
+	}
 	if (MainIntra_BSS == "0"){
 		document.security_form.MainIntraBSS.checked = true;
 	}else{
@@ -1781,7 +1878,7 @@ function clickwlanguest()
 -->
 <font id="GeneralWirelessSSID">Network Name(SSID) :</font></td>
 <td width="150">
-<input type=text name=ssid size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID1"); %>" />
+<input type=text name=ssid size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID"); %>" />
 </td>        
 <td width="*"><input type="checkbox" name=hidessid value="1" />
 <font id ="GeneralHideSSID1"> Hide</font>
@@ -1804,7 +1901,7 @@ function clickwlanguest()
 <td width="120">
 <font id="GeneralWirelessSSID1">Name(SSID1) :</font></td>
 <td width="150" nowrap >
-<input type=text name=mssid_1 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID2"); %>" />
+<input type=text name=mssid_1 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID1"); %>" />
 </td>
 <td><input type="checkbox" name=hidemssid_1 value="1" />
 <font id ="GeneralmSSIDHide1">Hide</font>
@@ -1826,7 +1923,7 @@ function clickwlanguest()
 <td width="120">
 <font id="GeneralWirelessSSID2"> Name(SSID2) :</font></td>
 <td width="150" nowrap >
-<input type=text name=mssid_2 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID3"); %>" />
+<input type=text name=mssid_2 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID2"); %>" />
 </td>
 <td><input type="checkbox" name=hidemssid_2 value="1" />
 <font id ="GeneralmSSIDHide2">Hide</font>
@@ -1838,7 +1935,6 @@ function clickwlanguest()
 </table>
 </li>
 
-<!-- <span id="div_mssid3_id" class="on"> -->
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
@@ -1849,7 +1945,7 @@ function clickwlanguest()
 <td width="120">
 <font id="GeneralWirelessSSID3">Name(SSID3) :</font></td>
 <td width="150" nowrap >
-<input type=text name=mssid_3 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID4"); %>" />
+<input type=text name=mssid_3 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID3"); %>" />
 </td>
 <td><input type="checkbox" name=hidemssid_3 value="1" />
 <font id ="GeneralmSSIDHide3">Hide</font>
@@ -1860,6 +1956,119 @@ function clickwlanguest()
 </tr>
 </table>
 </li>
+
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" nowrap >
+<input type="checkbox" name=enablessid4 value="1" />
+<font id="GeneralWirelessEnable4">Enable</font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID4">Name(SSID4) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_4 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID4"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_4 value="1" />
+<font id ="GeneralmSSIDHide4">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS4" type="checkbox" value="0" />
+<font id ="IntraBSS_4"> Enable Intra-BSS Traffic</font> 
+</td>
+</tr>
+</table>
+</li>
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" nowrap >
+<input type="checkbox" name=enablessid5 value="1" />
+<font id="GeneralWirelessEnable5">Enable</font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID5">Name(SSID5) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_5 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID5"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_5 value="1" />
+<font id ="GeneralmSSIDHide5">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS5" type="checkbox" value="0" />
+<font id ="IntraBSS_5"> Enable Intra-BSS Traffic</font> 
+</td>
+</tr>
+</table>
+</li>
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" nowrap >
+<input type="checkbox" name=enablessid6 value="1" />
+<font id="GeneralWirelessEnable6">Enable</font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID6">Name(SSID6) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_6 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID6"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_6 value="1" />
+<font id ="GeneralmSSIDHide6">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS6" type="checkbox" value="0" />
+<font id ="IntraBSS_6"> Enable Intra-BSS Traffic</font> 
+</td>
+</tr>
+</table>
+</li>
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" nowrap >
+<input type="checkbox" name=enablessid7 value="1" />
+<font id="GeneralWirelessEnable7">Enable</font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID7">Name(SSID7) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_7 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID7"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_7 value="1" />
+<font id ="GeneralmSSIDHide7">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS7" type="checkbox" value="0" />
+<font id ="IntraBSS_7"> Enable Intra-BSS Traffic</font> 
+</td>
+</tr>
+</table>
+</li>
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td width="60" nowrap >
+<input type="checkbox" name=enablessid8 value="1" />
+<font id="GeneralWirelessEnable8">Enable</font>
+</td>
+<td width="120">
+<font id="GeneralWirelessSSID8">Name(SSID8) :</font></td>
+<td width="150" nowrap >
+<input type=text name=mssid_8 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID8"); %>" />
+</td>
+<td><input type="checkbox" name=hidemssid_8 value="1" />
+<font id ="GeneralmSSIDHide8">Hide</font>
+<!-- Intra-BSS/SSID checkbox -->
+<input name="IntraBSS8" type="checkbox" value="0" />
+<font id ="IntraBSS_8"> Enable Intra-BSS Traffic</font> 
+</td>
+</tr>
+</table>
+</li>
+
+
 <li></li>
 <!-- add WLAN Guest -->
 <span id="div_wlanguest_id" class="off">

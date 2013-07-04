@@ -806,8 +806,8 @@ int set_language(int eid, webs_t wp, int argc, char_t **argv)
 	
 	lang=wp->url+18;
 	printf("\n\nLanguage =%s\n\n", lang);
-	doSystem("nvram set lang=%s", lang);
-	//nvram_set("lang", lang);
+	//doSystem("nvram set lang=%s", lang);
+	nvram_set("lang", lang);
 	return 1;
 }
 #endif
