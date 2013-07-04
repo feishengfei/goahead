@@ -72,7 +72,7 @@ function checkMac(str){
 	var len = str.length;
 	if(len!=17)
 		return false;
-	if(str="00:00:00:00:00:00")   
+	if(str=="00:00:00:00:00:00")   
         return false;
 
 	for (var i=0; i<str.length; i++) {
@@ -552,28 +552,28 @@ for(aptable = 0; aptable < MBSSID_MAX; aptable++){
 		document.write(" <tr id=id_"+aptable+"_");
 		document.write(i*2);
 		document.write("> <td width='10%' valign='top'");
-		document.write("><center><span class='table_left' id=");
+		document.write("><center><span class='table_left table_right' id=");
 		document.write(td_name);
 		document.write("><a href='javascript: delap("+aptable+", ");
 		document.write(2*i);
 		document.write(");'");
 		document.write(" onmouseout=\" MM_swapImgRestore();\" onmouseover=\"MM_swapImage('"+del_name+"','','images/i_delete_on.gif',1);\"><img src='images/i_delete.gif' border='0' id='"+del_name+"' title='Delete' ></a");
-		document.write("></span></center><td width='40%' valign='top'");
-		document.write("><center><input id=");
+		document.write("></span></center></td><td width='40%' valign='top'");
+		document.write("><center><span class='table_right'><input id=");
 		document.write(input_name);
-		document.write(" size=16 maxlength=20 readonly></td></center>");
+		document.write(" size=16 maxlength=20 readonly></span></center></td>");
 
 		input_name = "newap_" + aptable + "_" + (2*i+1);
 		td_name = "newap_td_" + aptable + "_" + (2*i+1);
 		del_name = "newap_del_"+ aptable +"_" + (2*i+1);
 		document.write("<td width='10%' valign='top'");
-		document.write("><center><span id=");
+		document.write("><center><span class='table_right' id=");
 		document.write(td_name);
 		document.write("><a href='javascript: delap("+aptable+", ");
 		document.write(2*i+1);
 		document.write(");'");
 		document.write(" onmouseout=\" MM_swapImgRestore();\" onmouseover=\"MM_swapImage('"+del_name+"','','images/i_delete_on.gif',1);\"><img src='images/i_delete.gif' border='0' id='"+del_name+"' title='Delete' ></a");
-		document.write("></center><td width='40%' valign='top' id=");
+		document.write("></span></center></td><td width='40%' valign='top' id=");
 		document.write("><center><span class='table_right'><input id=");
 		document.write(input_name);
 		document.write(" size=16 maxlength=20 readonly></span></td></center></tr>");

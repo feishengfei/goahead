@@ -36,8 +36,8 @@ var connMode_3g = "<% getCfgZero(1, "connMode_3g"); %>";
 var pppConnType = "<% getCfgZero(1, "ppp_conn_type"); %>";
 var turbo_3g = "<% getCfgZero(1, "turbo_3g"); %>";
 var nailup_3g = '<% getCfgZero(1, "wan_3g_nailup"); %>';
-var bigPond_srv = "<% getCfgZero(1, "bigPond_srv"); %>";
-var bigPond_enb = "<% getCfgZero(1, "bigPond_enb"); %>";
+//var bigPond_srv = "<% getCfgZero(1, "bigPond_srv"); %>";
+//var bigPond_enb = "<% getCfgZero(1, "bigPond_enb"); %>";
 var lanIP = "<%getLanIp(); %>";
 var lanMask="<% getLanNetmask(); %>"
 
@@ -262,7 +262,7 @@ function CheckValue()
      {   
          if (document.wanCfg.WAN_IP_Auto[0].checked == true) //DHCP
          {
-             if (document.wanCfg.bigPondEnb[0].checked == true) //BigPond enabled
+             /*if (document.wanCfg.bigPondEnb[0].checked == true) //BigPond enabled
              {
                  if(document.wanCfg.bigPondUser.value == "")
                  {
@@ -288,7 +288,7 @@ function CheckValue()
 			return false;
 		 }
              }
-             document.wanCfg.bigPondEnb[0].value = document.wanCfg.bigPondEnb[0].checked ? "1": "0";
+             document.wanCfg.bigPondEnb[0].value = document.wanCfg.bigPondEnb[0].checked ? "1": "0";*/
          }
          if (document.wanCfg.WAN_IP_Auto[1].checked == true) //Static IP
          {
@@ -377,7 +377,7 @@ function CheckValue()
 				return false;
 		 }
      }
-     else if (document.wanCfg.connectionType.options.selectedIndex == 2) //PPTP
+     else if (document.wanCfg.connectionType.options.selectedIndex == 3) //PPTP
      {
          if(document.wanCfg.pptpUser.value == "")
          {
@@ -453,7 +453,7 @@ function CheckValue()
 	        }
 		 }		 
      }
-     else if (document.wanCfg.connectionType.options.selectedIndex == 3) //L2TP
+     else if (document.wanCfg.connectionType.options.selectedIndex == 2) //L2TP
      {
          if(document.wanCfg.l2tpUser.value == "")
          {
@@ -685,7 +685,7 @@ function CheckValue()
 
 function connectionTypeSwitch()
 {
-        show_div(false, "PPPoE_setting");
+	show_div(false, "PPPoE_setting");
 	show_div(false, "PPTP_setting1");
 	show_div(false, "PPTP_setting2");  
 	show_div(false, "L2TP_setting1");
@@ -693,26 +693,25 @@ function connectionTypeSwitch()
 	show_div(false, "Ethernet_setting");
 	show_div(false, "3G_setting");
 
-        if (document.wanCfg.connectionType.options.selectedIndex == 0) {
-	    show_div(true, "Ethernet_setting");    
-        }	
-	
-	if (document.wanCfg.connectionType.options.selectedIndex == 1) {
+	if (document.wanCfg.connectionType.options.selectedIndex == 0) {
+		show_div(true, "Ethernet_setting");
+	}
+	else if (document.wanCfg.connectionType.options.selectedIndex == 1) {
 		show_div(true, "PPPoE_setting");
 	}
-	if (document.wanCfg.connectionType.options.selectedIndex == 2) {
-	    show_div(true, "PPTP_setting1");
-	    show_div(true, "PPTP_setting2");
+	else if (document.wanCfg.connectionType.options.selectedIndex == 2) {
+		show_div(true, "L2TP_setting1");
+		show_div(true, "L2TP_setting2");
 	}
-	if (document.wanCfg.connectionType.options.selectedIndex == 3) {
-	    show_div(true, "L2TP_setting1");
-	    show_div(true, "L2TP_setting2");
-        }
-        if (document.wanCfg.connectionType.options.selectedIndex == 4) {
-	    show_div(true, "3G_setting");
-        }
+	else if (document.wanCfg.connectionType.options.selectedIndex == 3) {
+		show_div(true, "PPTP_setting1");
+		show_div(true, "PPTP_setting2");
+	}
+	else if (document.wanCfg.connectionType.options.selectedIndex == 4) {
+		show_div(true, "3G_setting");
+	}
 //    parent.getElement("myFrame").height = document.body.scrollHeight;
-  parent.adjustMyFrameHeight();
+	parent.adjustMyFrameHeight();
 }
 
 function pppTypeChange()
@@ -1586,7 +1585,7 @@ function updateStatus()
 	      document.wanCfg.staticNetmask.disabled = true;
               document.wanCfg.staticGateway.disabled = true;
               
-      	      document.wanCfg.bigPondEnb[0].disabled = false;
+      	      /*document.wanCfg.bigPondEnb[0].disabled = false;
               document.wanCfg.bigPondEnb[1].disabled = false;
       	      if(bigPond_enb == "1") //BigPond enabled
       	      {
@@ -1601,7 +1600,7 @@ function updateStatus()
       	         document.wanCfg.bigPondUser.disabled = true;
       	         document.wanCfg.bigPondPass.disabled = true;
       	         document.wanCfg.bigPondPass2.disabled = true;
-      	      }
+      	      }*/
         }
         else //Static IP
         {
@@ -1610,15 +1609,15 @@ function updateStatus()
 	      document.wanCfg.staticNetmask.disabled = false;
               document.wanCfg.staticGateway.disabled = false;
               
-              document.wanCfg.bigPondEnb[0].disabled = true;
+              /*document.wanCfg.bigPondEnb[0].disabled = true;
               document.wanCfg.bigPondEnb[1].disabled = true;
               document.wanCfg.bigPondSrv.disabled = true;
       	      document.wanCfg.bigPondUser.disabled = true;
       	      document.wanCfg.bigPondPass.disabled = true;
-      	      document.wanCfg.bigPondPass2.disabled = true;
+      	      document.wanCfg.bigPondPass2.disabled = true;*/
 	}
 	//BigPond
-        if(bigPond_enb == "1") //enabled
+        /*if(bigPond_enb == "1") //enabled
         {
             document.wanCfg.bigPondEnb[0].checked = true;
         }
@@ -1645,7 +1644,7 @@ function updateStatus()
         else if (bigPond_srv == "61.9.240.13")
         {
            document.wanCfg.bigPondSrv.options.selectedIndex = 4;
-        }
+        }*/
         
         //PPPoE
         if (pppoeNailup == "1") //Nailup=checked
@@ -1933,42 +1932,42 @@ function updateStatus()
 
 function initValue()
 {
-   var mode = "<% getCfgGeneral(1, "wanConnectionMode"); %>";
-   var dns1_type = "<% getCfgGeneral(1, "wan_dns1_type"); %>";
-   var dns2_type = "<% getCfgGeneral(1, "wan_dns2_type"); %>";
-           
-    show_div(false, "PPPoE_setting");
+	var mode = "<% getCfgGeneral(1, "wanConnectionMode"); %>";
+	var dns1_type = "<% getCfgGeneral(1, "wan_dns1_type"); %>";
+	var dns2_type = "<% getCfgGeneral(1, "wan_dns2_type"); %>";
+
+	show_div(false, "PPPoE_setting");
 	show_div(false, "PPTP_setting1");
 	show_div(false, "PPTP_setting2");  
 	show_div(false, "L2TP_setting1");
 	show_div(false, "L2TP_setting2");
 	show_div(false, "Ethernet_setting");
 	show_div(false, "3G_setting");
-     
-   if ((mode == "STATIC") || (mode == "DHCP"))
-   {
-  		document.wanCfg.connectionType.options.selectedIndex = 0;
-	        show_div(true, "Ethernet_setting");
-   }
-   else if (mode == "PPPOE") {
+
+	if ((mode == "STATIC") || (mode == "DHCP"))
+	{
+		document.wanCfg.connectionType.options.selectedIndex = 0;
+		show_div(true, "Ethernet_setting");
+	}
+	else if (mode == "PPPOE") {
 		document.wanCfg.connectionType.options.selectedIndex = 1;
 		show_div(true, "PPPoE_setting");
-   }
-   else if (mode == "PPTP") {
-            document.wanCfg.connectionType.options.selectedIndex = 2;
-	    show_div(true, "PPTP_setting1");
-	    show_div(true, "PPTP_setting2");
-   }
-   else if (mode == "L2TP") {
-            document.wanCfg.connectionType.options.selectedIndex = 3;
-	    show_div(true, "L2TP_setting1");
-	    show_div(true, "L2TP_setting2");
-   }
-   else if (mode == "WWAN") {
-            document.wanCfg.connectionType.options.selectedIndex = 4;
-	    show_div(true, "3G_setting");
-   }
-   //for dns1 and dns2 types
+	}
+	else if (mode == "L2TP") {
+		document.wanCfg.connectionType.options.selectedIndex = 2;
+		show_div(true, "L2TP_setting1");
+		show_div(true, "L2TP_setting2");
+	}
+	else if (mode == "PPTP") {
+		document.wanCfg.connectionType.options.selectedIndex = 3;
+		show_div(true, "PPTP_setting1");
+		show_div(true, "PPTP_setting2");
+	}
+	else if (mode == "WWAN") {
+		document.wanCfg.connectionType.options.selectedIndex = 4;
+		show_div(true, "3G_setting");
+	}
+	//for dns1 and dns2 types
    if (dns1_type == "ISP")
    {
        document.wanCfg.dns1Type.options.selectedIndex = 0;
@@ -1993,7 +1992,7 @@ function initValue()
    {   document.wanCfg.dns2Type.options.selectedIndex = 2;
 
    }        
-   
+   updateStatus();
    var e = document.getElementById("wantitle");
 	e.innerHTML = _("wan title");
 	e = document.getElementById("wanEncapsulation");
@@ -2002,8 +2001,8 @@ function initValue()
 	e.innerHTML = _("wan Ethernet");
 	e = document.getElementById("wanPPPOE");
 	e.innerHTML = _("wan PPPOE");
-	e = document.getElementById("wanPPTP");
-	e.innerHTML = _("wan PPTP");
+	//e = document.getElementById("wanPPTP");
+	//e.innerHTML = _("wan PPTP");
 	e = document.getElementById("wanL2TP");
 	e.innerHTML = _("wan L2TP");
 	e = document.getElementById("wPppoeUser");
@@ -2158,7 +2157,7 @@ function initValue()
 	e.innerHTML = _("wan 3G IdleTimesec");
 	
 	//BigPond
-	e = document.getElementById("wBigPond");
+	/*e = document.getElementById("wBigPond");
 	e.innerHTML = _("wan BigPond");
 	e = document.getElementById("bigpond_enable");
 	e.innerHTML = _("wan BigPond enable");
@@ -2181,7 +2180,7 @@ function initValue()
 	e = document.getElementById("wBigPondPass");
 	e.innerHTML = _("wan BigPond password");
 	e = document.getElementById("wBigPondPass2");
-	e.innerHTML = _("wan BigPond password2");
+	e.innerHTML = _("wan BigPond password2");*/
 	
 	e = document.getElementById("wanApply");
 	e.value = _("wan Apply");
@@ -2217,8 +2216,8 @@ function initValue()
                       <td><select name="connectionType" size="1" onChange="connectionTypeSwitch();">
                           <option value="Ethernet" id="wanEthernet">Ethernet</option>
                           <option value="PPPOE" id="wanPPPOE">PPP over Ethernet</option>
-                          <option value="PPTP" id="wanPPTP">PPTP</option>
-                          <option value="L2TP" id="wanL2TP">L2TP</option>
+                          <!--<option value="L2TP" id="wanL2TP">L2TP</option>-->
+                          <!--<option value="PPTP" id="wanPPTP">PPTP</option>-->
                           <!--<option value="WWAN" id="wan3G">Mobile 3G</option>-->
                           </select> 
                       </td>
@@ -2657,7 +2656,7 @@ function initValue()
                     </tr>
                   </table>
                 </li>
-                <li class="w_text">
+                <!--<li class="w_text">
                   <table width="92%" border="0" align="center" cellpadding="0" cellspacing="0">
                     <tr><td width="40%" id=wBigPond>Bigpond : </td>
                         <td><input name="bigPondEnb" value="1" onclick="bigPondEnbChange()" type="radio" />&nbsp;<font id=bigpond_enable>Enable</font>                 
@@ -2710,7 +2709,7 @@ function initValue()
                       </span></td>
                     </tr>  
                   </table>
-                </li>
+                </li>-->
                 <li class="w_text">
                   <table id="ethernet_s" width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
                     <tr>

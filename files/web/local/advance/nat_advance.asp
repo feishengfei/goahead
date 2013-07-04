@@ -117,6 +117,51 @@ function formCheck()
 	ui_name[11] = document.NAT_ADV.PortRule_Name12.value;
 
 	
+	// check include non-digital charactor
+	for (i=0 ; i < 12; i++)
+	{
+			for (j=0; j < ui_inS[i].length; j ++)
+			{
+					c = ui_inS[i].charAt(j);
+					alert(c);
+					if ( !(c >= 0 && c <= 9) )
+					{
+							alert("Invalid start incoming port");
+					    return false;
+					}
+			}	
+			
+			for (j=0; j < ui_inE[i].length; j ++)
+			{
+					c = ui_inE[i].charAt(j);
+					if ( !(c >= 0 && c <= 9) )
+					{
+							alert("Invalid end incoming port");
+					    return false;
+					}
+			}	
+			
+			for (j=0; j < ui_trS[i].length; j ++)
+			{
+					c = ui_trS[i].charAt(j);
+					if ( !(c >= 0 && c <= 9) )
+					{
+							alert("Invalid start trigger port");
+					    return false;
+					}
+			}	
+			
+			for (j=0; j < ui_trE[i].length; j ++)
+			{
+					c = ui_trE[i].charAt(j);
+					if ( !(c >= 0 && c <= 9) )
+					{
+							alert("Invalid end trigger port");
+					    return false;
+					}
+			}	
+	}
+	
     for(i=0;i<12;i++){
         if((ui_inS[i]==0 &&ui_inS[i].length !=0)
 		|| (ui_inE[i]==0&&ui_inE[i].length!=0) 
@@ -198,6 +243,7 @@ function formCheck()
 	         }
 	    }
 	}
+
 	showWebMessage(2, "");
 	return true;	
 }

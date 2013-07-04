@@ -37,6 +37,7 @@
 #define WEBS_HEADER_BUFINC 		512			/* Header buffer size */
 #define WEBS_ASP_BUFINC			512			/* Asp expansion increment */
 #define WEBS_MAX_PASS			32			/* Size of password */
+//#define WEBS_BUFSIZE			1000		/* websWrite max output string */
 #define WEBS_BUFSIZE			4096		/* websWrite max output string */
 #define WEBS_MAX_HEADER			(5 * 1024)	/* Sanity check header */
 #define WEBS_MAX_URL			4096		/* Maximum URL size for sanity */

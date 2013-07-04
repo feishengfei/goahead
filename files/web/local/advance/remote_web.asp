@@ -184,6 +184,9 @@ function formCheck(){
         if(( num > 65535 ) || (num < 1)){
             alert("The value is invalid");  
    			return false;
+   		} else if ( ( num < 1024) && (num != 80 )) {
+   				alert("User-defined port must be greater than 1024");	
+   				return false;
    		}
    		
    		if(find_www_port(port_value)) {

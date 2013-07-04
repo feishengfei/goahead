@@ -45,26 +45,46 @@ function checkInput(str)
 
 function check_confirm()
 {
+	if (document.Lang.User_Select.selectedIndex == 0) {
 		if(document.forms[0].admpass_old.value < 1 || document.forms[0].admpass.value < 1) {
 				alert("Password not NULL");
+				document.forms[0].admpass_old.focus();
 				return false;		
 		} else {
 			  admpass_old = document.forms[0].admpass_old.value;
-			  admpass = document.forms[0].admpass.value;
-			  
 				tmp_admpass_old = allTrim(admpass_old);
-				tmp_admpass = allTrim(admpass);
-		
+
 				if (! isASCII(tmp_admpass_old)) {
 						alert("invalid old password: cann't include chinese!");
 						document.forms[0].admpass_old.focus();
 						return false;
-				}	else if ( ! isASCII(tmp_admpass)) {
-					 	alert("invalid new password: cann't include chinese!");
+				}	
+				
+				admpass = document.forms[0].admpass.value;	
+			  tmp_admpass = allTrim(admpass);
+			  
+			  if ( ! isASCII(tmp_admpass)) {
+						alert("invalid new password: cann't include chinese!");
 						document.forms[0].admpass.focus();
 						return false;
-				}
+				}	
 		}
+	} else {
+		if(document.forms[0].admpass.value < 1) {
+				alert("Password not NULL");
+				document.forms[0].admpass.focus();
+				return false;	
+		} else {
+			  admpass = document.forms[0].admpass.value;	
+			  tmp_admpass = allTrim(admpass);
+			  
+			  if ( ! isASCII(tmp_admpass)) {
+						alert("invalid new password: cann't include chinese!");
+						document.forms[0].admpass.focus();
+						return false;
+				}	
+		}
+	}
 		
     if(checkInput(document.forms[0].admpass.value)==1){
     	alert("System do not support specific invalid characters");

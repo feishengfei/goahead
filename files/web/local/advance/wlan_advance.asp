@@ -377,21 +377,28 @@ function initValue()
 	
 	document.wireless_advanced.distance.value = distance;
 
-	if (txPower == 10){
+	if (txPower == 0){
 		document.wireless_advanced.tx_power.options.selectedIndex = 0;
-	}else if (txPower == 25){
+	}else if (txPower == 2){
 		document.wireless_advanced.tx_power.options.selectedIndex = 1;	
-	}else if (txPower == 50){
+	}else if (txPower == 4){
 		document.wireless_advanced.tx_power.options.selectedIndex = 2;	
-	}else if (txPower == 75){
+	}else if (txPower == 6){
 		document.wireless_advanced.tx_power.options.selectedIndex = 3;	
-	}else if (txPower == 90){
+	}else if (txPower == 8){
 		document.wireless_advanced.tx_power.options.selectedIndex = 4;	
-	}else if (txPower == 100){
+	}else if (txPower == 10){
 		document.wireless_advanced.tx_power.options.selectedIndex = 5;	
-	}			
+	}else if (txPower == 12){
+		document.wireless_advanced.tx_power.options.selectedIndex = 6;	
+	}else if (txPower == 14){
+		document.wireless_advanced.tx_power.options.selectedIndex = 7;	
+	}else if (txPower == 16){
+		document.wireless_advanced.tx_power.options.selectedIndex = 8;	
+	}else if (txPower == 18){
+		document.wireless_advanced.tx_power.options.selectedIndex = 9;	
+	}
 
-	
 	if (noforward == 1)
 		document.wireless_advanced.IntraBSS.checked = false;
 	else
@@ -624,12 +631,16 @@ function initValue()
 <td width="40%" id ="AdvanceTXPower">Output Power</td>
 <td>
 <select name="tx_power" size="1">
-<option value = 10>10%</option>
-<option value = 25>25%</option>
-<option value = 50>50%</option>
-<option value = 75>75%</option>
-<option value = 90>90%</option>
-<option value = 100>100%</option>
+<option value = 0>Full</option>
+<option value = 2>-1 dB</option>
+<option value = 4>-2 dB</option>
+<option value = 6>-3 dB(Half)</option>
+<option value = 8>-4 dB</option>
+<option value = 10>-5 dB</option>
+<option value = 12>-6 dB(Quarter)</option>
+<option value = 14>-7 dB</option>
+<option value = 16>-8 dB</option>
+<option value = 18>-9 dB(Eighth)</option>
 </select>
 </td>	
 </tr>  

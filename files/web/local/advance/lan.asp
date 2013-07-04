@@ -874,12 +874,18 @@ function CheckValue()
     }
     else if(opmode == "1" || opmode == "5") //AP and Universal Repeater mode
     {
-		if (document.lanCfg.lanIpMode[0].checked == false)
+		if (document.lanCfg.lanIpMode[0].checked == true)
 		{
-			if(!checkIpAddr(document.lanCfg.lan_fallback_ip, false))
+			if(!checkIpAddr(document.lanCfg.lan_fallback_ip, false)) {
+				alert("Fallip invalid");
+				document.lanCfg.lan_fallback_ip.focus();
 				return false;
-		    if (!checkNetMask(document.lanCfg.lan_fallback_mask))
+			}
+		    if (!checkNetMask(document.lanCfg.lan_fallback_mask)) {
+		    alert("Fallmask invalid");
+		    document.lanCfg.lan_fallback_mask.focus();
 				return false;
+			}
 		}
         if (document.lanCfg.lanIpMode[1].checked == true) //fixed IP
 	    {			

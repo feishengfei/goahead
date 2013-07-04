@@ -33,12 +33,9 @@ function initTranslation()
 		
 	e = document.getElementById("MacRepeaterMacAddr");
 	e.innerHTML = _("MAC Address");
-	
-	e = document.getElementById("MacRepeaterTime");
-	e.innerHTML = _("mac repeater time");
 
 	e = document.getElementById("MacRepeaterRefresh");
-	e.value = _("refresh");
+	e.value = _("mac repeater refresh");
 }
 
 function PageInit()

@@ -158,7 +158,7 @@ function HasChanged()
                   </table>
                  </li>
 
-<span id="div_hidden_some_op_modes" class="off"> <!-- hidden some OP Modes -->
+<!--<span id="div_hidden_some_op_modes" class="off">  hidden some OP Modes -->
 <li class="w_text">
 <table width="90%" border="0" align=center cellspacing="0">
 <tr>
@@ -166,7 +166,7 @@ function HasChanged()
 </tr>
 </table>
 </li>
-</span> <!-- hidden some OP Modes -->
+<!-- </span> hidden some OP Modes -->
 
 <li class="w_text">
 <table width="90%" border="0" align=center cellspacing="0">
@@ -175,7 +175,6 @@ function HasChanged()
 </tr>
 </table>
 </li>
-</br>
 
 <span id="div_hidden_some_op_modes" class="off"> <!-- hidden some OP Modes -->
 <li class="w_text">
@@ -232,7 +231,6 @@ function HasChanged()
 </tr>
 </table>
 </li>
-<br />
 
 <li class="w_text">
 <table width="90%" border="0" align=center cellspacing="0">
@@ -287,11 +285,11 @@ function HasChanged()
 </li>
 <li class="w_text">
 <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
-<!--
+
 <tr>
 <td class="i_note_a" id="OPModeNote1_1">Router: In this mode, the device is supported to connect to internet via ADSL/Cable Modem. PCs in LAN ports share the same IP to ISP through WAN Port.</td>
 </tr>
--->
+
 <tr>
 <td class="i_note_a" id="OPModeNote1_2">Access Point: In this mode, the device allows the wireless-equipped computer can communicate with a wired network.</td>
 </tr>

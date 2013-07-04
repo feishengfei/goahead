@@ -413,17 +413,32 @@ function wlan24g_encrypt_mode(){
 }
 function wlan24g_80211_mode(){
       	document.write("<tr ><td valign='top'><span class='table_font'>&nbsp;&nbsp;- <font id='dash_infoWlan80211mode'></font>:</span></td><td>");
-	if (<% getCfgZero(1, "WirelessMode"); %> == 0){
-		document.write("<span class='table_font2'>802.11b/g</span>");
-	}else if (<% getCfgZero(1, "WirelessMode"); %> == 1){
-		document.write("<span class='table_font2'>802.11b</span>");
-	}else if (<% getCfgZero(1, "WirelessMode"); %> == 4){
-		document.write("<span class='table_font2'>802.11g</span>");
-	}else if (<% getCfgZero(1, "WirelessMode"); %> == 6){
-		document.write("<span class='table_font2'>802.11n</span>");
-	}else if (<% getCfgZero(1, "WirelessMode"); %> == 9){
-		document.write("<span class='table_font2'>802.11b/g/n</span>");
-	}
+      	var op_mode = <% getCfgZero(1, "OP_Mode"); %>;
+      	if(op_mode==1)
+      	{
+		if (<% getCfgZero(1, "WirelessMode"); %> == 0){
+			document.write("<span class='table_font2'>802.11b/g</span>");
+		}else if (<% getCfgZero(1, "WirelessMode"); %> == 1){
+			document.write("<span class='table_font2'>802.11b</span>");
+		}else if (<% getCfgZero(1, "WirelessMode"); %> == 4){
+			document.write("<span class='table_font2'>802.11g</span>");
+		}else if (<% getCfgZero(1, "WirelessMode"); %> == 6){
+			document.write("<span class='table_font2'>802.11n</span>");
+		}else if (<% getCfgZero(1, "WirelessMode"); %> == 9){
+			document.write("<span class='table_font2'>802.11b/g/n</span>");
+		}
+      	}
+      	else if(op_mode==5 ||op_mode==6)
+      	{
+      	     var associate_status="<% getWISPapcli0ConnectStatus(); %>";
+      	     if(associate_status=="Connected")
+      	     	document.write("<span class='table_font2'><% getConnectedAPMode(); %></span>");	
+      	     else
+      	     	document.write("<span class='table_font2'>--</span>");
+      	}
+      	else
+      		document.write("<span class='table_font2'>--</span>");	
+
 	document.write("</td></tr>");
 }
 function wlan24g_channel_mode(){

@@ -19,8 +19,7 @@
 
 #include	"webs.h"
 #include	"utils.h"
-//#include	"wireless.h"
-#include "nvram.h"
+#include	"wireless.h"
 //#include	"wireless.h"
 //#include	"internet.h"
 
@@ -32,6 +31,7 @@
 //#include	"linux/autoconf.h"  //kernel config
 //#include	"config/autoconf.h" //user config
 
+#include "nvram.h"
 #include "nvram_rule.h"
 #define TMP_LEN 256 //aron patch for giga, from httpd common.h
 
@@ -58,15 +58,15 @@ static int  getMiiInicBuilt(int eid, webs_t wp, int argc, char_t **argv);
 static int  getPlatform(int eid, webs_t wp, int argc, char_t **argv);
 static int  getStationBuilt(int eid, webs_t wp, int argc, char_t **argv);
 static int  getSysBuildTime(int eid, webs_t wp, int argc, char_t **argv);
-//static int  getSdkVersion(int eid, webs_t wp, int argc, char_t **argv);
+static int  getSdkVersion(int eid, webs_t wp, int argc, char_t **argv);
 static int  getSysUptime(int eid, webs_t wp, int argc, char_t **argv);
 #if 1//Arthur Chow 2009-01-03
 static int  getSysResource(int eid, webs_t wp, int argc, char_t **argv);
 #endif
 static int  getPortStatus(int eid, webs_t wp, int argc, char_t **argv);
 static int  isOnePortOnly(int eid, webs_t wp, int argc, char_t **argv);
-//static void forceMemUpgrade(webs_t wp, char_t *path, char_t *query);
-//static void setOpMode(webs_t wp, char_t *path, char_t *query);
+static void forceMemUpgrade(webs_t wp, char_t *path, char_t *query);
+static void setOpMode(webs_t wp, char_t *path, char_t *query);
 //Tommy, 2008/12/16 08:14¤U¤È
 static void SetOperationMode(webs_t wp, char_t *path, char_t *query);
 // Steve, 2009/01/16 02:45¤U¤È
@@ -77,7 +77,7 @@ static int  startInternetcheck(int eid, webs_t wp, int argc, char_t **argv);
 static int  statusRoutercheck(int eid, webs_t wp, int argc, char_t **argv);
 static int  statusInternetcheck(int eid, webs_t wp, int argc, char_t **argv);
 static int  javascriptLLTD(int eid, webs_t wp, int argc, char_t **argv);
-//static void easy_setting(webs_t wp, char_t *path, char_t *query); //modify by bingley
+static void easy_setting(webs_t wp, char_t *path, char_t *query);
 static int  clearLLTDInfo(int eid, webs_t wp, int argc, char_t **argv);
 static int  existLLTDinfo(int eid, webs_t wp, int argc, char_t **argv);
 #endif
@@ -101,7 +101,7 @@ wfputs(char *buf, FILE * fp)
         return BIO_puts((BIO *) fp, buf);
     else
 #endif
-        printf("fputs started !!!!\n");
+        printf("fputs started !!!!");
 		return fputs(buf, fp);
 }
 
@@ -383,7 +383,7 @@ valid_range(webs_t wp, char *value, struct variable *v)
 	printf("valid range value=%d,start value=%d,end value=%d\n",n,start,end);
 
     if (!is_digit_str(value) || n < start || n > end) {
-		printf("value is not in the range!!!!\n");
+		printf("value is not in the range!!!!");
         return FALSE;
     }
 
@@ -411,8 +411,8 @@ valid_choice(webs_t wp, char *value, struct variable *v)
             return TRUE;
     }
 
-   // for (choice = v->argv; *choice; choice++)
-   // return FALSE;
+    for (choice = v->argv; *choice; choice++)
+    return FALSE;
 }
 int
 valid_strict_name(webs_t wp, char *value, struct variable *v)
@@ -1192,7 +1192,7 @@ static int
 ej_lang(int eid, webs_t wp, int argc, char_t ** argv)
 {
     char *str;
-//    char *trans;
+    char *trans;
 
     if (ejArgs(argc, argv, "%s", &str) < 1) {
         websError(wp, 400, "Insufficient args\n");
@@ -1329,7 +1329,6 @@ ej_nvg_attr_match(int eid, webs_t wp, int argc, char_t **argv)
     }
     return 0;
 }
-
 /*
  * Example: 
  * wan_proto=dhcp
@@ -1436,7 +1435,7 @@ ej_rule_get(int eid, webs_t wp, int argc, char **argv)
 	int nattr = 1;
 	char *cur;
 	int cur_num;
-	int  j, rlen;
+	int i, j, rlen;
 
 	if (ejArgs(argc, argv, "%s %d", &rule_set, &cur_num) < 2) {
 		//websError(wp, 400, "Insufficient args\n");
@@ -1773,7 +1772,7 @@ ej_ad_tools_showif(int eid, webs_t wp, int argc, char_t **argv){
     char *iface, *act, *rule_set = "adtool_rule", 
          buf[TMP_LEN], buf_sel[SHORT_BUF_LEN],
          upperbuf[SHORT_BUF_LEN];
-//    int num, i;
+    int num, i;
 
     if (ejArgs(argc, argv, "%s %s", &iface, &act) < 1) {
         websError(wp, 400, "Insufficient args\n");
@@ -1936,7 +1935,7 @@ void formDefineUtilities(void)
 	websAspDefine(T("statusRoutercheck"), statusRoutercheck);
 	websAspDefine(T("statusInternetcheck"), statusInternetcheck);
 	websAspDefine(T("javascriptLLTD"), javascriptLLTD);
-//	websFormDefine(T("easy_setting"), easy_setting); //modify by bingley
+	websFormDefine(T("easy_setting"), easy_setting);
 	websAspDefine(T("clearLLTDInfo"), clearLLTDInfo);
 	websAspDefine(T("existLLTDinfo"), existLLTDinfo);
 #endif
@@ -1998,7 +1997,7 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 	}
 	
 	//Steve
-	printf("---> getCfgGeneral(): type = %d & field = %s\n",type,field);
+	printf("\n ---> getCfgGeneral(): type = %d & field = %s",type,field);
 	if (!strcmp(field, "Language")){
 		/* Get the setting of value from AXIMCom's nvram structure into reValue */
 		value = nvram_safe_get("lang");
@@ -2012,9 +2011,7 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 		value = reValue;	
 	}else if (!strcmp(field, "SystemName")){
 		value = nvram_safe_get("hostname");
-	}
-#if 0 //add by bingley	
-	else if (!strcmp(field, "SSID1")){
+	}else if (!strcmp(field, "SSID1")){
 		ezplib_get_attr_val("wl0_ssid_rule", 0, "ssid", buf, 33, EZPLIB_USE_CLI);
 		strcpy(reValue, buf);
 		char *str;
@@ -2060,9 +2057,7 @@ static int getCfgGeneral(int eid, webs_t wp, int argc, char_t **argv)
 		ezplib_get_attr_val("wl1_ssid_rule", 3, "ssid", buf, 33, EZPLIB_USE_CLI);
 		strcpy(reValue, buf); 
 		value = reValue;	
-	}
-#endif //add by bingley
-	else if (!strcmp(field, "lan_ipaddr")){ 
+	}else if (!strcmp(field, "lan_ipaddr")){ 
 		value = nvram_safe_get("lan0_ipaddr");
 	}else if (!strcmp(field, "lan_pcipaddr")){ 
 	      value = websGetRequestIpaddr(wp);	
@@ -3872,11 +3867,11 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 {
 	int type;
 	char_t *field;
-	char *value = NULL;
+	char *value;
 	char TempBuf[32];
 	char buf[TMP_LEN]; //aron add
-//	int ret; //aron add
-	int idx; //aron add
+	int ret; //aron add
+	int idx,i; //aron add
 	int tmp_val;
 	char device[16];
 	char *if_ptr;
@@ -3889,7 +3884,7 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 	}
 
     // Tommy for Debug	
-    printf(" ---> getCfgZero(): type = %d & field = %s\n",type,field);
+    printf("\n ---> getCfgZero(): type = %d & field = %s",type,field);
     if(!strcmp(field,"wisp_mode")){
         if (snprintf(device, 16, "wan0_device") >= 16)
             return -1;
@@ -5681,10 +5676,6 @@ printf("enable dhcp *********%s\n",value);
 	}
 	
 	if (1 == type) {
-		if (NULL == value){
-			return websWrite(wp, T("0"));
-		}
-		
 		if (!strcmp(value, "")){
 			return websWrite(wp, T("0"));
 		}
@@ -6270,7 +6261,7 @@ printf("\n ==> getPortStatus\n");
 	char wanspeed[10]={0};
 		char link = '0';
 		int speed = 100;
-//		char duplex = 'F';
+		char duplex = 'F';
 
 	FILE *fp = popen("/sbin/ezp-portstate 5 link", "r");
 	if(!fp){
@@ -6910,8 +6901,8 @@ static int getCfgLLTD(int eid, webs_t wp, int argc, char_t **argv)
 {
 	int type, idx;
 	char_t *field;
-//	char *value;
-//	char *nth;
+	char *value;
+	char *nth;
 
 	if (ejArgs(argc, argv, T("%d %s %d"), &type, &field, &idx) < 3) {
 		return websWrite(wp, T("Insufficient args\n"));
@@ -7099,7 +7090,7 @@ static int javascriptLLTD(int eid, webs_t wp, int argc, char_t **argv)
 		
 	return 1;
 }
-#if 0 //add by bingley
+
 /* goform/easy_setting */
 extern int WLAN_Scheduler(int setting);
 extern int parental_control_switch(int flag);
@@ -7167,7 +7158,7 @@ static void easy_setting(webs_t wp, char_t *path, char_t *query)
 
 	websRedirect(wp, "local/easy_info.asp");
 }
-#endif
+
 static int clearLLTDInfo(int eid, webs_t wp, int argc, char_t **argv)
 {
 	system("rm /tmp/ping_internet");
@@ -7225,7 +7216,7 @@ static int getFirmwareVersion(int eid, webs_t wp, int argc, char_t **argv)
     if(!(fp=fopen("/version","r"))){
     	 printf("cant open file!\n");
 	 websWrite(wp, "%s", FW_VERSION);
-	 return -1;
+	 return;
     }
     ch=fgetc(fp);
     while(ch!= EOF)
@@ -7240,7 +7231,7 @@ static int getFirmwareVersion(int eid, webs_t wp, int argc, char_t **argv)
 		memset(buffer,0,count*sizeof(char));
 	}
 	if (!(fp = fopen("/version", "r")))
-        return -1;
+        return;
         printf("get value=\n");
     while ((c = getc(fp)) != EOF) {
         printf("%c",c);

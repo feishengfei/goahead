@@ -142,4 +142,22 @@
 <message msgid="remote management www" msgstr=" WWW " />
 <!--Steve add and reference other page-->
 <message msgid="System do not support specific invalid characters." msgstr="系统不支援特定的无效字符。"/>
+
+<message msgid="contact" msgstr="联系："/>
+<message msgid="community read" msgstr="团体名称（只读）："/>
+<message msgid="community write" msgstr="团体名称（读/写）："/>
+<message msgid="trap ip" msgstr="陷阱IP："/>
+<message msgid="snmp enable" msgstr="开"/>
+<message msgid="snmp disable" msgstr="关"/>
+<message msgid="ssh enable" msgstr="开"/>
+<message msgid="ssh disable" msgstr="关"/>
+<message msgid="telnet enable" msgstr="开"/>
+<message msgid="telnet disable" msgstr="关"/>
+<message msgid="https enable" msgstr="开"/>
+<message msgid="https disable" msgstr="关"/>
+<message msgid="ssh server port" msgstr="服务器端口："/>
+<message msgid="telnet server port" msgstr="服务器端口："/>
+<message msgid="https server port" msgstr="服务器端口："/>
+<message msgid="service apply" msgstr="应用"/>
+<message msgid="service reset" msgstr="取消"/>
 </po>

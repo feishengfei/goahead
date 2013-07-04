@@ -22,10 +22,10 @@ void	formDefineUserMgmt(void);
 #include "webs.h"
 
 #include "nvram.h"
-#include <utils.h>  
-//#include "shutils.h" 
-//#include "nvram_ezpacket.h"
 #include "nvram_rule.h"
+#include <utils.h>
+//#include <shutils.h>
+
 #include  <syslog.h>
 #include  <sys/sysinfo.h>
 //#include "ezpcom-lib.h"
@@ -807,6 +807,7 @@ int set_language(int eid, webs_t wp, int argc, char_t **argv)
 	lang=wp->url+18;
 	printf("\n\nLanguage =%s\n\n", lang);
 	doSystem("nvram set lang=%s", lang);
+	//nvram_set("lang", lang);
 	return 1;
 }
 #endif
@@ -1621,7 +1622,7 @@ static long long getIfStatistic(char *interface, int type)
 	}
 	return -1;
 }
-#if 0 //add by bingley
+
 /*
  *     getIfStatistic()   ASP version
  */
@@ -2150,7 +2151,7 @@ int getWLAN1TxPacketASP(int eid, webs_t wp, int argc, char_t **argv)
 	return 0;
 }
 #endif
-#if 0
+
 int getWANCollsASP(int eid, webs_t wp, int argc, char_t **argv)
 {
 	char_t buf[32];
@@ -2189,7 +2190,7 @@ int getWLAN1CollsASP(int eid, webs_t wp, int argc, char_t **argv)
 	websWrite(wp, T("%s"),buf);
 	return 0;	
 }
-#endif
+
 int getPortLinkStatus(port_num)
 {
 	int port, rc;
@@ -2663,7 +2664,6 @@ int getAllNICStatisticASP(int eid, webs_t wp, int argc, char_t **argv)
     return 0;
 }
 
-#endif	//add by bingley
 
 int getMemTotalASP(int eid, webs_t wp, int argc, char_t **argv)
 {
@@ -2692,7 +2692,6 @@ int getMemTotalASP(int eid, webs_t wp, int argc, char_t **argv)
 	
 	return -1;
 }
-
 
 /*static int getCurrentTimeASP(int eid, webs_t wp, int argc, char_t **argv)
 {
@@ -3472,8 +3471,6 @@ int kill_wget(int eid, webs_t wp, int argc, char_t **argv)
 
 #endif //Steve220
 
-#if 0//add by bingley
-
 // Add for 3G +++++++++++++++++++
 //
 //	return : 0: not exist ; 1: exist
@@ -3798,7 +3795,7 @@ static int getIPv6ConnType(int eid, webs_t wp, int argc, char_t **argv)
 		    return websWrite(wp, T("PPPoE"));
 	else if(!strcmp(value, "link-local")) 
 		    return websWrite(wp, T("Link-local only"));
-	
+
 }
 static int getIPv6LanAddr(int eid, webs_t wp, int argc, char_t **argv)
 {
@@ -3942,7 +3939,7 @@ static int getIPv6DhcpWanDateway(int eid, webs_t wp, int argc, char_t **argv)
 // Add for IPv6 ---------------
 
 //=================================================================
-#endif //add by bingley
+
 void formDefineManagement(void)
 {
 	
@@ -3969,9 +3966,7 @@ void formDefineManagement(void)
 	websAspDefine(T("getMemTotalASP"), getMemTotalASP);
 
 
-#if 0	//add by bingley	
 	websAspDefine(T("GetIfBytesPerSecASP"), GetIfBytesPerSecASP);
-
 	websAspDefine(T("getWANRxByteASP"), getWANRxByteASP);
 	websAspDefine(T("getWANTxByteASP"), getWANTxByteASP);
 	websAspDefine(T("getLANRxByteASP"), getLANRxByteASP);
@@ -4005,15 +4000,15 @@ void formDefineManagement(void)
 	
 	
 #endif	
-#endif	//add by bingley
+	
 // Tommy, Add WAN/LAN/WLAN Collisions field, 2009/2/4 09:23
-#if 0
+#if 1
 	websAspDefine(T("getWANCollsASP"), getWANCollsASP);
 	websAspDefine(T("getLANCollsASP"), getLANCollsASP);
 	websAspDefine(T("getWLANCollsASP"), getWLANCollsASP);
 	websAspDefine(T("getWLAN1CollsASP"), getWLAN1CollsASP);
 #endif
-#if 0 //add by bingley
+
 	websAspDefine(T("getAllNICStatisticASP"), getAllNICStatisticASP);
 
 	websAspDefine(T("showSystemCommandASP"), showSystemCommandASP);
@@ -4025,7 +4020,6 @@ void formDefineManagement(void)
 
 	websFormDefine(T("clearlog"), clearlog);
 	websFormDefine(T("loglist"), loglist);//Gordon added
-#endif
 #if 1//Arthur Chow 2008-12-16: For login.asp/login_fail.asp
 	websFormDefine(T("web_login"), web_login);
 	websFormDefine(T("setSysPass"), setSysPass);
@@ -4033,7 +4027,6 @@ void formDefineManagement(void)
 	websFormDefine(T("setSysPassLogin"), setSysPassLogin);
 	websFormDefine(T("maintenance_general"), maintenance_general);
 #endif	
-#if 0
 #if 1//Arthur Chow 2009-02-04: For detecting/checking wan type
 	websAspDefine(T("detectEthernetWanType"), detectEthernetWanType);
 	websAspDefine(T("checkEthernetWanType"), checkEthernetWanType);
@@ -4079,6 +4072,4 @@ void formDefineManagement(void)
 // Add for IPv6 ---------------
 
 	formDefineWPS();
-#endif //add by bingley
-
 }

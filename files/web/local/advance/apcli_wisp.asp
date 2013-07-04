@@ -922,6 +922,22 @@ function CheckWep()
 		var keyvalue = document.wireless_apcli.apcli_key4.value;
 	}	
 	
+	tmp_keyvalue = keyvalue;
+	tmp_keyvalue = allTrim(tmp_keyvalue);
+	if (! isASCII(tmp_keyvalue)) {
+			alert("invalid key: cann't include chinese!");
+			if (defaultid == 1)
+				document.wireless_apcli.apcli_key1.focus();
+			else if (defaultid == 2)
+				document.wireless_apcli.apcli_key2.focus();
+			else if (defaultid == 3)
+				document.wireless_apcli.apcli_key3.focus();
+			else if (defaultid == 4)
+				document.wireless_apcli.apcli_key4.focus();
+					
+			return false;
+	}
+	
 	if (keyvalue.length == 0 &&  securitymode == "SHARED"){ 
 		alert(_('Please input wep key')+defaultid+'!');
 		return false;
@@ -1123,7 +1139,16 @@ function CheckWpa()
 		alert("Pass Phrase length should be larger than 8!");
 		document.wireless_apcli.apcli_wpapsk.focus();
 		return false;
+	} else {
+		tmp_apcli_wpapsk = document.wireless_apcli.apcli_wpapsk.value;
+		tmp_apcli_wpapsk = allTrim(tmp_apcli_wpapsk);
+		if (! isASCII(tmp_apcli_wpapsk)) {
+				alert("invalid wpapsk/wpa2psk: cann't include chinese!");
+				document.wireless_apcli.apcli_wpapsk.focus();
+				return false;
+		}
 	}
+	
 	if (!checkInjection(document.wireless_apcli.apcli_wpapsk.value)) {
 		alert('Invalid characters in Pass Phrase.');
 		document.wireless_apcli.apcli_wpapsk.focus();
@@ -1169,11 +1194,10 @@ function CheckWpa2()
 	} else {
 		tmp_wpa_password = document.wireless_apcli.apcli_wpa_password.value;
 		tmp_wpa_password = allTrim(tmp_wpa_password);
-		tmp_wpa_password = tmp_wpa_password.match(reg);
 		
-		if(! isASCII(tmp_wpa_username))
+		if(! isASCII(tmp_wpa_password))
 		{
-			alert("invalid wpa user password!");
+			alert("invalid wpa user password: cann't include chinese!");
 			document.wireless_apcli.apcli_wpa_password.focus();
 			return false;
 		}
@@ -1330,7 +1354,14 @@ function generate_wep()
 {
 	var passphrase;
 	passphrase = document.wireless_apcli.wep_passphrase.value;
-
+	tmp_passphrase = passphrase;
+	tmp_passphrase = allTrim(tmp_passphrase);
+	if (! isASCII(tmp_passphrase)) {
+			alert("invalid passphrase: cann't include chinese!");
+			document.wireless_apcli.wep_passphrase.focus();
+			return false;
+	}
+	
 	document.wireless_apcli.WEPKey_Code[1].checked = true; //Hex	
 	if (document.getElementById("wep_encry").selectedIndex == 1){ // get 128 bits WEP KEY
 		makeRequest("/goform/wifiget128wepkey", passphrase, get128wepeyHandler);

@@ -105,6 +105,9 @@ function initTranslation()
 	e = document.getElementById("QoSWMMEnable");
 	e.innerHTML = _("qos wmm enable");
 	
+	e = document.getElementById("DSCPNote");
+	e.innerHTML = _("DSCP Note");
+	
 	e = document.getElementById("GeneralApply");
 	e.value = _("general apply");
 	
@@ -2034,7 +2037,7 @@ All others
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-<td><span class="i_note" id ="SchedulingNote">Note: 1 Input the value of DSCP in decimal. 2 Configuration will affect others enabled radio.</span></td>
+<td><span class="i_note" id ="DSCPNote">Note: 1 Input the value of DSCP in decimal. 2 Configuration will affect others enabled radio.</span></td>
 </tr>
 </table>
 </li>               

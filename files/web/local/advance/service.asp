@@ -13,41 +13,60 @@ td {white-space: nowrap;}
 <script language="JavaScript" type="text/javascript">
 Butterlate.setTextDomain("firewall");
 
-var sys_port_list="<% get_sys_sock_port_list(); %>";
-
-function find_www_port(port){
-	var port_array = new Array();
-	
-	port_array = sys_port_list.split(":");
-	
-	for (i = 0; i < port_array.length; i ++) {
-			if(port_array[i] == port)
-					return true;	
-	}
-	
-	return false;
-}
-
 function initTranslation(){
-
-	<!-- var e = document.getElementById("RemoteManagementServerPort"); -->
-	<!-- e.innerHTML = _("remote management server port"); -->
-	<!-- e = document.getElementById("RemoteManagementServerAccess"); -->
-	<!-- e.innerHTML = _("remote management server access"); -->
-	<!-- e = document.getElementById("RemoteManagementSecuredIP"); -->
-	<!-- e.innerHTML = _("remote management secured ip"); -->
-	<!-- e = document.getElementById("RemoteManagementSecuredIPAll"); -->
-	<!-- e.innerHTML = _("remote management secured ip all"); -->
-	<!-- e = document.getElementById("RemoteManagementSecuredIPSel"); -->
-	<!-- e.innerHTML = _("remote management secured ip sel"); -->
-	<!-- e = document.getElementById("natApply"); -->
-	<!-- e.value = _("nat apply"); -->
-	<!-- e = document.getElementById("natReset"); -->
-	<!-- e.value = _("nat reset"); -->
+    
+	e = document.getElementById("contact");
+	e.innerHTML = _("contact");
 	
-	<!-- e = document.getElementById("remoteManagementWWW"); -->
-	<!-- e.innerHTML = _("remote management www"); -->
+	e = document.getElementById("community_read");
+	e.innerHTML = _("community read");
+	
+	e = document.getElementById("community_write");
+	e.innerHTML = _("community write");
+		
+	e = document.getElementById("trap_ip");
+	e.innerHTML = _("trap ip");
+	
+	e = document.getElementById("snmpenable");
+	e.innerHTML = _("snmp enable");
+	
+	e = document.getElementById("snmpdisable");
+	e.innerHTML = _("snmp disable");
+	
+	e = document.getElementById("sshenable");
+	e.innerHTML = _("ssh enable");
+	
+	e = document.getElementById("sshdisable");
+	e.innerHTML = _("ssh disable");
+	
+	e = document.getElementById("telnetenable");
+	e.innerHTML = _("telnet enable");
+	
+	e = document.getElementById("telnetdisable");
+	e.innerHTML = _("telnet disable");
+	
+	e = document.getElementById("httpsenable");
+	e.innerHTML = _("https enable");
+	
+	e = document.getElementById("httpsdisable");
+	e.innerHTML = _("https disable");
+	
+	e = document.getElementById("sshserverport");
+	e.innerHTML = _("ssh server port");
+	
+	e = document.getElementById("telnetserverport");
+	e.innerHTML = _("telnet server port");
+	
+	e = document.getElementById("httpsserverport");
+	e.innerHTML = _("https server port");
+	
+  	e = document.getElementById("serviceApply");
+	e.value = _("service apply");
+	
+	e = document.getElementById("serviceReset");
+	e.value = _("service reset");
 }
+
 function atoi(str, num){
 	i = 1;
 	if (num != 1) {
@@ -205,11 +224,6 @@ if(form.ssh_enable[0].checked)
 		alert("invalid ssh port number!");
 		return false;
 	}
-	if(find_www_port(form.ssh_port.value))
-  	{
-  		alert("SSh port already in use");
-  		return false;	
-  	}
 }
 if(form.telnet_enable[0].checked)
 {
@@ -218,11 +232,6 @@ if(form.telnet_enable[0].checked)
 		alert("invalid telnet port number!");
 		return false;
 	}
-	if(find_www_port(form.telnet_port.value))
-	{
-  		alert("telnet port already in use");
-  		return false;	
-  	}
 }
 if(form.https_enable[0].checked)
 {
@@ -231,11 +240,6 @@ if(form.https_enable[0].checked)
 		alert("invalid https port number!");
 		return false;
 	}
-	if(find_www_port(form.https_port.value))
-  	{
-  		alert("https port already in use");
-  		return false;	
-  	}
 }
 showWebMessage(2, "");
 return true;
@@ -368,10 +372,10 @@ form.snmp_trap_ip.disabled=false;
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr><td width="40%" id="RemoteManagementServerPort">SNMP : </td>
-<td><input name="snmp_enable" onclick="radioChange()" value="1" type="radio" />&nbsp;&nbsp;&nbsp;Enable</td>
-
-<td><input name="snmp_enable" onclick="radioChange()" value="0" type="radio" />&nbsp;&nbsp;&nbsp;Disable</td>
-
+<td><input name="snmp_enable" onclick="radioChange()" value="1" type="radio" /></td>
+<td id="snmpenable"></td>
+<td><input name="snmp_enable" onclick="radioChange()" value="0" type="radio" /></td>
+<td id="snmpdisable"></td>
 <td width="43%"></td>
 </tr>
 </table>
@@ -391,29 +395,30 @@ form.snmp_trap_ip.disabled=false;
 </li>
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id=""> Contact: </td>
+<tr><td width="40%" id="contact"> Contact: </td>
 <td><input name="snmp_contact" size="32" maxlength="32" value="<% getCfgGeneral(1, "SNMP_contact");%>" type="text" /></td>
 </tr>
 </table>
 </li>
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id=""> Community Name(read only): </td>
+<tr><td width="40%" id="community_read"> Community Name(read only): </td>
 <td><input name="snmp_comm_ro" size="32" maxlength="32" value="<% getCfgGeneral(1, "SNMP_comm_ro");%>" type="text" /></td>
 </tr>
 </table>
 </li>
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id=""> Community Name(read/write): </td>
+<tr><td width="40%" id="community_write"> Community Name(read/write): </td>
 <td><input name="snmp_comm_rw" size="32" maxlength="32" value="<% getCfgGeneral(1, "SNMP_comm_rw");%>" type="text" /></td>
 </tr>
 </table>
 </li>
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id=""> Trap IpAddress: </td>
-<td><input name="snmp_trap_ip" size="32" maxlength="32" value="<% getCfgGeneral(1, "SNMP_trap_ip");%>" type="text" /></td>
+<tr>
+  <td width="40%" id="trap_ip"> Trap IP: </td>
+  <td><input name="snmp_trap_ip" size="32" maxlength="32" value="<% getCfgGeneral(1, "SNMP_trap_ip");%>" type="text" /></td>
 </tr>
 </table>
 </li>
@@ -459,10 +464,10 @@ form.snmp_trap_ip.disabled=false;
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr><td width="40%" id="ManagementSSHFunc">SSH : </td>
-<td><input name="ssh_enable" onclick="sshchange()" value="1" type="radio" />&nbsp;&nbsp;&nbsp;Enable</td>
-
-<td><input name="ssh_enable" onclick="sshchange()" value="0" type="radio" />&nbsp;&nbsp;&nbsp;Disable</td>
-
+<td><input name="ssh_enable" onclick="sshchange()" value="1" type="radio" /></td>
+<td id="sshenable"></td>
+<td><input name="ssh_enable" onclick="sshchange()" value="0" type="radio" /></td>
+<td id="sshdisable"></td>
 <td width="43%"></td>
 </tr>
 </table>
@@ -470,7 +475,7 @@ form.snmp_trap_ip.disabled=false;
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id=""> Server Port: </td>
+<tr><td width="40%" id="sshserverport"> Server Port: </td>
 <td><input name="ssh_port" size="5" maxlength="5" value="<% getCfgGeneral(1, "ssh_port");%>" type="text" /></td>
 </tr>
 </table>
@@ -490,10 +495,10 @@ form.snmp_trap_ip.disabled=false;
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr><td width="40%" id="ManagementTelnetFunc">Telnet : </td>
-<td><input name="telnet_enable" onclick="telnetchange()" value="1" type="radio" />&nbsp;&nbsp;&nbsp;Enable</td>
-
-<td><input name="telnet_enable" onclick="telnetchange()" value="0" type="radio" />&nbsp;&nbsp;&nbsp;Disable</td>
-
+<td><input name="telnet_enable" onclick="telnetchange()" value="1" type="radio" /></td>
+<td id="telnetenable"></td>
+<td><input name="telnet_enable" onclick="telnetchange()" value="0" type="radio" /></td>
+<td id="telnetdisable"></td>
 <td width="43%"></td>
 </tr>
 </table>
@@ -501,7 +506,7 @@ form.snmp_trap_ip.disabled=false;
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id=""> Server Port: </td>
+<tr><td width="40%" id="telnetserverport"> Server Port: </td>
 <td><input name="telnet_port" size="5" maxlength="5" value="<% getCfgGeneral(1, "telnet_port");%>" type="text" /></td>
 </tr>
 </table>
@@ -520,11 +525,12 @@ form.snmp_trap_ip.disabled=false;
 <li class="title" id="Managementhttps">HTTPS</li>
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id="ManagementhttpsFunc">Https : </td>
-<td><input name="https_enable" onclick="httpschange()" value="1" type="radio" />&nbsp;&nbsp;&nbsp;Enable</td>
-
-<td><input name="https_enable" onclick="httpschange()" value="0" type="radio" />&nbsp;&nbsp;&nbsp;Disable</td>
-
+<tr>
+<td width="40%" id="ManagementhttpsFunc">HTTPS : </td>
+<td><input name="https_enable" onclick="httpschange()" value="1" type="radio" /></td>
+<td id="httpsenable"></td>
+<td><input name="https_enable" onclick="httpschange()" value="0" type="radio" /></td>
+<td id="httpsdisable"></td>
 <td width="43%"></td>
 </tr>
 </table>
@@ -532,7 +538,7 @@ form.snmp_trap_ip.disabled=false;
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr><td width="40%" id=""> Port: </td>
+<tr><td width="40%" id="httpsserverport"> Port: </td>
 <td><input name="https_port" size="5" maxlength="5" value="<% getCfgGeneral(1, "https_port");%>" type="text" /></td>
 </tr>
 </table>
@@ -546,8 +552,8 @@ form.snmp_trap_ip.disabled=false;
 
 <center>
 <li class="table_button">
-<input type="submit" value="Apply" id="natApply" name="add" onClick="return myformCheck()"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="reset" value="Cancel" id="natReset" name="reset" onClick="window.location.reload()">
+<input type="submit" value="Apply" id="serviceApply" name="add" onClick="return myformCheck()"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="reset" value="Cancel" id="serviceReset" name="reset" onClick="window.location.reload()">
 <input type=hidden value="/local/advance/service.asp" name="service_url">
 </li>
 </center>

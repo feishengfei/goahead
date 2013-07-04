@@ -424,6 +424,14 @@
 	<message msgid="autoconfiguration addr setup" msgstr="地址自动配置设置"/>
 	<message msgid="ipv6 dhcp enable" msgstr="启用无状态地址自动配置"/>
 	<message msgid="ipv6 dhcp life time" msgstr="路由器公告使用周期："/>
+	<message msgid="wan dhcpv6 type" msgstr="类型："/>
+	<message msgid="ipv6 dns id" msgstr="IPv6 DNS 设置"/>
+	<message msgid="dns type" msgstr="DNS 类型: "/>
+	<message msgid="dhcp ipv6 dns1" msgstr="第一 DNS 服务器："/>
+	<message msgid="dhcp ipv6 dns2" msgstr="第二 DNS 服务器："/>
+	<message msgid="ipv6 type" msgstr="类型："/>
+	<message msgid="ipv6 dhcp addrstart" msgstr="地址（起始）："/>
+	<message msgid="ipv6 dhcp addrend" msgstr="地址（结束）："/>				
 	<message msgid="general apply" msgstr="应用"/>
 	<message msgid="general reset" msgstr="取消"/>
 	<message msgid="Error. Invalid Subnet Mask." msgstr="错误。子网掩码无效。"/>
@@ -442,4 +450,11 @@
 <message msgid="Please set value between 64~32768" msgstr="Please set value between 64~32768" />
 <message msgid="lan fallback ip" msgstr="回退IP" />
 <message msgid="lan fallback mask" msgstr="回退mask" />
+
+<message msgid="ping host" msgstr="目标宿主：" />
+<message msgid="ping package" msgstr="包个数：" />
+<message msgid="arpping host" msgstr="目标宿主：" />
+<message msgid="arpping package" msgstr="包个数：" />
+<message msgid="traceroute host" msgstr="目标宿主：" />
+<message msgid="traceroute hop" msgstr="跳数：" />
 </po>

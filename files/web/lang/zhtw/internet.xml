@@ -65,6 +65,14 @@
 	<message msgid="lanAdv DNSServer2Defined" msgstr="使用者定義"/>
 	<message msgid="lanAdv DNSServer2Relay" msgstr="DHCP 轉送站"/>
 	<message msgid="lanAdv DNSServer2None" msgstr="無"/>
+	<message msgid="wan dhcpv6 type" msgstr="類型："/>
+	<message msgid="ipv6 dns id" msgstr="IPv6 DNS 設置"/>
+	<message msgid="dns type" msgstr="DNS 類型: "/>
+	<message msgid="dhcp ipv6 dns1" msgstr="第一 DNS 服務器："/>
+	<message msgid="dhcp ipv6 dns2" msgstr="第二 DNS 服務器："/>
+	<message msgid="ipv6 type" msgstr="類型："/>
+	<message msgid="ipv6 dhcp addrstart" msgstr="地址（起始）："/>
+	<message msgid="ipv6 dhcp addrend" msgstr="地址（結束）："/>
 	<message msgid="lanAdv Apply" msgstr="套用"/>
 	<message msgid="lanAdv Reset" msgstr="重設"/>
 	<message msgid="ipAlias title" msgstr="IP 別名1"/>
@@ -442,4 +450,12 @@
 <message msgid="Please set value between 64~32768" msgstr="Please set value between 64~32768" />
 <message msgid="lan fallback ip" msgstr="fallback IP" />
 <message msgid="lan fallback mask" msgstr="fallback mask" />
+
+<message msgid="ping host" msgstr="目標宿主：" />
+<message msgid="ping package" msgstr="包個數：" />
+<message msgid="arpping host" msgstr="目標宿主：" />
+<message msgid="arpping package" msgstr="包個數：" />
+<message msgid="traceroute host" msgstr="目標宿主：" />
+<message msgid="traceroute hop" msgstr="跳數：" />
+
 </po>

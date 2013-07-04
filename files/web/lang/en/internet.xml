@@ -467,4 +467,11 @@
 <message msgid="Please set value between 64~32768" msgstr="Please set value between 64~32768" />
 <message msgid="lan fallback ip" msgstr="fallback IP" />
 <message msgid="lan fallback mask" msgstr="fallback mask" />
+
+<message msgid="ping host" msgstr="Target Host:" />
+<message msgid="ping package" msgstr="Number of packets:" />
+<message msgid="arpping host" msgstr="Target Host:" />
+<message msgid="arpping package" msgstr="Number of packets:" />
+<message msgid="traceroute host" msgstr="Target Host:" />
+<message msgid="traceroute hop" msgstr="Hop Count:" />
 </po>

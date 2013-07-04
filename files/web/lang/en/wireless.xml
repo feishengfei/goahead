@@ -80,7 +80,7 @@
 <message msgid="Client" msgstr="Client"/>
 <message msgid="IP Address" msgstr="IP Address"/>
 <message msgid="MAC Address" msgstr="MAC Address"/>
-<message msgid="refresh" msgstr="Refresh"/>
+<message msgid="mac repeater refresh" msgstr="Refresh"/>
 
 <!-- for Advance web pages -->
 <message msgid="advance title" msgstr="Wireless Advanced Setup" />
@@ -514,4 +514,6 @@
 <message msgid="op mode note1_5" msgstr="WISP + UR Mode: In this mode, the device acts as both access point and wireless client and also maintains router function. The wireless connection is treated as WAN, while the LAN broadcast as Wi-Fi signals for other wireless client devices to connect to." />
 <message msgid="UR Title" msgstr="Client Setup" />
 <message msgid="advance distance" msgstr="Distance" />
+<message msgid="DSCP Note" msgstr="Note: 1 Input the value of DSCP in decimal. 2 Configuration will affect others enabled radio" />
+<message msgid="survey waiting" msgstr="Scanning AP,please wait......" />
 </po>

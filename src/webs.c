@@ -106,9 +106,10 @@ int websOpenServer(int port, int retries,int usehttps)
 	char TempBuf[32]={0};
 	ezplib_get_attr_val("http_rule", 0, "port", TempBuf, 32, EZPLIB_USE_CLI);
 	port = atoi(TempBuf);
+	//printf(" port=%d\n",port);
 	if((port > 65535) || (port < 0))
 		port=80;
-
+	
 	#endif
 	/*End:Add for "HTTP port in LAN" by Steve, 2009-02-09*/
 

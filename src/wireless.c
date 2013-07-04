@@ -24,10 +24,8 @@
 #include	"webs.h"
 #include	"wireless.h"
 //#include	"oid.h"
-
-#include 	<nvram.h>
-#include 	"nvram_rule.h"
-
+#include "nvram.h"
+#include "nvram_rule.h"
 //#include	"linux/autoconf.h"
 
 // Tommy, Add syslog, 2009/10/21 04:47
@@ -52,13 +50,11 @@ void WPSRestart(void); // Aaron 2009/8/13 move to here!
  */
 static int default_shown_mbssid[3]  = {0,0,0};
 
-//extern 
-	int g_wsc_configured;
-//extern 
-	int g1_wsc_configured;
+extern int g_wsc_configured;
+extern int g1_wsc_configured;
 
 // Tommy, 2009/1/8 10:28
-//extern void create_crond_file(void);
+extern void create_crond_file(void);
 // Tommy, 2009/3/13 09:57
 //extern void check_scheduler(void);
 static void wifiAPGeneral(webs_t wp, char_t *path, char_t *query);
@@ -113,6 +109,7 @@ static void urwifi5GApcli(webs_t wp, char_t *path, char_t *query);
 static int  getRadioStatusASP(int eid, webs_t wp, int argc, char_t **argv);
 static int  getRadioStatusASP5G(int eid, webs_t wp, int argc, char_t **argv);
 static int  getAPClientConnectionESSID(int eid, webs_t wp, int argc, char_t **argv);
+static int getConnectedAPMode(int eid, webs_t wp, int argc, char_t **argv);
 static int  getAPClientConnectionStatus(int eid, webs_t wp, int argc, char_t **argv);
 static int  getAPClientConnectionESSIDMAC(int eid, webs_t wp, int argc, char_t **argv);
 static int  getAPClient5GConnectionESSID(int eid, webs_t wp, int argc, char_t **argv);
@@ -1257,7 +1254,29 @@ static int getRadioStatusASP5G(int eid, webs_t wp, int argc, char_t **argv)
 	}
 #endif
 }
+static int getConnectedAPMode(int eid, webs_t wp, int argc, char_t **argv)
+{
+       char buf[50];
+	FILE *fp = NULL;
+	int len=0;
 
+       system("iwpriv apclii0 set SiteSurvey=1");
+       system("iwpriv apclii0 get_site_survey > /etc/site_survey.dat");
+	system("/sbin/ezp-wps-set 2 0 0 0");
+	if (NULL == (fp = fopen("/etc/wireless_mode.dat", "r")))
+	{
+		websWrite(wp, T("--"));
+		return 0;
+	}
+    	len = fscanf(fp, "%s", buf);
+	fclose(fp);
+	system("rm /etc/wireless_mode.dat");
+	if(len!=1)
+             websWrite(wp, T("--"));
+       else
+             websWrite(wp, T("%s"), buf);
+   
+}
 static int getAPClientConnectionStatus(int eid, webs_t wp, int argc, char_t **argv)
 {
 	char buf[65];
@@ -1419,10 +1438,9 @@ static int getAPClient5GConnectionESSID(int eid, webs_t wp, int argc, char_t **a
 static int getWlanCurrentMac(int eid, webs_t wp, int argc, char_t **argv)
 {
 	char if_hw[18] = {0};
-/*
+
 	if (-1 == getIfMac("rai0", if_hw))
 		return websWrite(wp, T(" "));
-*/
 	return websWrite(wp, T("%s"), if_hw);
 }
 
@@ -3348,7 +3366,7 @@ static void wifiAdvanced(webs_t wp, char_t *path, char_t *query)
 		wIntraBSS = "0";
 	}
 
-	char_t *tx_power = websGetVar(wp, T("tx_power"), T("100"));
+	char_t *tx_power = websGetVar(wp, T("tx_power"), T("0"));
 
 	char_t *wirelessmode = websGetVar(wp, T("wirelessmode"), T("9")); //9: bgn mode
 	
@@ -3497,6 +3515,7 @@ static void wifiAdvanced(webs_t wp, char_t *path, char_t *query)
 //	nvram_commit(RT2860_NVRAM);
 	nvram_commit();	
 
+	//initInternet();
 //	reconfig_wireless(RT2860_NVRAM);
 		
 	
@@ -5001,6 +5020,7 @@ static void wifiApcli(webs_t wp, char_t *path, char_t *query)
 	    }     
 	}	
 #endif		
+	//initInternet();
 
 	//debug print
 #if 0	
@@ -5168,6 +5188,7 @@ static void wispwifiApcli(webs_t wp, char_t *path, char_t *query)
 	    }     
 	}	
 #endif		
+	//initInternet();
 
 	//debug print
 #if 0	
@@ -5600,7 +5621,7 @@ static void wirelessWds(webs_t wp, char_t *path, char_t *query)
 	}
 	nvram_commit(RT2860_NVRAM);
 
-	//initInternet();
+	initInternet();
 
 	//debug print
 	websHeader(wp);
@@ -5658,6 +5679,7 @@ static void wirelessApcli(webs_t wp, char_t *path, char_t *query)
 	nvram_bufset(RT2860_NVRAM, "ApCliKey4Type", keytype);
 	nvram_bufset(RT2860_NVRAM, "ApCliKey4Str", key4);
 	nvram_commit(RT2860_NVRAM);
+	initInternet();
 
 	//debug print
 	websHeader(wp);
@@ -5824,14 +5846,17 @@ void restart8021XDaemon(int nvram)
 static	char reValue[256];
 void getSecurity(webs_t wp, char_t *path, char_t *query)
 {
+	#define RESULT_SIZE 4096
 	int  i;
-	char_t result[4096];
+	char_t result[RESULT_SIZE];
 	char_t *wpapsk;
 	char *value;
     	char buf[TMP_LEN]; 
 	int ret;   
 	int ssid_num; 
         char *wpa_compatible;   
+
+	memset(result, 0, RESULT_SIZE);
         ssid_num = atoi(nvram_safe_get("wlv_rule_max"));     
 	result[0] = '\0';
 	sprintf(result, "%d\n",  default_shown_mbssid[0]);	
@@ -5840,16 +5865,16 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		ezplib_get_attr_val("wl0_ssid_rule", i, "ssid", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;
-	      		
-	gstrncat(result, value, 4096);	// SSID
-	gstrncat(result, "\r", 4096);
+		
+	gstrncat(result, value, RESULT_SIZE);	// SSID
+	gstrncat(result, "\r", RESULT_SIZE);
 
 		ezplib_get_attr_val("wl0_sec_wpa2_rule", i, "preauth", buf, TMP_LEN, EZPLIB_USE_CLI);			
 		strcpy(reValue, buf);
 		value = reValue;	
 	
-	gstrncat(result, value, 4096);	//  PreAuth  for wpa2
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	//  PreAuth  for wpa2
+	gstrncat(result, "\r", RESULT_SIZE);
 			
 		ezplib_get_attr_val("wl0_sec_rule", i, "secmode", buf, TMP_LEN, EZPLIB_USE_CLI);	
 	
@@ -5884,82 +5909,82 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 	   	
-	gstrncat(result, value, 4096);	//  AuthMode
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	//  AuthMode
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	ezplib_get_attr_val("wl0_sec_rule", i, "secmode", buf, TMP_LEN, EZPLIB_USE_CLI);
 	if(!strcmp(buf , "wep")){
 		strcpy(reValue, "WEP");
 		value = reValue;
-		gstrncat(result, value, 4096);	//  EncrypType for wep
-		gstrncat(result, "\r", 4096);	
+		gstrncat(result, value, RESULT_SIZE);	//  EncrypType for wep
+		gstrncat(result, "\r", RESULT_SIZE);	
 	}else {		
-	gstrncat(result, "", 4096);	        //  EncrypType  
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, "", RESULT_SIZE);	        //  EncrypType  
+	gstrncat(result, "\r", RESULT_SIZE);
 	}
 
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "key_index", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;
 	
-	gstrncat(result, value, 4096);	        //  defaultkey   
-	gstrncat(result, "\r", 4096);  
+	gstrncat(result, value, RESULT_SIZE);	        //  defaultkey   
+	gstrncat(result, "\r", RESULT_SIZE);  
 	
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "keytype", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;	
 	
-	gstrncat(result, value, 4096);	         //  Key1Type
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	         //  Key1Type
+	gstrncat(result, "\r", RESULT_SIZE);
 
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "key1", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;
 	   	
-	gstrncat(result, value, 4096); 	         //  key1str 
-        gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE); 	         //  key1str 
+        gstrncat(result, "\r", RESULT_SIZE);
         
         	ezplib_get_attr_val("wl0_sec_wep_rule", i, "keytype", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;
        
-	gstrncat(result, value, 4096); 	         //  Key2Type
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE); 	         //  Key2Type
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "key2", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;
 	
-	gstrncat(result, value, 4096);            // key2str  
-	gstrncat(result, "\r", 4096);  
+	gstrncat(result, value, RESULT_SIZE);            // key2str  
+	gstrncat(result, "\r", RESULT_SIZE);  
 	
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "keytype", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;
 	
-	gstrncat(result, value, 4096);	          // Key3Type
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	          // Key3Type
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "key3", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;
 
-	gstrncat(result, value, 4096);            //  key3str 
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);            //  key3str 
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "keytype", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;
 	
-	gstrncat(result, value, 4096);           //  Key4Type
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);           //  Key4Type
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 		ezplib_get_attr_val("wl0_sec_wep_rule", i, "key4", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;
 
-	gstrncat(result, value, 4096);            //  key4str
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);            //  key4str
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	ezplib_get_attr_val("wl0_sec_rule", i, "secmode", buf, TMP_LEN, EZPLIB_USE_CLI);	
 
@@ -5969,8 +5994,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 
-	gstrncat(result, value, 4096);            //  WPAPSK = passphrase
-	gstrncat(result, "\r", 4096);				
+	gstrncat(result, value, RESULT_SIZE);            //  WPAPSK = passphrase
+	gstrncat(result, "\r", RESULT_SIZE);				
 
 	}else if(!strcmp(buf , "psk2")){
 		
@@ -5978,21 +6003,21 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 
-	gstrncat(result, value, 4096);             //  WPAPSK2 = passphrase
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);             //  WPAPSK2 = passphrase
+	gstrncat(result, "\r", RESULT_SIZE);
 			
 	}else {  
 	   	ezplib_get_attr_val("wl0_sec_wpa_rule", i, "key", buf, TMP_LEN, EZPLIB_USE_CLI); 
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);                //  WPAPSK for disable
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);                //  WPAPSK for disable
+	gstrncat(result, "\r", RESULT_SIZE);
 		
 	}
 			
-	gstrncat(result, "DISABLE", 4096);          //RekeyMethod
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, "DISABLE", RESULT_SIZE);          //RekeyMethod
+	gstrncat(result, "\r", RESULT_SIZE);
 
 	ezplib_get_attr_val("wl0_sec_rule", i, "secmode", buf, TMP_LEN, EZPLIB_USE_CLI);
 	
@@ -6001,21 +6026,21 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);               //RekeyInterval for wpa
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);               //RekeyInterval for wpa
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	}else if((!strcmp(buf , "wpa2")) || (!strcmp(buf , "psk2"))){	
 		ezplib_get_attr_val("wl0_sec_wpa2_rule", i, "rekey_time_interval", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);               //RekeyInterval for wpa2
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);               //RekeyInterval for wpa2
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	}else{
 	
-	gstrncat(result, "", 4096);               //RekeyInterval for Null
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, "", RESULT_SIZE);               //RekeyInterval for Null
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	}
 
@@ -6023,12 +6048,12 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 	ezplib_get_attr_val("wl0_sec_wpa2_rule", i, "pmkperiod", buf, TMP_LEN, EZPLIB_USE_CLI);	
 		strcpy(reValue, buf);
 		value = reValue;	
-	gstrncat(result, value, 4096);               //PMKCachePeriod ==> PMK Cache Period = ??minutes   ??????????????????????????
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);               //PMKCachePeriod ==> PMK Cache Period = ??minutes   ??????????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);
 
 
-	gstrncat(result, "0", 4096);	             //IEEE8021X   
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, "0", RESULT_SIZE);	             //IEEE8021X   
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	ezplib_get_attr_val("wl0_sec_rule", i, "secmode", buf, TMP_LEN, EZPLIB_USE_CLI);
 
@@ -6037,8 +6062,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);	              //RADIUS_Server for wpa
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	              //RADIUS_Server for wpa
+	gstrncat(result, "\r", RESULT_SIZE);
 		
 	}else if(!strcmp(buf , "wpa2")){	
 			
@@ -6046,13 +6071,13 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 		 
-	gstrncat(result, value, 4096);	              //RADIUS_Server for wpa2
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	              //RADIUS_Server for wpa2
+	gstrncat(result, "\r", RESULT_SIZE);
 		
 	}else{
 	
-	gstrncat(result, "", 4096);	                //RADIUS_Server for Null
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, "", RESULT_SIZE);	                //RADIUS_Server for Null
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	}
 	
@@ -6064,8 +6089,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 	
-	gstrncat(result, value, 4096);	               //RADIUS_Port for wpa
-	gstrncat(result, "\r", 4096);		
+	gstrncat(result, value, RESULT_SIZE);	               //RADIUS_Port for wpa
+	gstrncat(result, "\r", RESULT_SIZE);		
 			
 	}else if(!strcmp(buf , "wpa2")){	
 			
@@ -6073,8 +6098,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);	               //RADIUS_Port for wpa2
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //RADIUS_Port for wpa2
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	}else {	
 		
@@ -6082,8 +6107,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 	
-	gstrncat(result, value, 4096);	               //RADIUS_Port for disable
-	gstrncat(result, "\r", 4096);		
+	gstrncat(result, value, RESULT_SIZE);	               //RADIUS_Port for disable
+	gstrncat(result, "\r", RESULT_SIZE);		
 			
 	}
 	
@@ -6095,8 +6120,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);	               //RADIUS_Key for wpa
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //RADIUS_Key for wpa
+	gstrncat(result, "\r", RESULT_SIZE);
 		
 	}else if(!strcmp(buf , "wpa2")){	
 		
@@ -6104,13 +6129,13 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);	               //RADIUS_Key for wpa2
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //RADIUS_Key for wpa2
+	gstrncat(result, "\r", RESULT_SIZE);
 	
 	}else {	
 		
-	gstrncat(result, "", 4096);	               //RADIUS_Key for disable
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, "", RESULT_SIZE);	               //RADIUS_Key for disable
+	gstrncat(result, "\r", RESULT_SIZE);
 		
 	}
 	
@@ -6122,8 +6147,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 		
-	gstrncat(result, value, 4096);	               //session_timeout_interval for wpa
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //session_timeout_interval for wpa
+	gstrncat(result, "\r", RESULT_SIZE);
 		
 	}else if(!strcmp(buf , "wpa2")){
 		
@@ -6131,8 +6156,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 
-	gstrncat(result, value, 4096);	                //session_timeout_interval for wpa2
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	                //session_timeout_interval for wpa2
+	gstrncat(result, "\r", RESULT_SIZE);
 			
 	}else {
 		
@@ -6140,8 +6165,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		strcpy(reValue, buf);
 		value = reValue;
 
-	gstrncat(result, value, 4096);	                //session_timeout_interval for disable
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	                //session_timeout_interval for disable
+	gstrncat(result, "\r", RESULT_SIZE);
 			
 	}
 	
@@ -6151,32 +6176,32 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
 		ezplib_get_attr_val("wl00_acl_rule", 0, "policy", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;
-	gstrncat(result, value, 4096);	               //AccessPolicy   ???????????????????????
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //AccessPolicy   ???????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);
 	}else if (i == 1){
         int rule_num1;     
         rule_num1 = atoi(nvram_safe_get("wl01_acl_num"));
 		ezplib_get_attr_val("wl01_acl_rule", 0, "policy", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;	
-	gstrncat(result, value, 4096);	               //AccessPolicy   ???????????????????????
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //AccessPolicy   ???????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);
 	}else if (i == 2){
         int rule_num2;     
         rule_num2 = atoi(nvram_safe_get("wl02_acl_num"));	
 		ezplib_get_attr_val("wl02_acl_rule", 0, "policy", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;	
-	gstrncat(result, value, 4096);	               //AccessPolicy   ???????????????????????
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //AccessPolicy   ???????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);
 	}else if (i == 3){
         int rule_num3;     
         rule_num3 = atoi(nvram_safe_get("wl03_acl_num"));		
 		ezplib_get_attr_val("wl03_acl_rule", 0, "policy", buf, TMP_LEN, EZPLIB_USE_CLI); 		
 		strcpy(reValue, buf);
 		value = reValue;	
-	gstrncat(result, value, 4096);	               //AccessPolicy   ???????????????????????
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, value, RESULT_SIZE);	               //AccessPolicy   ???????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);
 	}	
 
 
@@ -6199,8 +6224,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
             		} 
 		}
 
-	gstrncat(result, result0, 4096);	               //AccessControlList   ????????????????????
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, result0, RESULT_SIZE);	               //AccessControlList   ????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);
 	}
 	else if (i == 1){
 		
@@ -6221,8 +6246,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
             		} 
 		}
 	
-	gstrncat(result, result1, 4096);	               //AccessControlList   ????????????????????
-	gstrncat(result, "\r", 4096);
+	gstrncat(result, result1, RESULT_SIZE);	               //AccessControlList   ????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);
 	}
 	else if (i == 2){
 		
@@ -6243,8 +6268,8 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
             		} 
 		}
 	
-	gstrncat(result, result2, 4096);	               //AccessControlList   ????????????????????
-	gstrncat(result, "\r", 4096);	
+	gstrncat(result, result2, RESULT_SIZE);	               //AccessControlList   ????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);	
 	}
 	else if (i == 3){
 
@@ -6265,13 +6290,14 @@ void getSecurity(webs_t wp, char_t *path, char_t *query)
             		} 
 		}
 		
-	gstrncat(result, result3, 4096);	               //AccessControlList   ????????????????????
-	gstrncat(result, "\r", 4096);			
+	gstrncat(result, result3, RESULT_SIZE);	               //AccessControlList   ????????????????????
+	gstrncat(result, "\r", RESULT_SIZE);			
 	}
 
-	gstrncat(result, "\n", 4096);
+	gstrncat(result, "\n", sizeof(result));
 	}
-	
+
+#undef RESULT_SIZE
 	websWrite(wp, T("HTTP/1.1 200 OK\nContent-type: text/plain\nPragma: no-cache\nCache-Control: no-cache\n\n"));
 	websWrite(wp, T("%s"), result);
 	websDone(wp, 200);
@@ -6783,7 +6809,7 @@ static	char key40_2[11];
 static	char key40_3[11];
 static	char key40_4[11];
 static	u_char keys[21];
-//extern void Gen40BitsKey(u_char *genkey, char *keystr);
+extern void Gen40BitsKey(u_char *genkey, char *keystr);
 static void wifiget40wepkey(webs_t wp, char_t *path, char_t *query)
 {
 	char_t result[4096];
@@ -6798,7 +6824,7 @@ static void wifiget40wepkey(webs_t wp, char_t *path, char_t *query)
 	memset(key40_2,0,sizeof(key40_2));
 	memset(key40_3,0,sizeof(key40_3));
 	memset(key40_4,0,sizeof(key40_4));
-	//Gen40BitsKey(keys, passphrase);
+	Gen40BitsKey(keys, passphrase);
 	
 	//produce 4 40bits WEP string format 
 #if 1    
@@ -6848,7 +6874,7 @@ static void wifiget40wepkey(webs_t wp, char_t *path, char_t *query)
 
 // Passphrase to WEP
 static char key128[27];
-//extern void Gen128BitsKey(u_char *genkey, char *keystr);
+extern void Gen128BitsKey(u_char *genkey, char *keystr);
 static void wifiget128wepkey(webs_t wp, char_t *path, char_t *query)
 {
 	char_t result[4096];
@@ -8896,7 +8922,7 @@ void wifiSecurity( webs_t wp, char_t *path, char_t *query)
 	system("/sbin/ezp-wps-set 0 0 1 2");
 	nvram_commit();
 
-	//initInternet();
+	initInternet();
 
 #endif
 
@@ -9071,7 +9097,7 @@ void wifi5GSecurity( webs_t wp, char_t *path, char_t *query)
 	system("/sbin/ezp-wps-set 0 1 1 2");
 	nvram_commit();
 
-	//initInternet();
+	initInternet();
 #endif
 
 #if 1//Arthur Chow 2009-03-06		
@@ -9348,6 +9374,7 @@ void MFSecurity(webs_t wp, char_t *path, char_t *query)
 		return;
 
 	mbssid = atoi(SSID);
+	printf(">>>>>>>>>>>>>>>>>>>>>mbssid: %d\n", mbssid);
 //	default_shown_mbssid[0] = mbssid;
 // Tommy, Accelerate Wireless Apply, 2009/5/14 01:30
 //#if 0 // Tommy, Accelerate Wireless Apply, 2009/5/14 01:30	
@@ -9381,6 +9408,7 @@ void MFSecurity(webs_t wp, char_t *path, char_t *query)
 	
 	nvram_commit();
 
+	//initInternet();
 //	reconfig_wireless(RT2860_NVRAM);	
 
 	//restart8021XDaemon(RT2860_NVRAM);
@@ -10658,6 +10686,7 @@ static void WiFiWMM(webs_t wp, char_t *path, char_t *query)
 	
 //	nvram_commit(RT2860_NVRAM);
 	nvram_commit();
+	//initInternet();
 //	reconfig_wireless(RT2860_NVRAM);	
 //	WPSRestart();
 	
@@ -12223,6 +12252,7 @@ int WLAN_EZSecurity(int setting)
 		STFs(RT2860_NVRAM, mbssid, "IEEE8021X", "0");			
 
 		nvram_commit(RT2860_NVRAM);	
+		//initInternet();
 		reconfig_wireless(RT2860_NVRAM);
 		return 1;	
 	}else{
@@ -12258,6 +12288,8 @@ void formDefineWireless(void) {
 	websAspDefine(T("getAPClient5GConnectionESSID"), getAPClient5GConnectionESSID);	
 	websAspDefine(T("getAPClient5GConnectionStatus"), getAPClient5GConnectionStatus);
 	websAspDefine(T("getAPClient5GConnectionESSIDMAC"), getAPClient5GConnectionESSIDMAC);	
+
+       websAspDefine(T("getConnectedAPMode"), getConnectedAPMode);
 		
 	websAspDefine(T("getWlanApcliBuilt"), getWlanApcliBuilt);
 	websAspDefine(T("getWlanChannel"), getWlanChannel);

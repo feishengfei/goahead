@@ -14,10 +14,12 @@ Butterlate.setTextDomain("wireless");
 
 function initTranslation()
 {
-
+	e = document.getElementById("survey_waiting");
+	e.innerHTML = _("survey waiting");
 }
 function updateState()
 {
+      initTranslation();
 	  setTimeout("window.location.href= '/local/advance/ur_site_survey.asp'",2000); 
 }
 </script>
@@ -32,7 +34,7 @@ function updateState()
 <li class="w_text">
 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-<td  id="survey_waiting" align="center"><font size="4" color="#385f95"><b>Scanning AP, please wait ......</b></font></td>
+<td  id="survey_waiting" align="center" style="font-weight:bold;font-size:20px;" ></td>
 </tr>
 </table>
 </li>

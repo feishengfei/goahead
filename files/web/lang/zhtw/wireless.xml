@@ -376,9 +376,11 @@
 <message msgid="station ssid" msgstr="SSID" /> 
 <message msgid="scan bssid" msgstr="BSSID" />
 <message msgid="mac repeater" msgstr="上傳client MAC" />
-<message msgid="scan rssi" msgstr="Signal Strength" />
+<message msgid="scan rssi" msgstr="信號強度" />
 <message msgid="scan rescan" msgstr="Rescan" />
 <message msgid="scan add profile" msgstr=" Setting " />
+<message msgid="station encryp" msgstr="加密算法" />
+<message msgid="station auth" msgstr=" 認證方式 " />
 <!-- wisp_sute_survey.asp-->
 <!-- wds.asp 20090624 add-->
 <message msgid="WDS WEP Key should be a 10/26 hexdecimal or a 5/13 ascii" msgstr="WDS 的 WEP 金鑰必須為 10/26 個字元的 16 進位碼或 5/13 個 ASCII 碼" />
@@ -392,7 +394,7 @@
 	<message msgid="Client" msgstr="Client"/>
 	<message msgid="IP Address" msgstr="IP 地址"/>
 	<message msgid="MAC Address" msgstr="MAC 地址"/>
-	<message msgid="refresh" msgstr="刷新"/>
+	<message msgid="mac repeater refresh" msgstr="刷新"/>
 
 <!-- added by WR71210IRA -->
 	<message msgid="op mode ur" msgstr="通用橋接器模式"/>
@@ -495,4 +497,6 @@
 <message msgid="op mode note1_5" msgstr="WISP + UR Mode: In this mode, the device acts as both access point and wireless client and also maintains router function. The wireless connection is treated as WAN, while the LAN broadcast as Wi-Fi signals for other wireless client devices to connect to." />
 <message msgid="UR Title" msgstr="客戶端創建" />
 <message msgid="advance distance" msgstr="距離" />
+<message msgid="DSCP Note" msgstr="备注：1 以十進制輸入DSCP值 2 配置對其他頻段也生效" />
+<message msgid="survey waiting" msgstr="掃描AP中，請等待......" />
 </po>

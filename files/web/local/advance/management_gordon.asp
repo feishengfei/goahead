@@ -88,6 +88,29 @@ function check127net(str, num)
 	return false;
 }
 
+
+function checkmultinet(str, num)
+{
+       var k = 0;
+	 for (var i=0; i<str.length; i++) {
+		if (str.charAt(i) == '.')
+			k = k+1;
+		continue;
+	}
+	if(k > 3){
+	      alert("Error. IP address is not valid.");
+             return false;
+	}
+	d = atoi(str, num);
+	if (d >223 && d <240 )
+	{
+	      alert("Error. IP address is multicast address.");
+		return true;
+	}      
+	return false;
+}
+
+
 function checkIpAddr(field)
 {
 	if (field.value == "") {
@@ -104,7 +127,11 @@ function checkIpAddr(field)
 	}
 	
 	if(check127net(field.value, 1)==true)
+	   return false;
+	   
+    if(checkmultinet(field.value,1)==true)
 	   return false; 
+	   
 	if ((!checkRange(field.value, 1, 0, 239)) ||
 			(!checkRange(field.value, 2, 0, 255)) ||
 			(!checkRange(field.value, 3, 0, 255)) ||

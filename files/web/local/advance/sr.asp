@@ -117,7 +117,7 @@ function checkRange(str, num, min, max)
     return true;
 }
 
-function checkIpAddr(field)
+function checkIpAddr(field,ismask)
 {
     if(field.value == ""){
         field.focus();
@@ -129,13 +129,30 @@ function checkIpAddr(field)
         return false;
     }
 
-    if( (!checkRange(field.value,1,0,255)) ||
-        (!checkRange(field.value,2,0,255)) ||
-        (!checkRange(field.value,3,0,255)) ||
-        (!checkRange(field.value,4,0,255)) ){
-        field.focus();
-        return false;
-    }
+    if (ismask) {
+		if ((!checkRange(field.value, 1, 0, 255)) ||
+				(!checkRange(field.value, 2, 0, 255)) ||
+				(!checkRange(field.value, 3, 0, 255)) ||
+				(!checkRange(field.value, 4, 0, 255)))
+		{
+			alert('IP adress format error.');
+			field.value = field.defaultValue;
+			field.focus();
+			return false;
+		}
+	}
+	else {
+		if ((!checkRange(field.value, 1, 0, 239)) ||
+				(!checkRange(field.value, 2, 0, 255)) ||
+				(!checkRange(field.value, 3, 0, 255)) ||
+				(!checkRange(field.value, 4, 0, 254)))
+		{
+			alert('IP adress format error.');
+			field.value = field.defaultValue;
+			field.focus();
+			return false;
+		}
+	}
 
    return true;
 }
@@ -207,6 +224,28 @@ function isAllNum(str)
 	return 1;
 }
 
+function check127net(str, num)
+{
+       var k = 0;
+	 for (var i=0; i<str.length; i++) {
+		if (str.charAt(i) == '.')
+			k = k+1;
+		continue;
+	}
+	if(k > 3){
+	      alert("Error. IP address is not valid.");
+             return false;
+	}
+	d = atoi(str, num);
+	if (d ==127 )
+	{
+	       alert("Error. IP address is loopback address.");
+		return true;
+	}
+      
+	return false;
+}
+
 function formCheck()
 {
 	if(checkInjection(document.addrouting.comment.value) == false){
@@ -228,15 +267,20 @@ function formCheck()
 		document.addrouting.comment.select();
 		return false;
       }
-	if( document.addrouting.dest.value != "" && !checkIpAddr(document.addrouting.dest )){
+	  
+	if(check127net(document.addrouting.dest.value,1)==true)
+	   return false;
+	   
+	   
+	if( document.addrouting.dest.value != "" && !checkIpAddr(document.addrouting.dest,false)){
 		alert("The destination has wrong format.");
 		return false;
 	}
-	if( document.addrouting.netmask.value != "" && !checkIpAddr(document.addrouting.netmask )){
+	if( document.addrouting.netmask.value != "" && !checkIpAddr(document.addrouting.netmask,true)){
 		alert("The netmask has wrong format.");
 		return false;
 	}
-	if( document.addrouting.gateway.value != "" && !checkIpAddr(document.addrouting.gateway)){
+	if( document.addrouting.gateway.value != "" && !checkIpAddr(document.addrouting.gateway,false)){
 		alert("The gateway has wrong format.");
 		return false;
 	}

@@ -49,6 +49,30 @@ var AccessPolicy = new Array();
 var AccessControlList = new Array();
 var DefaultWEPKey = new Array();
 
+function  allTrim(ui){  
+    var  notValid=/\s/;
+	  
+    while(notValid.test(ui)){  
+        ui=ui.replace(notValid,"");
+	} 
+	 
+    return ui;
+}
+
+function isASCII(str)
+{
+	for( var i = 0; i < str.length; i++)
+	{
+		 var chr = str.charCodeAt(i);
+		 if( chr < 0 || chr > 255 )
+		 {
+		    return false;
+		 }
+	}
+	
+	return true;
+}
+
 function show_div(show,id) {
 	if(show)
 		document.getElementById(id).className  = "on" ;
@@ -342,7 +366,15 @@ function checkData()
 		if (keyvalue.length == 0){
 			alert('Please input wpapsk key!');
 			return false;
-		}
+		} else {
+			tmp_ap_wpapsk = keyvalue;
+			tmp_ap_wpapsk = allTrim(tmp_ap_wpapsk);
+			if (! isASCII(tmp_ap_wpapsk)) {
+					alert("invalid wpapsk/wpa2psk: cann't include chinese!");
+					document.security_form.passphrase.focus();
+					return false;
+			}	
+	  }
 
 		if (keyvalue.length < 8){
 			alert('Please input at least 8 character of wpapsk key!');
@@ -455,14 +487,40 @@ function check_radius()
 	if(!document.security_form.RadiusServerIP.value.length){
 		alert('Please input the radius server ip address.');
 		return false;		
+	}else {
+		tmp_RadiusServerIP = document.security_form.RadiusServerIP.value;
+		tmp_RadiusServerIP = allTrim(tmp_RadiusServerIP);
+		if (! isASCII(tmp_RadiusServerIP)) {
+				alert("invalid Radius Server IP: cann't include chinese!");
+				document.security_form.RadiusServerIP.focus();
+				return false;
+		}
 	}
+	
 	if(!document.security_form.RadiusServerPort.value.length){
 		alert('Please input the radius server port number.');
 		return false;		
+	} else {
+		tmp_RadiusServerPort = document.security_form.RadiusServerPort.value;
+		tmp_RadiusServerPort = allTrim(tmp_RadiusServerPort);
+		if (! isASCII(tmp_RadiusServerPort)) {
+				alert("invalid Radius Server Port: cann't include chinese!");
+				document.security_form.RadiusServerPort.focus();
+				return false;
+		}
 	}
+	
 	if(!document.security_form.RadiusServerSecret.value.length){
 		alert('Please input the radius server shared secret.');
 		return false;		
+	}else {
+		tmp_RadiusServerSecret = document.security_form.RadiusServerSecret.value;
+		tmp_RadiusServerSecret = allTrim(tmp_RadiusServerSecret);
+		if (! isASCII(tmp_RadiusServerSecret)) {
+				alert("invalid Radius Server Secret: cann't include chinese!");
+				document.security_form.RadiusServerSecret.focus();
+				return false;
+		}
 	}
 
 	if(checkIpAddr(document.security_form.RadiusServerIP) == false){
@@ -604,6 +662,22 @@ function check_Wep(securitymode)
 		var keyvalue = document.security_form.wep_key_3.value;
 	else if (defaultid == 4)
 		var keyvalue = document.security_form.wep_key_4.value;
+
+	tmp_keyvalue = keyvalue;
+	tmp_keyvalue = allTrim(tmp_keyvalue);
+	if (! isASCII(tmp_keyvalue)) {
+			alert("invalid key: cann't include chinese!");
+			if (defaultid == 1)
+				document.security_form.wep_key_1.focus();
+			else if (defaultid == 2)
+				document.security_form.wep_key_1.focus();
+			else if (defaultid == 3)
+				document.security_form.wep_key_1.focus();
+			else if (defaultid == 4)
+				document.security_form.wep_key_1.focus();
+					
+			return false;
+	}
 
 	if (keyvalue.length == 0 &&  (securitymode == "SHARED" || securitymode == "OPEN")){ // shared wep  || md5
 		alert(_('Please input wep key')+defaultid+'!');
@@ -880,15 +954,9 @@ function RadiusServerStatus()
 	var MBSSID = document.security_form.ssidIndex.options.selectedIndex;
 
 	if(security_mode == "WPA" || security_mode == "WPA2"){
-          if(MBSSID == 0){
                document.security_form.RadiusServerIP.disabled = false;
 		  document.security_form.RadiusServerPort.disabled = false;
 		  document.security_form.RadiusServerSecret.disabled = false;	
-	   }else{
-               document.security_form.RadiusServerIP.disabled = true;
-		  document.security_form.RadiusServerPort.disabled = true;
-		  document.security_form.RadiusServerSecret.disabled = true;	
-	   }
 	}
 }
 
@@ -907,43 +975,16 @@ function LoadFields(MBSSID)
 		var Auth = "<% getCfgZero(1, 'AuthMode'); %>";
 		PhyMode = 1*PhyMode;
 		if (PhyMode == 6){
-			if (MBSSID == 0){
 				sp_select.options[sp_select.length] = new Option(_("general nosecurity"),"Disable",	false, AuthMode[MBSSID] == "Disable");       
 		    		sp_select.options[sp_select.length] = new Option(_("general wpa2psk"),"WPA2PSK",	false, AuthMode[MBSSID] == "WPA2PSK");
 		    		sp_select.options[sp_select.length] = new Option(_("general wpa2"),	"WPA2",		false, AuthMode[MBSSID] == "WPA2");
-			}else{
-			       if(Auth == "WPA" || Auth == "WPA2"){
-				sp_select.options[sp_select.length] = new Option(_("general nosecurity"),"Disable",	false, AuthMode[MBSSID] == "Disable");       
-		    		sp_select.options[sp_select.length] = new Option(_("general wpa2psk"),"WPA2PSK",	false, AuthMode[MBSSID] == "WPA2PSK");
-		    		sp_select.options[sp_select.length] = new Option(_("general wpa2"),	"WPA2",		false, AuthMode[MBSSID] == "WPA2");
-			      }else{
-				sp_select.options[sp_select.length] = new Option(_("general nosecurity"),"Disable",	false, AuthMode[MBSSID] == "Disable");       
-		    		sp_select.options[sp_select.length] = new Option(_("general wpa2psk"),"WPA2PSK",	false, AuthMode[MBSSID] == "WPA2PSK");
-			      }
-			}
 		}else{
-		      if (MBSSID == 0){
 			sp_select.options[sp_select.length] = new Option(_("general nosecurity"),"Disable",	false, AuthMode[MBSSID] == "Disable");
 			sp_select.options[sp_select.length] = new Option(_("general static wep"),"SHARED", 	false, AuthMode[MBSSID] == "SHARED");
 	    		sp_select.options[sp_select.length] = new Option(_("general wpapsk"), "WPAPSK",	false, AuthMode[MBSSID] == "WPAPSK");
 	    		sp_select.options[sp_select.length] = new Option(_("general wpa"),	"WPA",		false, AuthMode[MBSSID] == "WPA");        
 	    		sp_select.options[sp_select.length] = new Option(_("general wpa2psk"),"WPA2PSK",	false, AuthMode[MBSSID] == "WPA2PSK");
 	    		sp_select.options[sp_select.length] = new Option(_("general wpa2"),	"WPA2",		false, AuthMode[MBSSID] == "WPA2");
-               }else{
-                    if(Auth == "WPA" || Auth == "WPA2"){
-			sp_select.options[sp_select.length] = new Option(_("general nosecurity"),"Disable",	false, AuthMode[MBSSID] == "Disable");
-			sp_select.options[sp_select.length] = new Option(_("general static wep"),"SHARED", 	false, AuthMode[MBSSID] == "SHARED");
-	    		sp_select.options[sp_select.length] = new Option(_("general wpapsk"), "WPAPSK",	false, AuthMode[MBSSID] == "WPAPSK");
-	    		sp_select.options[sp_select.length] = new Option(_("general wpa"),	"WPA",		false, AuthMode[MBSSID] == "WPA");        
-	    		sp_select.options[sp_select.length] = new Option(_("general wpa2psk"),"WPA2PSK",	false, AuthMode[MBSSID] == "WPA2PSK");
-	    		sp_select.options[sp_select.length] = new Option(_("general wpa2"),	"WPA2",		false, AuthMode[MBSSID] == "WPA2");
-			}else{
-			sp_select.options[sp_select.length] = new Option(_("general nosecurity"),"Disable",	false, AuthMode[MBSSID] == "Disable");
-			sp_select.options[sp_select.length] = new Option(_("general static wep"),"SHARED", 	false, AuthMode[MBSSID] == "SHARED");
-	    		sp_select.options[sp_select.length] = new Option(_("general wpapsk"), "WPAPSK",	false, AuthMode[MBSSID] == "WPAPSK");
-	    		sp_select.options[sp_select.length] = new Option(_("general wpa2psk"),"WPA2PSK",	false, AuthMode[MBSSID] == "WPA2PSK");
-			}
-	        }
     	     }
 	}else{
 		// enable WPS
@@ -1102,12 +1143,12 @@ function LoadFields(MBSSID)
 			document.security_form.ieee8021x_wep[0].checked = true;
 	}
 	
-	document.getElementById("RadiusServerIP").value = RADIUS_Server[0];
-	document.getElementById("RadiusServerPort").value = RADIUS_Port[0];
-	document.getElementById("RadiusServerSecret").value = RADIUS_Key[0];			
+	document.getElementById("RadiusServerIP").value = RADIUS_Server[MBSSID];
+	document.getElementById("RadiusServerPort").value = RADIUS_Port[MBSSID];
+	document.getElementById("RadiusServerSecret").value = RADIUS_Key[MBSSID];			
 	//document.getElementById("RadiusServerSessionTimeout").value = session_timeout_interval[MBSSID];
 	securityMode(0);
-       RadiusServerStatus();
+       //RadiusServerStatus();
 }
 
 
@@ -1531,6 +1572,13 @@ function generate_wep()
 {
 	var passphrase;
 	passphrase = document.security_form.wep_passphrase.value;
+	tmp_passphrase = passphrase;
+	tmp_passphrase = allTrim(tmp_passphrase);
+	if (! isASCII(tmp_passphrase)) {
+			alert("invalid passphrase: cann't include chinese!");
+			document.security_form.wep_passphrase.focus();
+			return false;
+	}
 
 	document.security_form.WEPKey_Code[1].checked = true; //Hex	
 	if (document.getElementById("wep_encry").selectedIndex == 1){ // get 128 bits WEP KEY
@@ -1750,7 +1798,7 @@ Name(SSID5) :</font></td>
 <tr>
 <td width="40%" id="GeneralSecureMode">Security Mode</td>
 <td>
-<select name="security_mode" id="security_mode" size="1" onchange="securityMode(1); RadiusServerStatus();">
+<select name="security_mode" id="security_mode" size="1" onchange="securityMode(1)">
 <!-- ....Javascript will update options.... -->
 </select>
 </td>

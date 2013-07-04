@@ -48,12 +48,12 @@ DASW	= -DDIGEST_ACCESS_SUPPORT
 # IFMODLIB = /usr/lib/libm.a
 
 #Alvin add
-SSLPATCHFILE =../websSSL.o
-SSLINC =../../openssl-1.0.1e/include #openssl header files
+#SSLPATCHFILE =../websSSL.o
+#SSLINC =../../openssl-1.0.1e/include #openssl header files
 #openssl static library files
-SSLLIB =../../openssl-1.0.1e/libssl.a ../../openssl-1.0.1e/libcrypto.a
+#SSLLIB =../../openssl-1.0.1e/libssl.a ../../openssl-1.0.1e/libcrypto.a
 #add openssl macro compile and designate openssl header files path
-CFLAGS = -g -DWEBS -DUEMF -DOS="LINUX" -DLINUX -DWEBS_SSL_SUPPORT -DOPENSSL -I$(SSLINC)
+#CFLAGS = -DWEBS -DUEMF -DOS="LINUX" -DLINUX -DWEBS_SSL_SUPPORT -DOPENSSL -I$(SSLINC)
 #add end
 
 # Dependencies
@@ -64,7 +64,8 @@ DEPEND_FILES	= ../md5_dgst.o ../asp.o ../balloc.o ../base64.o ../cgi.o ../defaul
 				  ../sock.o ../sockGen.o $(SSLPATCHFILE) \
 				  ../security.o ../sym.o ../uemf.o ../url.o ../value.o \
 				  ../md5c.o ../um.o ../umui.o ../websda.o ../emfdb.o \
-				  ../webrom.o ../webs.o ../websuemf.o ../wireless.o ../management.o ../utils.o main.o
+				  ../webrom.o ../webs.o ../websuemf.o ../wireless.o ../wps.o\
+				  ../management.o ../utils.o ../qos.o ../firewall.o ../internet.o main.o
 #CFLAGS	= -DWEBS -DUEMF -DOS="LINUX" -DLINUX $(UMSW) $(DASW) $(SSLSW) $(IFMODSW)
 OTHERS	= -DB_STATS -DB_FILL -DDEBUG
 DEBUG	= -g -Wall
@@ -163,16 +164,15 @@ clean:
 
 ../utils.o: ../utils.c ../utils.h ../webs.h
 
+../qos.o: ../qos.h ../utils.h
+
+../firewall.o: ../firewall.c ../webs.h ../firewall.h
 
 ../wireless.o: ../wireless.c ../wireless.h ../internet.h ../utils.h ../webs.h
 
+../wps.o: ../wps.c ../wps.h ../utils.h ../webs.h ../internet.h ../wireless.h
 
-
-
-
-
-
-
+../internet.o: ../internet.c ../internet.h ../utils.h ../webs.h
 
 main.o:  main.c ../wsIntrn.h ../webs.h ../ej.h ../ejIntrn.h ../uemf.h
 

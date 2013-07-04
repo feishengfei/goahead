@@ -195,7 +195,7 @@ function initValue()
                       <td><select name="DDNSProvider" size="1" onChange="SPwitch();">
                         <option value="dyndns.org">WWW.DynDNS.ORG </option>
                         <option value="no-ip.com">WWW.NO-IP.COM </option>
-                        <option value="eurodyndns">WWW.EuroDNS.COM </option>
+                        <option value="eurodyndns">WWW.EuroDynDNS.COM </option>
                         <option value="regfish">WWW.REGFISH.COM </option>
                       </select></td>
                     </tr>

@@ -146,4 +146,22 @@
 <message msgid="remote management www" msgstr=" WWW " />
 <!--Steve add and reference other page-->
 <message msgid="System do not support specific invalid characters." msgstr="System does not support specific invalid characters." />
+
+<message msgid="contact" msgstr="Contact:"/>
+<message msgid="community read" msgstr="Community Name(read only):"/>
+<message msgid="community write" msgstr="Community Name(read/write):"/>
+<message msgid="trap ip" msgstr="Trap IP:"/>
+<message msgid="snmp enable" msgstr="Enable"/>
+<message msgid="snmp disable" msgstr="Disable"/>
+<message msgid="ssh enable" msgstr="Enable"/>
+<message msgid="ssh disable" msgstr="Disable"/>
+<message msgid="telnet enable" msgstr="Enable"/>
+<message msgid="telnet disable" msgstr="Disable"/>
+<message msgid="https enable" msgstr="Enable"/>
+<message msgid="https disable" msgstr="Disable"/>
+<message msgid="ssh server port" msgstr="Server Port:"/>
+<message msgid="telnet server port" msgstr="Server Port:"/>
+<message msgid="https server port" msgstr="Server Port:"/>
+<message msgid="service apply" msgstr="Apply"/>
+<message msgid="service reset" msgstr="Cancel"/>
 </po>

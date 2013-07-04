@@ -6,25 +6,7 @@ PID_FILE=/var/run/goahead.pid
 #LANTRIGGER=70
 START=70
 log_msg="WEB-goahead"
-init_network() {
-	alias l='ls -al'
-
-	IPADDR=`nvram show lan_static_rule 0 ipaddr`
-
-	brctl addbr br0
-	brctl addif br0 eth2
-
-	ifconfig eth2 up
-	ifconfig br0 up $IPADDR
-
-	ulimit -c unlimited
-	sysctl -w kernel.core_pattern="/tmp/%e-%p-%t.core"
-	sysctl -w kernel.core_uses_pid=0
-}
-
-
 start () {
-	init_network;
 	[ $(nvram show http_rule 0 enable) = 1 ] && {
         local mgmtport="$(nvram show http_rule 0 port)"
         #pidof httpd > /dev/null && stop
@@ -78,7 +60,7 @@ start () {
 #            iptables -t filter -A EZP_FL_STATE -d $lanipaddr -p tcp --dport ${mgmtport} \
 #                -j EZP_LOG_DROP
 #        }
-#	killall goahead
+	killall goahead
          #startup goahead
         local enable="$(nvram get https_enable)"
         local port="$(nvram get https_port)"

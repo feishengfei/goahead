@@ -367,9 +367,33 @@ function initTranslation()
 	e = document.getElementById("IPv6_Dhcp_lifetime");
 	e.innerHTML = _("ipv6 dhcp life time");
 	
-	e = document.getElementById("IPv6_time_minutes");
-	e.innerHTML = _("ipv6 time minutes");
+	e = document.getElementById("wandhcpv6type_id");
+	e.innerHTML = _("wan dhcpv6 type");
 
+	e = document.getElementById("ipv6dnsid");
+	e.innerHTML = _("ipv6 dns id");
+	
+	e = document.getElementById("dnsType");
+	e.innerHTML = _("dns type");
+	
+	e = document.getElementById("Dhcp_IPv6_DNS1");
+	e.innerHTML = _("dhcp ipv6 dns1");
+	
+	e = document.getElementById("Dhcp_IPv6_DNS2");
+	e.innerHTML = _("dhcp ipv6 dns2");
+	
+	e = document.getElementById("ipv6Type");
+	e.innerHTML = _("ipv6 type");
+	
+	e = document.getElementById("IPv6_Dhcp_addrstart2");
+	e.innerHTML = _("ipv6 dhcp addrstart");
+	
+	e = document.getElementById("IPv6_Dhcp_addrend2");
+	e.innerHTML = _("ipv6 dhcp addrend");
+	
+    e = document.getElementById("IPv6_time_minutes");
+	e.innerHTML = _("ipv6 time minutes");
+	
 	e = document.getElementById("GeneralApply");
 	e.value = _("general apply");
 
@@ -542,16 +566,17 @@ function CheckValue()
 //	}
 	if (!validate_ipv6addr(document.ipv6_basic.lanIPv6_addr_static.value))
 		return false;
-	
-	if (document.ipv6_basic.pppoeIPv6_pass.value != document.ipv6_basic.pppoeIPv6_passconfirm.value)
-	{
-		alert("Error: Confirm password not match!!");
-		return false;
+		/* if password is null, firefox compare password to passwordconfirm will cccur error */
+	if (document.ipv6_basic.pppoeIPv6_pass.value.length != 0) {
+		if (document.ipv6_basic.pppoeIPv6_pass.value != document.ipv6_basic.pppoeIPv6_passconfirm.value)
+		{
+			alert("Error: Confirm password not match!!");
+			return false;
+		}
 	}
-	
-	if (document.ipv6_basic.dns1Type.options.selectedIndex == 1) //DNS1 User-Defined
+	/*if (document.ipv6_basic.dns1Type.options.selectedIndex == 1) //DNS1 User-Defined
 	{
-		if(document.ipv6_basic.pppoeIPv6_dns1.value == "")
+		if(document.ipv6_basic.dns1Type.options.selectedIndex == "")
 		{
 			alert('First DNS Server should not be empty with User-Defined.');
 			return false;
@@ -578,7 +603,8 @@ function CheckValue()
 		}
 //		if (!checkIpAddr(document.ipv6_basic.pppoeIPv6_dns2, false))
 //				 return false;
-	} 
+	} */
+	
 
 	if (document.ipv6_basic.dhcpIPv6_LifeTime.value < 12 || document.ipv6_basic.dhcpIPv6_LifeTime.value > 5400)
 	{
@@ -1100,7 +1126,7 @@ function CheckValue()
                 <li class="w_text">
                   <table id=Ipv6Dhcp_addrstart width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td width="40%" id=IPv6_Dhcp_addrstart>Address (start) :</td>
+                        <td width="40%" id=IPv6_Dhcp_addrstart1>Address (start) :</td>
                         <td><input name="dhcpIPv6_addrprefix1" maxlength=35 size=35 
                              value="<% getCfgGeneral(1, "Ipv6_dhcp_addrprefix1"); %>"/><font> :: </font>
                         <input name="dhcpIPv6_addrstart1" maxlength=10 size=10 
@@ -1111,7 +1137,7 @@ function CheckValue()
                  <li class="w_text">
                   <table id=Ipv6Dhcp_addrend width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td width="40%" id=IPv6_Dhcp_addrend>Address (end) :</td>
+                        <td width="40%" id=IPv6_Dhcp_addrend1>Address (end) :</td>
                         <td><input name="dhcpIPv6_addrprefix11" maxlength=35 size=35 
                              value="<% getCfgGeneral(1, "Ipv6_dhcp_addrprefix1"); %>"/><font> :: </font>                      
                         <input name="dhcpIPv6_addrend1" maxlength=10 size=10 
@@ -1127,7 +1153,7 @@ function CheckValue()
                 <li class="w_text">
                   <table id=Ipv6Dhcp_addrstart width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td width="40%" id=IPv6_Dhcp_addrstart>Address (start) :</td>
+                        <td width="40%" id=IPv6_Dhcp_addrstart2>Address (start) :</td>
                         <td><input name="dhcpIPv6_addrprefix2" maxlength=35 size=35 
                              value="<% getCfgGeneral(1, "Ipv6_dhcp_addrprefix2"); %>"/><font> : </font>
                         <input name="dhcpIPv6_addrstart2" maxlength=10 size=10 
@@ -1138,7 +1164,7 @@ function CheckValue()
                  <li class="w_text">
                   <table id=Ipv6Dhcp_addrend width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td width="40%" id=IPv6_Dhcp_addrend>Address (end) :</td>
+                        <td width="40%" id=IPv6_Dhcp_addrend2>Address (end) :</td>
                         <td><input name="dhcpIPv6_addrprefix22" maxlength=35 size=35 
                              value="<% getCfgGeneral(1, "Ipv6_dhcp_addrprefix2"); %>"/><font> : </font>                       
                             <input name="dhcpIPv6_addrend2" maxlength=10 size=10 

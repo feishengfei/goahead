@@ -320,6 +320,7 @@
 	<message msgid="Wireless LAN 5G" msgstr="無線5G區域網路"/>
 	<message msgid="SNMP" msgstr="SNMP"/>
 	<message msgid="System Utilities" msgstr="系統工具"/>
+	<message msgid="Service" msgstr="服務"/>
 	<message msgid="Qos" msgstr="Qos"/>
 	<message msgid="Factory Default" msgstr="回覆原廠值"/>
 	<message msgid="General" msgstr="一般"/>
@@ -474,12 +475,12 @@
 	<message msgid="Universal Repeater" msgstr="通用橋接器"/>
 	<message msgid="dash_info sys wisp ur"	msgstr="WISP + UR Mode" />
 	<message msgid="dash_info wlan wisp ur"	msgstr="AP + Wireless Client Mode" />
-	<message msgid="dash_info ipv6 title"	msgstr="IPv6 Status" />
-	<message msgid="dash_info ipv6 conn type"	msgstr="IPv6 Connection Type" />
-	<message msgid="dash_info ipv6 wan address"	msgstr="WAN IPv6 Address" />
-	<message msgid="dash_info ipv6 wan gateway"	msgstr="Gateway IP Address" />
-	<message msgid="dash_info ipv6 wan first dns"	msgstr="First DNS Server" />
-	<message msgid="dash_info ipv6 wan second dns"	msgstr="Second DNS Server" />
-	<message msgid="dash_info ipv6 lan address"	msgstr="LAN IPv6 Address" />
-	<message msgid="dash_info ipv6 lan link local"	msgstr="LAN IPv6 Link Local Address" />
+	<message msgid="dash_info ipv6 title"	msgstr="IPv6 狀態" />
+	<message msgid="dash_info ipv6 conn type"	msgstr="IPv6 連接類型" />
+	<message msgid="dash_info ipv6 wan address"	msgstr="WAN IPv6 地址" />
+	<message msgid="dash_info ipv6 wan gateway"	msgstr="網関 IP 地址" />
+	<message msgid="dash_info ipv6 wan first dns"	msgstr="第一 DNS 服務器" />
+	<message msgid="dash_info ipv6 wan second dns"	msgstr="第二 DNS 服務器" />
+	<message msgid="dash_info ipv6 lan address"	msgstr="LAN IPv6 地址" />
+	<message msgid="dash_info ipv6 lan link local"	msgstr="LAN IPv6 本地地址" />
 </po>

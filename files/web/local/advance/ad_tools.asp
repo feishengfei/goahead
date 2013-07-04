@@ -118,7 +118,7 @@ function to_adtool(F, cmd) {
         }
     }else {
 	     if(cmd == "ping"){
-		   if(checkIpAddr(E(cmd+'cnt'))==false)
+		   if(checkIpAddr(E(cmd+'host'))==false)
 		     return false;
 		 }
          if (isAllNum(E(cmd+'cnt').value) == 0) {
@@ -178,6 +178,25 @@ function to_adtool_arp(F, cmd) {
     return true;
 }
 function init() {
+
+  	e = document.getElementById("ping_host");
+	e.innerHTML = _("ping host");
+	
+	e = document.getElementById("ping_package");
+	e.innerHTML = _("ping package");
+	
+	e = document.getElementById("arpping_host");
+	e.innerHTML = _("arpping host");
+	
+	e = document.getElementById("arpping_package");
+	e.innerHTML = _("arpping package");
+		
+	e = document.getElementById("traceroute_host");
+	e.innerHTML = _("traceroute host");
+	
+	e = document.getElementById("traceroute_hop");
+	e.innerHTML = _("traceroute hop");
+	
   F = document.getElementsByName("form")[0];
 }
 </script>
@@ -207,7 +226,7 @@ function init() {
               <li class="w_text">
                 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
                   <tr>
-                    <td width="40%" id=""> <% lang("Target Host"); %> : </td>
+                    <td width="40%" id="ping_host"> <% lang("Target Host"); %> : </td>
                     <td><input name="pinghost" id="pinghost" size="32" maxlength="32" value="<% nvg_attr_get("pinghost", "adtool_rule", "0", "pinghost"); %>" type="text" /></td>
                   </tr>
                 </table>
@@ -215,7 +234,7 @@ function init() {
               <li class="w_text">
                 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td width="40%" id=""><% lang("Number of Packets"); %> : </td>
+                  <td width="40%" id="ping_package"><% lang("Number of Packets"); %> : </td>
                   <td><input name="pingcnt" id="pingcnt" size="32" maxlength="2" value="<% nvg_attr_get("pingcnt", "adtool_rule", "0", "pingcnt"); %>" type="text" /> Packets (1 ~ 10)</td>
                 </tr>
               </table>
@@ -250,7 +269,7 @@ else
         <li class="w_text">
           <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
-              <td width="40%" id=""> <% lang("Target Host"); %> : </td>
+              <td width="40%" id="arpping_host"> <% lang("Target Host"); %> : </td>
               <td><input name="arpinghost" id="arpinghost" size="32" maxlength="32" value="<% nvg_attr_get("arpinghost", "adtool_rule", "0", "arpinghost"); %>" type="text" /></td>
             </tr>
           </table>
@@ -258,7 +277,7 @@ else
         <li class="w_text">
           <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
-              <td width="40%" id=""> <% lang("Number of Packets"); %> : </td>
+              <td width="40%" id="arpping_package"> <% lang("Number of Packets"); %> : </td>
               <td><input name="arpingcnt" id="arpingcnt" size="32" maxlength="2" value="<% nvg_attr_get("arpingcnt", "adtool_rule", "0", "arpingcnt"); %>" type="text" /> <%lang("Packets"); %> <% lang("(1 ~ 10)"); %> </td>
             </tr>
           </table>
@@ -289,7 +308,7 @@ else
         <li class="w_text">
           <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
-              <td width="40%" id=""> <% lang("Target Host"); %> : </td>
+              <td width="40%" id="traceroute_host"> <% lang("Target Host"); %> : </td>
               <td><input name="traceroutehost" id="traceroutehost" size="32" maxlength="32" value="<% nvg_attr_get("traceroutehost", "adtool_rule", "0", "traceroutehost"); %>" type="text" /></td>
             </tr>
           </table>
@@ -297,7 +316,7 @@ else
         <li class="w_text">
           <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
-              <td width="40%" id=""> <% lang("Hop Count"); %> : </td>
+              <td width="40%" id="traceroute_hop"> <% lang("Hop Count"); %> : </td>
               <td><input name="traceroutecnt" id="traceroutecnt" size="32" maxlength="2" value="<% nvg_attr_get("traceroutecnt", "adtool_rule", "0", "traceroutecnt"); %>" type="text" /><%lang("Counts"); %> <% lang("(1 ~ 15)"); %></td>
             </tr>
           </table>
@@ -313,7 +332,7 @@ else
         <li class="w_text">
           <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
             <tr>
-              <td><textarea rows=6 disabled="disabled"><% st_show_traceroute();%></textarea></td>
+              <td><textarea rows="6" readonly="readonly" ><% st_show_traceroute();%></textarea></td>
             </tr>
         </table>
       </li>
