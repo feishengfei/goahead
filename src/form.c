@@ -72,6 +72,7 @@ int websFormHandler(webs_t wp, char_t *urlPrefix, char_t *webDir, int arg,
  *			For good practice, forms must call websDone()
  */
 			(*fn)((void*) wp, formName, query);
+			printf("query:%s\r\n", query);
 
 /*
  *			Remove the test to force websDone, since this prevents

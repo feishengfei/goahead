@@ -404,10 +404,9 @@ function parseAllData(str)
 	}
 }
 
-function Channel_BandWidth_onClick()
+function Channel_BandWidth_onChange()
 {
-
-	if (document.security_form.n_bandwidth[0].checked == true)
+	if (document.security_form.n_bandwidth.options.selectedIndex == 0)
 	{
 		show_div(false, "div_extension_channel");	
 		document.security_form.n_extcha.disabled = true;
@@ -418,7 +417,6 @@ function Channel_BandWidth_onClick()
 		show_div(true, "div_extension_channel");	
 		document.security_form.n_extcha.disabled = false;
 	}
-
 	parent.adjustMyFrameHeight();
 }
 
@@ -438,7 +436,7 @@ function wirelessModeChange()
 	    show_div(true, "div_networkmode_id");
 	}
 
-	Channel_BandWidth_onClick();
+	Channel_BandWidth_onChange();
 	parent.adjustMyFrameHeight();
 }
 
@@ -880,7 +878,7 @@ function check_Wep(securitymode)
 }
 
 function check_same_ssid(){
-      for (var i = 1; i < 9; i++){
+      for (var i = 1; i < 8; i++){
 		if (eval("document.security_form.mssid_"+i).value != ""){
 			if (i == 1){
 				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_1).value ){
@@ -904,9 +902,6 @@ function check_same_ssid(){
 				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_7).value ){
 					return false;	
 				}	
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_8).value ){
-					return false;	
-				}	
 			}
 			else if (i == 2){
 				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_2).value ){
@@ -927,9 +922,6 @@ function check_same_ssid(){
 				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_7).value ){
 					return false;	
 				}			
-				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_8).value ){
-					return false;	
-				}			
 			}
 			else if (i == 3){
 				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_3).value ){
@@ -947,9 +939,6 @@ function check_same_ssid(){
 				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_7).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_8).value ){
-					return false;	
-				}
 			}
 			else if (i == 4){
 				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_4).value ){
@@ -964,9 +953,6 @@ function check_same_ssid(){
 				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_7).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_8).value ){
-					return false;	
-				}
 			}
 			else if (i == 5){
 				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_5).value ){
@@ -978,9 +964,6 @@ function check_same_ssid(){
 				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_7).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_8).value ){
-					return false;	
-				}
 			}
 			else if (i == 6){
 				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_6).value ){
@@ -989,20 +972,9 @@ function check_same_ssid(){
 				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_7).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_8).value ){
-					return false;	
-				}
 			}
 			else if (i == 7){
 				if (eval(document.security_form.mssid_6).value == eval(document.security_form.mssid_7).value ){
-					return false;	
-				}
-				if (eval(document.security_form.mssid_6).value == eval(document.security_form.mssid_8).value ){
-					return false;	
-				}
-			}
-			else if (i == 8){
-				if (eval(document.security_form.mssid_7).value == eval(document.security_form.mssid_8).value ){
 					return false;	
 				}
 			}
@@ -1026,8 +998,7 @@ function submit_apply()
 	    ((document.security_form.mssid_4.value == "") && (document.security_form.hidemssid_4.checked == true)) ||
 	    ((document.security_form.mssid_5.value == "") && (document.security_form.hidemssid_5.checked == true)) ||
 	    ((document.security_form.mssid_6.value == "") && (document.security_form.hidemssid_6.checked == true)) ||
-	    ((document.security_form.mssid_7.value == "") && (document.security_form.hidemssid_7.checked == true)) ||
-	    ((document.security_form.mssid_8.value == "") && (document.security_form.hidemssid_8.checked == true)) 
+	    ((document.security_form.mssid_7.value == "") && (document.security_form.hidemssid_7.checked == true)) 
 		 ){
 		alert("SSID field cannot empty when you select hide function");
 		return false;
@@ -1039,8 +1010,7 @@ function submit_apply()
 	    ((document.security_form.mssid_4.value == "") && (document.security_form.IntraBSS4.checked == true)) ||
 	    ((document.security_form.mssid_5.value == "") && (document.security_form.IntraBSS5.checked == true)) ||
 	    ((document.security_form.mssid_6.value == "") && (document.security_form.IntraBSS6.checked == true)) ||
-	    ((document.security_form.mssid_7.value == "") && (document.security_form.IntraBSS7.checked == true)) ||
-	    ((document.security_form.mssid_8.value == "") && (document.security_form.IntraBSS8.checked == true))
+	    ((document.security_form.mssid_7.value == "") && (document.security_form.IntraBSS7.checked == true)) 
 		 ){
 		alert("SSID field cannot empty");
 		return false;
@@ -1085,21 +1055,17 @@ function submit_apply()
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}	
-	if(checkInjection(document.security_form.mssid_8.value) == false){
-		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
-		return false;
-	}	
 	if(check_same_ssid() == false){
 		alert("Duplicate ssid names!");	
              return false;
 	}
 	submit_ssid_num = 1;
 
-	for (i = 1; i < 4; i++)
+	for (i = 1; i < 8; i++)
 	{
 		if (eval("document.security_form.mssid_"+i).value != "")
 		{
-			if (i == 3)
+			if (i == 8)
 			{
 				if (1*apcli_include == 0)
 					submit_ssid_num++;
@@ -1148,10 +1114,6 @@ function submit_apply()
 	else
 		document.security_form.bssid_num7.value = "1";	
 
-	if(document.security_form.mssid_8.value == "")
-		document.security_form.bssid_num8.value = "0";
-	else
-		document.security_form.bssid_num8.value = "1";	
 
 	if(	(document.security_form.ssid.value == "") || 
 		(document.security_form.mssid_1.value == "") || 
@@ -1160,8 +1122,7 @@ function submit_apply()
 		(document.security_form.mssid_4.value == "") ||
 		(document.security_form.mssid_5.value == "") ||
 		(document.security_form.mssid_6.value == "") ||
-		(document.security_form.mssid_7.value == "") ||
-		(document.security_form.mssid_8.value == "") 
+		(document.security_form.mssid_7.value == "") 
 	){
 		alert("Please enter SSID!");
 		return false;
@@ -1482,8 +1443,6 @@ function initTranslation()
 	e.innerHTML = _("general mssid hide");
 	e = document.getElementById("GeneralmSSIDHide7");
 	e.innerHTML = _("general mssid hide");
-	e = document.getElementById("GeneralmSSIDHide8");
-	e.innerHTML = _("general mssid hide");
 
 	e = document.getElementById("AdvanceNetMode");
 	e.innerHTML = _("advance net mode");
@@ -1651,9 +1610,7 @@ function initTranslation()
 	e.innerHTML = _("advance intra bss");	
 	e = document.getElementById("IntraBSS_7");
 	e.innerHTML = _("advance intra bss");	
-	e = document.getElementById("IntraBSS_8");
 
-	e.innerHTML = _("advance intra bss");	
 	e = document.getElementById("Main_IntraBSS");
 	e.innerHTML = _("main advance intra bss");		
 	e = document.getElementById("GeneralWirelessSSID1");
@@ -1670,8 +1627,6 @@ function initTranslation()
 	e.innerHTML = _("general wireless ssid6");	
 	e = document.getElementById("GeneralWirelessSSID7");
 	e.innerHTML = _("general wireless ssid7");	
-	e = document.getElementById("GeneralWirelessSSID8");
-	e.innerHTML = _("general wireless ssid8");	
 	
 	e = document.getElementById("enable_guest_wlan");
 	e.innerHTML = _("wlan guest enable");	
@@ -1708,8 +1663,6 @@ function initTranslation()
 	e.innerHTML = _("wireless enable");
 	e = document.getElementById("GeneralWirelessEnable7");
 	e.innerHTML = _("wireless enable");
-	e = document.getElementById("GeneralWirelessEnable8");
-	e.innerHTML = _("wireless enable");
 }
 
 function initAll()
@@ -1721,7 +1674,7 @@ function initAll()
 	
 	initTranslation();
 	
-//	var Enable_SSID = '<% getCfgZero(1, "EnableSSID"); %>';
+//	var Enable_SSID  = '<% getCfgZero(1, "EnableSSID" ); %>';
 	var Enable_SSID1 = '<% getCfgZero(1, "EnableSSID1"); %>';
 	var Enable_SSID2 = '<% getCfgZero(1, "EnableSSID2"); %>';	
 	var Enable_SSID3 = '<% getCfgZero(1, "EnableSSID3"); %>';	
@@ -1729,8 +1682,7 @@ function initAll()
 	var Enable_SSID5 = '<% getCfgZero(1, "EnableSSID5"); %>';	
 	var Enable_SSID6 = '<% getCfgZero(1, "EnableSSID6"); %>';	
 	var Enable_SSID7 = '<% getCfgZero(1, "EnableSSID7"); %>';	
-	var Enable_SSID8 = '<% getCfgZero(1, "EnableSSID8"); %>';	
-	var Intra_BSS = '<% getCfgZero(1, "NoForwarding"); %>';
+	var Intra_BSS  = '<% getCfgZero(1, "NoForwarding"); %>';
 	var Intra_BSS1 = '<% getCfgZero(1, "NoForwarding1"); %>';
 	var Intra_BSS2 = '<% getCfgZero(1, "NoForwarding2"); %>';	
 	var Intra_BSS3 = '<% getCfgZero(1, "NoForwarding3"); %>';
@@ -1738,8 +1690,7 @@ function initAll()
 	var Intra_BSS5 = '<% getCfgZero(1, "NoForwarding5"); %>';
 	var Intra_BSS6 = '<% getCfgZero(1, "NoForwarding6"); %>';
 	var Intra_BSS7 = '<% getCfgZero(1, "NoForwarding7"); %>';
-	var Intra_BSS8 = '<% getCfgZero(1, "NoForwarding8"); %>';
-	var broadcastssidEnable  = '<% getCfgZero(1, "HideSSID"); %>';
+	var broadcastssidEnable   = '<% getCfgZero(1, "HideSSID"); %>';
 	var broadcastssidEnable1  = '<% getCfgZero(1, "HideSSID1"); %>';
 	var broadcastssidEnable2  = '<% getCfgZero(1, "HideSSID2"); %>';
 	var broadcastssidEnable3  = '<% getCfgZero(1, "HideSSID3"); %>';
@@ -1747,7 +1698,6 @@ function initAll()
 	var broadcastssidEnable5  = '<% getCfgZero(1, "HideSSID5"); %>';
 	var broadcastssidEnable6  = '<% getCfgZero(1, "HideSSID6"); %>';
 	var broadcastssidEnable7  = '<% getCfgZero(1, "HideSSID7"); %>';
-	var broadcastssidEnable8  = '<% getCfgZero(1, "HideSSID8"); %>';
 	var nv_channel = <% getCfgZero(1, "Channel"); %>;
 	var MainIntra_BSS = "<% getCfgZero(1, "MainIntra_BSS"); %>";
 	var nv_radio_off = "<% getRadioStatusASP(); %>";
@@ -1757,16 +1707,17 @@ function initAll()
 	// HT BW
 	if (1*ht_bw == 0)
 	{
-		document.security_form.n_bandwidth[0].checked = true;
+		document.security_form.n_bandwidth.options.selectedIndex = 0;
 		show_div(false, "div_extension_channel");		
 		document.security_form.n_extcha.disabled = true;
 	}
 	else
 	{
-		document.security_form.n_bandwidth[1].checked = true;
+		document.security_form.n_bandwidth.options.selectedIndex = 1;
 		show_div(true, "div_extension_channel");		
 		document.security_form.n_extcha.disabled = false;
 	}
+
 
 	PhyMode = 1*PhyMode;
 	if (PhyMode == 9)
@@ -1778,11 +1729,14 @@ function initAll()
 	else
 		t.innerHTML = _("general off");
 		
-//	if (Enable_SSID == "1"){
-//		document.security_form.enablessid.checked = true;
-//	}else{
-//		document.security_form.enablessid.checked = false;
-//	}
+/*
+	if (Enable_SSID == "1"){
+		document.security_form.enablessid.checked = true;
+	}else{
+		document.security_form.enablessid.checked = false;
+	}
+*/
+
 	if (Enable_SSID1 == "1"){
 		document.security_form.enablessid1.checked = true;
 	}else{
@@ -1817,11 +1771,6 @@ function initAll()
 		document.security_form.enablessid7.checked = true;
 	}else{
 		document.security_form.enablessid7.checked = false;
-	}
-	if (Enable_SSID8 == "1"){
-		document.security_form.enablessid8.checked = true;
-	}else{
-		document.security_form.enablessid8.checked = false;
 	}
 		
 	if (broadcastssidEnable == "1"){
@@ -1863,11 +1812,6 @@ function initAll()
 		document.security_form.hidemssid_7.checked = true;
 	}else{
 		document.security_form.hidemssid_7.checked = false;
-	}
-	if (broadcastssidEnable8 == "1"){
-		document.security_form.hidemssid_8.checked = true;
-	}else{
-		document.security_form.hidemssid_8.checked = false;
 	}
 	
 	if (Intra_BSS == "0"){
@@ -1911,11 +1855,7 @@ function initAll()
 	}else{
 		document.security_form.IntraBSS7.checked = false;
 	}
-	if (Intra_BSS8 == "0"){
-		document.security_form.IntraBSS8.checked = true;
-	}else{
-		document.security_form.IntraBSS8.checked = false;
-	}
+
 	if (MainIntra_BSS == "0"){
 		document.security_form.MainIntraBSS.checked = true;
 	}else{
@@ -2132,6 +2072,10 @@ function clickwlanguest()
 <input type="hidden" name="bssid_num1" value="">
 <input type="hidden" name="bssid_num2" value="">
 <input type="hidden" name="bssid_num3" value="">
+<input type="hidden" name="bssid_num4" value="">
+<input type="hidden" name="bssid_num5" value="">
+<input type="hidden" name="bssid_num6" value="">
+<input type="hidden" name="bssid_num7" value="">
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
@@ -2313,30 +2257,6 @@ function clickwlanguest()
 </table>
 </li>
 
-<li class="w_text">
-<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
-<tr>
-<td width="60" nowrap >
-<input type="checkbox" name=enablessid8 value="1" />
-<font id="GeneralWirelessEnable8">Enable</font>
-</td>
-<td width="120">
-<font id="GeneralWirelessSSID8">Name(SSID8) :</font></td>
-<td width="150" nowrap >
-<input type=text name=mssid_8 size=20 maxlength=32 value="<% getCfgGeneral(1, "SSID8"); %>" />
-</td>
-<td><input type="checkbox" name=hidemssid_8 value="1" />
-<font id ="GeneralmSSIDHide8">Hide</font>
-<!-- Intra-BSS/SSID checkbox -->
-<input name="IntraBSS8" type="checkbox" value="0" />
-<font id ="IntraBSS_8"> Enable Intra-BSS Traffic</font> 
-</td>
-</tr>
-</table>
-</li>
-
-
-
 <li></li>
 <!-- add WLAN Guest -->
 <span id="div_wlanguest_id" class="off">
@@ -2441,8 +2361,9 @@ function clickwlanguest()
 <tr>
 <td id="AdvanceHTChannelBW" width="180" nowrap>Channel BandWidth :</td>
 <td width="150">
-<input type=radio id=n_bandwidth_0 name=n_bandwidth value="0" onClick="Channel_BandWidth_onClick()" checked>20&nbsp;
-<input type=radio id=n_bandwidth_1 name=n_bandwidth value="1" onClick="Channel_BandWidth_onClick()">20/40
+<select name="n_bandwidth" id="n_bandwidth" size="1" onChange="Channel_BandWidth_onChange()">
+<option value=0>20 &nbsp; </option>
+<option value=1>20/40 </option>
 </td>
 <td width="*">&nbsp;</td>
 </tr>

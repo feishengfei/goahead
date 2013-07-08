@@ -2440,32 +2440,32 @@ printf("ENTER replace ssid\n");
 
 //SSID
 	ezplib_get_rule("wl0_ssid_rule", OldNum, SSID, TMP_LEN);
-    	ezplib_replace_rule("wl0_ssid_rule", NewNum, SSID);
+	ezplib_replace_rule("wl0_ssid_rule", NewNum, SSID);
 	ezplib_replace_rule("wl0_ssid_rule", OldNum, "");
 	
 //enable^hidden^rate^wme^isolation	
 	ezplib_get_rule("wl0_basic_rule", OldNum, basic, TMP_LEN);
-    	ezplib_replace_rule("wl0_basic_rule", NewNum, basic);
+	ezplib_replace_rule("wl0_basic_rule", NewNum, basic);
 	ezplib_replace_rule("wl0_basic_rule", OldNum, "0^0^0^1^1");
 	
 //security mode
 	ezplib_get_rule("wl0_sec_rule", OldNum, SEC, TMP_LEN);
-    	ezplib_replace_rule("wl0_sec_rule", NewNum, SEC);
+	ezplib_replace_rule("wl0_sec_rule", NewNum, SEC);
 	ezplib_replace_rule("wl0_sec_rule", OldNum, "disabled");
 	
 //WEP
 	ezplib_get_rule("wl0_sec_wep_rule", OldNum, WEP, TMP_LEN);
-    	ezplib_replace_rule("wl0_sec_wep_rule", NewNum, WEP);
+	ezplib_replace_rule("wl0_sec_wep_rule", NewNum, WEP);
 	ezplib_replace_rule("wl0_sec_wep_rule", OldNum, "1^^^^^^open");
 	
 //WPA	
 	ezplib_get_rule("wl0_sec_wpa_rule", OldNum, WPA, TMP_LEN);
-    	ezplib_replace_rule("wl0_sec_wpa_rule", NewNum, WPA);
+	ezplib_replace_rule("wl0_sec_wpa_rule", NewNum, WPA);
 	ezplib_replace_rule("wl0_sec_wpa_rule", OldNum, "^tkip^^^1812^disable^3600^5000^3000");
 	
 //WPA2
 	ezplib_get_rule("wl0_sec_wpa2_rule", OldNum, WPA2, TMP_LEN);
-    	ezplib_replace_rule("wl0_sec_wpa2_rule", NewNum, WPA2);
+	ezplib_replace_rule("wl0_sec_wpa2_rule", NewNum, WPA2);
 	ezplib_replace_rule("wl0_sec_wpa2_rule", OldNum, "^aes^^^1812^disable^3600^5000^0^10^3000^1");
 	
 //MAC Filter num
@@ -2480,7 +2480,7 @@ printf("ENTER replace ssid\n");
 	sprintf(old_acl_basic, "wl0%d_acl_basic_rule", OldNum);
 	sprintf(new_acl_basic, "wl0%d_acl_basic_rule", NewNum);		 
 	ezplib_get_rule(old_acl_basic, 0, AclBasic, TMP_LEN);
-    	ezplib_replace_rule(new_acl_basic, 0, AclBasic);
+	ezplib_replace_rule(new_acl_basic, 0, AclBasic);
 	ezplib_replace_rule(old_acl_basic, 0, "1^disabled");
 	
 //MAC Filter rule
@@ -2489,9 +2489,8 @@ printf("ENTER replace ssid\n");
 	AclRule = nvram_safe_get(old_acl_rule);
 	nvram_set(new_acl_rule, AclRule);
 	nvram_set(old_acl_rule, "");	
-
-	    			
 }
+
 static void revise_mbss_value(int old_num, int new_num)
 {
 #if 0
@@ -7781,26 +7780,27 @@ char* mask2prefix2(char *mask)
     return mask;
 }
 
-//void APGeneral(int nvram, webs_t wp, char_t *path, char_t *query)
 void APGeneral(webs_t wp, char_t *path, char_t *query)
 {
-#if 1
-
-	char_t *ssid,*mssid_1, *mssid_2, *mssid_3, *mssid_4, *mssid_5, *mssid_6,*mssid_7,*bssid_num, *set_bssid_num;
-	char_t *hidessid, *hidemssid_1, *hidemssid_2, *hidemssid_3, *hidemssid_4, *hidemssid_5, *hidemssid_6,*hidemssid_7;
-	char_t *main_intra_bss, *intra_bss, *intra_bss1, *intra_bss2, *intra_bss3, *intra_bss4, *intra_bss5, *intra_bss6,*intra_bss7;
+	char_t *ssid, *bssid_num, *set_bssid_num;
+	char_t *mssid_1, *mssid_2, *mssid_3, *mssid_4;
+	char_t *mssid_5, *mssid_6, *mssid_7; 
+	char_t *hidessid, *hidemssid_1, *hidemssid_2, *hidemssid_3; 
+	char_t *hidemssid_4, *hidemssid_5, *hidemssid_6, *hidemssid_7;
+	char_t *intra_bss, *intra_bss1, *intra_bss2, *intra_bss3;
+	char_t *intra_bss4, *intra_bss5, *intra_bss6, *intra_bss7;
 	char_t *enablessid, *enablessid1, *enablessid2, *enablessid3;
-	char_t *sz11gChannel;
-	char_t	*auto_channel;	
-	char_t *bssid_num1, *bssid_num2, *bssid_num3;
+	char_t *enablessid4, *enablessid5, *enablessid6, *enablessid7;
+
+	char_t *main_intra_bss;
 	
 	int mbssid, mbssid_num, i, ssid_num;
-
 	int new_bssid_num, old_bssid_num;
-		
-	char 	*hidessid_str = malloc(sizeof(char)) , *hidessid_str1 = malloc(sizeof(char)),*hidessid_str2 = malloc(sizeof(char)),*hidessid_str3 = malloc(sizeof(char));
-	char 	*intra_bss_str = malloc(sizeof(char)),*intra_bss_str1 = malloc(sizeof(char)),*intra_bss_str2 = malloc(sizeof(char)),*intra_bss_str3 = malloc(sizeof(char)), *intra_bss_str_main = malloc(sizeof(char));
-	char 	*enablessid_str = malloc(sizeof(char)) , *enablessid_str1 = malloc(sizeof(char)),*enablessid_str2 = malloc(sizeof(char)),*enablessid_str3 = malloc(sizeof(char));
+	char_t *wirelessmode;
+	char_t *sz11gChannel, *auto_channel;	
+	char_t *n_extcha;
+	char_t *n_bandwidth;
+
 	char wordlist[5];
 	char TempSSID[128];
 	
@@ -7815,15 +7815,16 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 	char OldBuf_bm_en[32];
 	char OldBuf_bm_val[32];
 	int GuestNoChange=0;
-	
-	//Steve add 2011/06/30
-	ezplib_get_attr_val("guest_lan_rule", 0, "enable", OldBuf_en, 32, EZPLIB_USE_CLI);
-	
-	ezplib_replace_attr("guest_lan_rule", 0, "enable", wlan_guest); // Need to implement 
-		
-	ezplib_get_attr_val("wl_mode_rule", 0, "mode", TempBuf, 32, EZPLIB_USE_CLI);
-	if ( (!strcmp(TempBuf, "normal")) && (!strcmp(wlan_guest, "1"))){ // Router mode
-	//if (!strcmp(TempBuf, "normal")){ // Router mode	
+	ezplib_get_attr_val("guest_lan_rule", 0, "enable", 
+		OldBuf_en, 32, EZPLIB_USE_CLI);
+	ezplib_replace_attr("guest_lan_rule", 0, "enable", 
+		wlan_guest); 
+
+	// Router mode 
+	/*TODO:lan static interface update need to be implemented*/
+	ezplib_get_attr_val("wl_mode_rule", 0, "mode", 
+		TempBuf, 32, EZPLIB_USE_CLI);
+	if ( (!strcmp(TempBuf, "normal")) && (!strcmp(wlan_guest, "1")) ) { 
 		char *wlan_guest_ip = websGetVar(wp, T("wlanguestip"), T(""));
 		char *wlan_guest_mask = websGetVar(wp, T("wlanguestmask"), T(""));
 		char *wlan_guestBW_enable = websGetVar(wp, T("wlanguestBW"), T("0"));
@@ -7831,46 +7832,43 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 		char *wlan_guest_max_bw = websGetVar(wp, T("guestmaxbw"), T(""));
 		char *mask;
 		
-		//Steve add 2011/06/30
 		mask = mask2prefix2(wlan_guest_mask);
 		ezplib_get_attr_val("guest_lan_rule", 0, "ipaddr", OldBuf_ip, 32, EZPLIB_USE_CLI);
 		ezplib_get_attr_val("guest_lan_rule", 0, "netmask", OldBuf_mask, 32, EZPLIB_USE_CLI);
 		ezplib_get_attr_val("guest_lan_rule", 0, "bwen", OldBuf_bm_en, 32, EZPLIB_USE_CLI);
 		ezplib_get_attr_val("guest_lan_rule", 0, "bw", OldBuf_bm_val, 32, EZPLIB_USE_CLI);
-		printf("OldBuf_ip=%s\n",OldBuf_ip);
-		printf("OldBuf_mask=%s\n",OldBuf_mask);
-		printf("OldBuf_bm_en=%s\n",OldBuf_bm_en);
-		printf("OldBuf_bm_val=%s\n",OldBuf_bm_val);
-		if((!strcmp(OldBuf_en, wlan_guest)) && (!strcmp(OldBuf_ip, wlan_guest_ip)) && (!strcmp(OldBuf_mask, mask)) && (!strcmp(OldBuf_bm_en, wlan_guestBW_enable)) && (!strcmp(OldBuf_bm_val, wlan_guest_max_bw))){
-			printf("GuestNoChange=1");
+		if(	(!strcmp(OldBuf_en, wlan_guest)) && 
+			(!strcmp(OldBuf_ip, wlan_guest_ip)) && 
+			(!strcmp(OldBuf_mask, mask)) && 
+			(!strcmp(OldBuf_bm_en, wlan_guestBW_enable)) && 
+			(!strcmp(OldBuf_bm_val, wlan_guest_max_bw)) ){
 			GuestNoChange=1;
-		}else{
-			printf("GuestNoChange=0");
+		}
+		else{
 			GuestNoChange=0;
 		}
-		
 		//wlan_guest_ip
-		ezplib_replace_attr("guest_lan_rule", 0, "ipaddr", wlan_guest_ip); // Need to implement 
-		
-		//wlan_guest_mask
-		//Translate AboCom's netmask to AXIM's nvram format
+		ezplib_replace_attr("guest_lan_rule", 0, 
+			"ipaddr", wlan_guest_ip); 
+		//wlan_guest_mask, Translate AboCom's netmask to AXIM's nvram format
     	mask = mask2prefix2(wlan_guest_mask);
-		ezplib_replace_attr("guest_lan_rule", 0, "netmask", mask); // Need to implement 
-		
+		ezplib_replace_attr("guest_lan_rule", 0, 
+			"netmask", mask); 
 		//wlan_guestBW_enable
-		ezplib_replace_attr("guest_lan_rule", 0, "bwen", wlan_guestBW_enable); // Need to implement 
-		
+		ezplib_replace_attr("guest_lan_rule", 0, "bwen", 
+			wlan_guestBW_enable); 
 		//wlan_guest_priority
-		ezplib_replace_attr("guest_lan_rule", 0, "prio", wlan_guest_priority); // Need to implement 
-		
+		ezplib_replace_attr("guest_lan_rule", 0, "prio", 
+			wlan_guest_priority); 
 		//wlan_guest_max_bw
-		ezplib_replace_attr("guest_lan_rule", 0, "bw", wlan_guest_max_bw); // Need to implement 
+		ezplib_replace_attr("guest_lan_rule", 0, "bw", 
+			wlan_guest_max_bw); 
 	}	
-#endif // Tommy: Implement WLAN Guest function
 
-	ezplib_get_attr_val("wl0_ssid_rule", 0, "ssid", TempSSID, 128, EZPLIB_USE_CLI);
+	ezplib_get_attr_val("wl0_ssid_rule", 0, "ssid", 
+		TempSSID, 128, EZPLIB_USE_CLI);
 	
-	ssid = websGetVar(wp, T("ssid"), T("")); 
+	ssid    = websGetVar(wp, T("ssid"),    T("")); 
 	mssid_1 = websGetVar(wp, T("mssid_1"), T("")); 
 	mssid_2 = websGetVar(wp, T("mssid_2"), T("")); 
 	mssid_3 = websGetVar(wp, T("mssid_3"), T(""));
@@ -7878,15 +7876,17 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 	mssid_5 = websGetVar(wp, T("mssid_5"), T("")); 
 	mssid_6 = websGetVar(wp, T("mssid_6"), T("")); 
 	mssid_7 = websGetVar(wp, T("mssid_7"), T("")); 	 
-
-	bssid_num = websGetVar(wp, T("bssid_num"), T("1"));
-
-	enablessid = websGetVar(wp, T("enablessid"), T(""));
+	
+	/*Enable, Hide, Enable Intra-BSS Traffic*/
+//	enablessid  = websGetVar(wp, T("enablessid"),  T(""));
 	enablessid1 = websGetVar(wp, T("enablessid1"), T(""));
 	enablessid2 = websGetVar(wp, T("enablessid2"), T(""));
 	enablessid3 = websGetVar(wp, T("enablessid3"), T(""));
-
-	hidessid = websGetVar(wp, T("hidessid"), T("")); 
+	enablessid4 = websGetVar(wp, T("enablessid4"), T(""));
+	enablessid5 = websGetVar(wp, T("enablessid5"), T(""));
+	enablessid6 = websGetVar(wp, T("enablessid6"), T(""));
+	enablessid7 = websGetVar(wp, T("enablessid7"), T(""));
+	hidessid    = websGetVar(wp, T("hidessid"),    T("")); 
 	hidemssid_1 = websGetVar(wp, T("hidemssid_1"), T("")); 
 	hidemssid_2 = websGetVar(wp, T("hidemssid_2"), T("")); 
 	hidemssid_3 = websGetVar(wp, T("hidemssid_3"), T(""));
@@ -7894,9 +7894,7 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 	hidemssid_5 = websGetVar(wp, T("hidemssid_5"), T("")); 
 	hidemssid_6 = websGetVar(wp, T("hidemssid_6"), T("")); 
 	hidemssid_7 = websGetVar(wp, T("hidemssid_7"), T("")); 	
-
-// Intra-BSS
-	intra_bss = websGetVar(wp, T("IntraBSS"), T("")); 
+	intra_bss  = websGetVar(wp, T("IntraBSS"),  T("")); 
 	intra_bss1 = websGetVar(wp, T("IntraBSS1"), T("")); 
 	intra_bss2 = websGetVar(wp, T("IntraBSS2"), T("")); 
 	intra_bss3 = websGetVar(wp, T("IntraBSS3"), T(""));
@@ -7904,312 +7902,245 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 	intra_bss5 = websGetVar(wp, T("IntraBSS5"), T(""));
 	intra_bss6 = websGetVar(wp, T("IntraBSS6"), T("")); 
 	intra_bss7 = websGetVar(wp, T("IntraBSS7"), T(""));
-//bisolation
-	main_intra_bss = websGetVar(wp, T("MainIntraBSS"), T(""));
-	
-//number of ssid	
-	bssid_num1 = websGetVar(wp, T("bssid_num1"), T("")); 
-	bssid_num2 = websGetVar(wp, T("bssid_num2"), T(""));	
-	bssid_num3 = websGetVar(wp, T("bssid_num3"), T(""));	
-//	old_bssid_num = atoi(nvram_bufget(RT2860_NVRAM, "BssidNum"));
 
-//	old_bssid_num = atoi(nvram_safe_get("wlv_rule_max"));
-
+	/*SSID count*/
+	bssid_num = websGetVar(wp, T("bssid_num"), T("1"));
 	new_bssid_num = atoi(bssid_num);	
-
-	//SSID, 
-	if (0 == strlen(ssid)){
-		nvram_commit();
-//		nvram_commit(RT2860_NVRAM);
-		websError(wp, 403, T("'SSID' should not be empty!"));
-		return;
-	}
-	
-	if (0 != strlen(ssid)) {
-	ezplib_replace_attr("wl0_ssid_rule", 0, "ssid", ssid);
-
-	//enable ssid
-// AXIM/Holmas say: First SSID must be enable.
-//	if (!strncmp(enablessid, "1", 2)){
-		sprintf(enablessid_str, "%s", "1");
-//	}else{
-//		sprintf(enablessid_str, "%s", "0");
-//	}
-
-	// Hide SSID	
-	if (!strncmp(hidessid, "1", 2)){
-		sprintf(hidessid_str, "%s", "1");
-	}else{
-		sprintf(hidessid_str, "%s", "0");
-	}			
-	// Intra-BSS
-	if (!strncmp(intra_bss, "0", 2)){
-		sprintf(intra_bss_str, "%s", "0");		
-	}else{
-		sprintf(intra_bss_str, "%s", "1");
-	}
-	
-	ezplib_replace_attr("wl0_basic_rule", 0, "enable", enablessid_str);	
-	ezplib_replace_attr("wl0_basic_rule", 0, "hidden", hidessid_str);
-	ezplib_replace_attr("wl0_basic_rule", 0, "isolation", intra_bss_str);
-
-	}	
-//	default_shown_mbssid[RT2860_NVRAM] = 0;
-//	default_shown_mbssid[nvram] = mbssid;
-
-		
-//	nvram_bufset(RT2860_NVRAM, racat("SSID", i), mssid_1);
-//	if (0 != strlen(mssid_1)) {
-//	ezplib_replace_attr("wl0_basic_rule", 1, "enable", "1");		
-//	}else 
-//	ezplib_replace_attr("wl0_basic_rule", 1, "enable", "0");	
-	
-	ezplib_replace_attr("wl0_ssid_rule", 1, "ssid", mssid_1);
-
-		//enable ssid1
-		if (!strncmp(enablessid1, "1", 2)){
-			sprintf(enablessid_str1, "%s", "1");
-		}else{
-			sprintf(enablessid_str1, "%s", "0");
-		}
-		// Hide SSID
-		if (!strncmp(hidemssid_1, "1", 2)){
-			sprintf(hidessid_str1, "%s", "1");
-		}else{
-			sprintf(hidessid_str1, "%s", "0");
-		}
-		// Intra-BSS
-		if (!strncmp(intra_bss1, "0", 2)){
-			sprintf(intra_bss_str1, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str1, "%s", "1");
-		}
-	
-	ezplib_replace_attr("wl0_basic_rule", 1, "enable", enablessid_str1);	
-	ezplib_replace_attr("wl0_basic_rule", 1, "hidden", hidessid_str1);
-	ezplib_replace_attr("wl0_basic_rule", 1, "isolation", intra_bss_str1);	
-
-	
-//	if (0 != strlen(mssid_2)) {
-//	ezplib_replace_attr("wl0_basic_rule", 2, "enable", "1");		
-//	}else
-//	ezplib_replace_attr("wl0_basic_rule", 2, "enable", "0");
-	
-//	nvram_bufset(RT2860_NVRAM, racat("SSID", i), mssid_2);
-	ezplib_replace_attr("wl0_ssid_rule", 2, "ssid", mssid_2);
-			
-		//enable ssid2
-		if (!strncmp(enablessid2, "1", 2)){
-			sprintf(enablessid_str2, "%s", "1");
-		}else{
-			sprintf(enablessid_str2, "%s", "0");
-		}
-		// Hide SSID
-		if (!strncmp(hidemssid_2, "1", 2)){
-			sprintf(hidessid_str2, "%s", "1");
-		}else{
-			sprintf(hidessid_str2, "%s", "0");
-		}
-		// Intra-BSS
-		if (!strncmp(intra_bss2, "0", 2)){
-			sprintf(intra_bss_str2, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str2, "%s", "1");
-		}		
-
-	ezplib_replace_attr("wl0_basic_rule", 2, "enable", enablessid_str2);
-	ezplib_replace_attr("wl0_basic_rule", 2, "hidden", hidessid_str2);
-	ezplib_replace_attr("wl0_basic_rule", 2, "isolation", intra_bss_str2);
-
-
-//	nvram_bufset(RT2860_NVRAM, racat("SSID", i), mssid_3);
-//	if (0 != strlen(mssid_3)) {
-//	ezplib_replace_attr("wl0_basic_rule", 3, "enable", "1");		
-//	}else
-//	ezplib_replace_attr("wl0_basic_rule", 3, "enable", "0");
-
-	ezplib_replace_attr("wl0_ssid_rule", 3, "ssid", mssid_3);
-				
-		//enable ssid3
-		if (!strncmp(enablessid3, "1", 2)){
-			sprintf(enablessid_str3, "%s", "1");
-		}else{
-			sprintf(enablessid_str3, "%s", "0");
-		}
-		// hide ssid
-		if (!strncmp(hidemssid_3, "1", 2)){
-			sprintf(hidessid_str3, "%s", "1");
-		}else{
-			sprintf(hidessid_str3, "%s", "0");
-		}
-		// Intra-BSS
-		if (!strncmp(intra_bss3, "0", 2)){
-			sprintf(intra_bss_str3, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str3, "%s", "1");
-		}		
-
-	ezplib_replace_attr("wl0_basic_rule", 3, "enable", enablessid_str3);
-	ezplib_replace_attr("wl0_basic_rule", 3, "hidden", hidessid_str3);
-	ezplib_replace_attr("wl0_basic_rule", 3, "isolation", intra_bss_str3);
-
-		// Main Intra-BSS
-		if (!strncmp(main_intra_bss, "0", 2)){
-			sprintf(intra_bss_str_main, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str_main, "%s", "1");
-		}	
-	ezplib_replace_attr("wl_ap_basic_rule", 0, "bisolation", intra_bss_str_main);		
-/*		
-	if (0 != strlen(mssid_4)) {
-//		nvram_bufset(RT2860_NVRAM, racat("SSID", i), mssid_4);
-	ezplib_replace_attr("wl0_ssid_rule", 4, "ssid", mssid_4);
-		
-		if (!strncmp(hidemssid_4, "1", 2)){
-			sprintf(hidessid_str4, "%s", "1");
-		}else{
-			sprintf(hidessid_str4, "%s", "0");
-		}
-		// Intra-BSS
-		if (!strncmp(intra_bss4, "0", 2)){
-			sprintf(intra_bss_str4, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str4, "%s", "1");
-		}		
-		
-	}
-	if (0 != strlen(mssid_5)) {
-//		nvram_bufset(RT2860_NVRAM, racat("SSID", i), mssid_5);
-	ezplib_replace_attr("wl0_ssid_rule", 5, "ssid", mssid_5);		
-		if (!strncmp(hidemssid_5, "1", 2)){
-			sprintf(hidessid_str5, "%s", "1");
-		}else{
-			sprintf(hidessid_str5, "%s", "0");
-		}
-		// Intra-BSS
-		if (!strncmp(intra_bss5, "0", 2)){
-			sprintf(intra_bss_str5, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str5, "%s", "1");
-		}		
-//		i++;
-	}
-	if (0 != strlen(mssid_6)) {
-//		nvram_bufset(RT2860_NVRAM, racat("SSID", i), mssid_6);
-	ezplib_replace_attr("wl0_ssid_rule", 6, "ssid", mssid_6);
-		
-		if (!strncmp(hidemssid_6, "1", 2)){
-			sprintf(hidessid_str6, "%s", "1");
-		}else{
-			sprintf(hidessid_str6, "%s", "0");
-		}
-		// Intra-BSS
-		if (!strncmp(intra_bss6, "0", 2)){
-			sprintf(intra_bss_str6, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str6, "%s", "1");
-		}		
-//		i++;
-	}
-	if (0 != strlen(mssid_7)) {
-//		nvram_bufset(RT2860_NVRAM, racat("SSID", i), mssid_7);
-	ezplib_replace_attr("wl0_ssid_rule", 7, "ssid", mssid_7);
-
-		
-		if (!strncmp(hidemssid_7, "1", 2)){
-			sprintf(hidessid_str7, "%s", "1");
-		}else{
-			sprintf(hidessid_str7, "%s", "0");
-		}
-		// Intra-BSS
-		if (!strncmp(intra_bss7, "0", 2)){
-			sprintf(intra_bss_str7, "%s", "0");		
-		}else{
-			sprintf(intra_bss_str7, "%s", "1");
-		}		
-	}
-*/	
-//	nvram_bufset(RT2860_NVRAM, "HideSSID", hidessid_str);	
-//	nvram_bufset(RT2860_NVRAM, "NoForwarding", intra_bss_str);	
-//	nvram_bufset(RT2860_NVRAM, "BssidNum", bssid_num);
-
-	nvram_set("wlv_rule_max", bssid_num);
-							
-	if (new_bssid_num < 1 || new_bssid_num > 4) {
-//		nvram_commit(RT2860_NVRAM);
+	strcpy(TempBuf, nvram_get("wlv_rule_max"));
+	if (new_bssid_num < 1 || new_bssid_num > atoi(TempBuf)) {
 		nvram_commit();
 		websError(wp, 403, T("'bssid_num' %s is out of range!"), bssid_num);
 		return;
 	}
-	
-//	revise_mbss_value(old_bssid_num, new_bssid_num);
-	if((!strcmp(bssid_num1, "0")) && (!strcmp(bssid_num2, "0")) && (!strcmp(bssid_num3, "1"))){
 
-		replace_ssid_value(1 , 3);
-				
+	/* SSID */
+	if (0 == strlen(ssid)){
+		nvram_commit();
+		websError(wp, 403, T("'SSID' should not be empty!"));
+		return;
 	}
-	if((!strcmp(bssid_num1, "0")) && (!strcmp(bssid_num2, "1")) && (!strcmp(bssid_num3, "0"))){
 
-		replace_ssid_value(1 , 2);
-		replace_blankssid_value(3);				
-	}
-	if((!strcmp(bssid_num1, "0")) && (!strcmp(bssid_num2, "1")) && (!strcmp(bssid_num3, "1"))){
-
-		replace_ssid_value(1 , 2);
-		replace_ssid_value(2 , 3);
-				
-	}		
-	if((!strcmp(bssid_num2, "0")) && (!strcmp(bssid_num3, "1"))){
-
-		replace_ssid_value(2 , 3);
-				
-	}
-	if((!strcmp(bssid_num1, "0")) && (!strcmp(bssid_num2, "0")) && (!strcmp(bssid_num3, "0"))){
-
-		replace_blankssid_value(1);
-		replace_blankssid_value(2);
-		replace_blankssid_value(3);
-				
-	}
-	if((!strcmp(bssid_num1, "1")) && (!strcmp(bssid_num2, "0")) && (!strcmp(bssid_num3, "0"))){
-
-		replace_blankssid_value(2);
-		replace_blankssid_value(3);
-				
-	}
-	if((!strcmp(bssid_num1, "1")) && (!strcmp(bssid_num2, "1")) && (!strcmp(bssid_num3, "0"))){
-
-		replace_blankssid_value(3);
-				
+	/* SSID */
+	if (0 != strlen(ssid)) {
+		ezplib_replace_attr("wl0_ssid_rule", 0, "ssid", ssid);
+		//enable ssid
+		// AXIM/Holmas say: First SSID must be enable.
+		ezplib_replace_attr("wl0_basic_rule", 0, "enable", "1");	
+		// Hide SSID	
+		if (!strncmp(hidessid, "1", 2)){
+			ezplib_replace_attr("wl0_basic_rule", 0, "hidden", "1");
+		}else{
+			ezplib_replace_attr("wl0_basic_rule", 0, "hidden", "0");
+		}			
+		// Intra-BSS
+		if (!strncmp(intra_bss, "0", 2)){
+			ezplib_replace_attr("wl0_basic_rule", 0, "isolation", "1");
+		}else{
+			ezplib_replace_attr("wl0_basic_rule", 0, "isolation", "0");
+		}
 	}	
+
+	/* SSID 1 */	
+	ezplib_replace_attr("wl0_ssid_rule", 1, "ssid", mssid_1);
+	//enable ssid1
+	if (!strncmp(enablessid1, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 1, "enable", "1");	
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 1, "enable", "0");	
+	}
+	// Hide SSID
+	if (!strncmp(hidemssid_1, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 1, "hidden", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 1, "hidden", "0");
+	}
+	// Intra-BSS
+	if (!strncmp(intra_bss1, "0", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 1, "isolation", "1");	
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 1, "isolation", "0");	
+	}
+
+	/* SSID 2 */	
+	ezplib_replace_attr("wl0_ssid_rule", 2, "ssid", mssid_2);
+
+	//enable ssid2
+	if (!strncmp(enablessid2, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 2, "enable", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 2, "enable", "0");
+	}
+	// Hide SSID
+	if (!strncmp(hidemssid_2, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 2, "hidden", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 2, "hidden", "0");
+	}
+	// Intra-BSS
+	if (!strncmp(intra_bss2, "0", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 2, "isolation", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 2, "isolation", "0");
+	}		
+
+	/* SSID 3 */	
+	ezplib_replace_attr("wl0_ssid_rule", 3, "ssid", mssid_3);
+	//enable ssid3
+	if (!strncmp(enablessid3, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 3, "enable", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 3, "enable", "0");
+	}
+	// Hide SSID
+	if (!strncmp(hidemssid_3, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 3, "hidden", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 3, "hidden", "0");
+	}
+	// Intra-BSS
+	if (!strncmp(intra_bss3, "0", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 3, "isolation", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 3, "isolation", "0");
+	}		
+
+	/* SSID 4 */	
+	ezplib_replace_attr("wl0_ssid_rule", 4, "ssid", mssid_4);
+	//enable ssid4
+	if (!strncmp(enablessid4, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 4, "enable", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 4, "enable", "0");
+	}
+	// Hide SSID
+	if (!strncmp(hidemssid_4, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 4, "hidden", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 4, "hidden", "0");
+	}
+	// Intra-BSS
+	if (!strncmp(intra_bss4, "0", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 4, "isolation", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 4, "isolation", "0");
+	}		
+
+	/* SSID 5 */	
+	ezplib_replace_attr("wl0_ssid_rule", 5, "ssid", mssid_5);
+	//enable ssid5
+	if (!strncmp(enablessid5, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 5, "enable", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 5, "enable", "0");
+	}
+	// Hide SSID
+	if (!strncmp(hidemssid_5, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 5, "hidden", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 5, "hidden", "0");
+	}
+	// Intra-BSS
+	if (!strncmp(intra_bss5, "0", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 5, "isolation", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 5, "isolation", "0");
+	}		
+
+	/* SSID 6 */	
+	ezplib_replace_attr("wl0_ssid_rule", 6, "ssid", mssid_6);
+	//enable ssid6
+	if (!strncmp(enablessid6, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 6, "enable", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 6, "enable", "0");
+	}
+	// Hide SSID
+	if (!strncmp(hidemssid_6, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 6, "hidden", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 6, "hidden", "0");
+	}
+	// Intra-BSS
+	if (!strncmp(intra_bss6, "0", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 6, "isolation", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 6, "isolation", "0");
+	}		
+
+	/* SSID 7 */	
+	ezplib_replace_attr("wl0_ssid_rule", 7, "ssid", mssid_7);
+	//enable ssid7
+	if (!strncmp(enablessid7, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 7, "enable", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 7, "enable", "0");
+	}
+	// Hide SSID
+	if (!strncmp(hidemssid_7, "1", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 7, "hidden", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 7, "hidden", "0");
+	}
+	// Intra-BSS
+	if (!strncmp(intra_bss7, "0", 2)){
+		ezplib_replace_attr("wl0_basic_rule", 7, "isolation", "1");
+	}else{
+		ezplib_replace_attr("wl0_basic_rule", 7, "isolation", "0");
+	}		
+
+	/* Network Mode */
+	wirelessmode = websGetVar(wp, T("wirelessmode"), T("0"));
+	ezplib_replace_attr("wl_mode_rule", 0, "mode", wirelessmode);
+	
+	/* Channel Bandwidth */
+	n_bandwidth = websGetVar(wp, T("wirelessmode"), T("0"));	
+	char ModeTmpBuf[32];
+	ezplib_get_attr_val("wl_mode_rule", 0, "mode", ModeTmpBuf, 32, EZPLIB_USE_CLI);
+	if (!strcmp(ModeTmpBuf, "ap")){
+		ezplib_replace_attr("wl_ap_advanced_rule", 0, "htbw", n_bandwidth); 
+	}else {
+		ezplib_replace_attr("wl_advanced_rule", 0, "htbw", n_bandwidth); 
+	}
+	
+	/* Channel Selection 1~11, 0 stands for auto*/
 	sz11gChannel = websGetVar(wp, T("sz11gChannel"), T(""));		
 	auto_channel = websGetVar(wp, T("Auto_Channel"), T(""));
-
-        if (!strncmp(auto_channel, "1", 2))
-		sz11gChannel = "0";
-	
-//        if (!strncmp(sz11gChannel, "0", 2))
-//		nvram_bufset(RT2860_NVRAM, "AutoChannelSelect", "1");
-//	else
-//		nvram_bufset(RT2860_NVRAM, "AutoChannelSelect", "0");			
-//	nvram_bufset(RT2860_NVRAM, "Channel", sz11gChannel);
+	if (!strncmp(auto_channel, "1", 2))
+	sz11gChannel = "0";
 	nvram_set("AP_Channel", sz11gChannel);
 	ezplib_replace_attr("wl_ap_basic_rule", 0, "channel", sz11gChannel);
+
+	/* Extension Channel */
+	n_extcha = websGetVar(wp, T("n_extcha"), T("0"));
+	ezplib_replace_attr("wl_advanced_rule", 0, "extcha", n_extcha);
+
+
+	/*Communicate between wireless clients with diff SSIDs*/
+	main_intra_bss = websGetVar(wp, T("MainIntraBSS"), T(""));
+	if (!strncmp(main_intra_bss, "0", 2)){
+		ezplib_replace_attr("wl_ap_basic_rule", 0, "bisolation", "0");		
+	}else{
+		ezplib_replace_attr("wl_ap_basic_rule", 0, "bisolation", "1");		
+	}	
+
+	printf("setter:\r\n");
+	printf("Network Mode:%s\r\n", wirelessmode);
+	printf("Channel Bandwidth:%s\r\n", n_bandwidth);
+	printf("Channel Selection:%s(%s)\r\n", sz11gChannel, auto_channel);
+	printf("Extension Channel:%s\r\n", n_extcha);
+	printf("MainIntraBSS:%s\r\n", main_intra_bss);
+
 		
 
 //	default_shown_mbssid[nvram] = mbssid;
 
 //# WPS
 	{
-		//if(nvram == RT2860_NVRAM && mbssid == 0){		// only ra0 supports WPS now.
 		if (strcmp(TempSSID, ssid)){
 			//char *wordlist= nvram_bufget(RT2860_NVRAM, "WscModeOption");
 			ezplib_get_attr_val("wl_wps_rule", 0, "configured", wordlist, sizeof(wordlist), EZPLIB_USE_CLI);
 			if(wordlist){
 				if (strcmp(wordlist, "0"))
-					//doSystem("iwpriv rai0 set WscConfStatus=1");
-					system("/sbin/ezp-wps-set 0 0 1 1");
-				//nvram_bufset(RT2860_NVRAM, "WscConfigured", "1");
 				ezplib_replace_attr("wl_wps_rule", 0, "configured" ,"1");
 				g_wsc_configured = 1;
 			}
@@ -8217,42 +8148,19 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 	}
 //# WPS
 
-// AXIMCOM: It should execute, if extension channel have problem.
-#if 0
-	// Reset Extension Channel to 0
-	ezplib_replace_attr("wl_advanced_rule", 0, "extcha", "0");
 
-	system("/sbin/ezp-wl0-ctrl advance");	
-#endif
-
-	system("/sbin/ezp-wl0-ctrl basic");
-	//doSystem("iwpriv rai0 set WscConfStatus=2");
-	system("/sbin/ezp-wps-set 0 0 1 2");
-// AXIMCOM/Holmas: WLAN Guest need to execute this script
+	// AXIMCOM/Holmas: WLAN Guest need to execute this script
 	ezplib_get_attr_val("wl_mode_rule", 0, "mode", TempBuf, 32, EZPLIB_USE_CLI);
 	if (!strcmp(TempBuf, "normal")){ // Router mode
-		system("/sbin/ezp-guest-lan");
+		/**script invoke**/
 	}
 	
+	/* Configuration Done */
 	nvram_commit();
 
-	free(enablessid_str);
-	free(enablessid_str1);
-	free(enablessid_str2);	
-	free(enablessid_str3);
-	free(hidessid_str);
-	free(hidessid_str1);
-	free(hidessid_str2);	
-	free(hidessid_str3);
-	free(intra_bss_str);	
-	free(intra_bss_str1);
-	free(intra_bss_str2);
-	free(intra_bss_str3);
-	free(intra_bss_str_main);
-
-// AXIMCOM/Holmas: need to reboot
-	//if (!strcmp(TempBuf, "normal")){ // Router mode
-	if ( (!strcmp(TempBuf, "normal")) && (!strcmp(wlan_guest, "1"))){ // Router mode
+	// AXIMCOM/Holmas: need to reboot
+	// Router mode
+	if ( (!strcmp(TempBuf, "normal")) && (!strcmp(wlan_guest, "1"))){ 
 		//Steve add 2011/06/30
 		if(GuestNoChange==1){
 			setWebMessage(0, NULL);
@@ -12260,7 +12168,9 @@ int WLAN_EZSecurity(int setting)
 		return 0;
 	}
 #endif
+	return 0;
 }
+
 #endif //Steve10
 
 void formDefineWireless(void) {
