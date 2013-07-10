@@ -36,6 +36,7 @@ var ht_badecline = '<% getCfgZero(1, "HT_BADecline"); %>';
 var tx_stream_idx = '<% getCfgZero(1, "HT_TxStream"); %>';
 var rx_stream_idx = '<% getCfgZero(1, "HT_RxStream"); %>';	
 var dtim = '<% getCfgZero(1,"DTIM"); %>';
+var beacon = '<% getCfgZero(1,"beacon"); %>';
 var distance = '<% getCfgZero(1,"distance"); %>';
 var tx_burst = '<% getCfgZero(1,"TxBurst"); %>';
 var antenna_mode = '<% getCfgZero(1,"AntennaMode"); %>'
@@ -180,10 +181,11 @@ function wirelessModeChange()
 	show_div(false, "div_other_2");
 	show_div(false, "div_other_3");	
 	show_div(false, "div_other_4");		
+	show_div(false, "div_networkmode_id");
 
 	if ((document.wireless_advanced.wirelessmode.selectedIndex == 3)||(document.wireless_advanced.wirelessmode.selectedIndex == 4)){
 		
-		show_div(true, "div_ht_phy_1_1");
+		//show_div(true, "div_ht_phy_1_1");
 		
 		if(document.wireless_advanced.wirelessmode.selectedIndex == 4){
 			//show_div(true, "div_ht_phy_1_2");
@@ -196,9 +198,8 @@ function wirelessModeChange()
 			show_div(false, "div_ht_phy_1_7");
 		}
 			
-		show_div(true, "div_ht_phy_1_3");
-		show_div(true, "div_ht_phy_1_4");
-		show_div(true, "div_ht_phy_1_4");
+//		show_div(true, "div_ht_phy_1_3");
+//		show_div(true, "div_ht_phy_1_4");
 		show_div(false, "div_ht_phy_1_6");
 		
 		Channel_BandWidth_onClick();
@@ -245,7 +246,7 @@ function wirelessModeChange()
 		show_div(false, "div_networkmode_id");
 	}else{
 	    show_div(true, "div_all_advance_id");
-	    show_div(true, "div_networkmode_id");
+//	    show_div(true, "div_networkmode_id");
 	}
 
 	parent.adjustMyFrameHeight();
@@ -268,6 +269,9 @@ function initTranslation()
 
 	e = document.getElementById("AdvanceTXPower");
 	e.innerHTML = _("advance tx power");
+
+	e = document.getElementById("AdvanceBeaconInterval");
+	e.innerHTML = _("advance beacon interval");
 
 	e = document.getElementById("AdvanceNetMode");
 	e.innerHTML = _("advance net mode");
@@ -547,7 +551,7 @@ function initValue()
 		show_div(true, "div_all_advance_id");
 	} else{
 	    show_div(true, "div_all_advance_id");
-	    show_div(true, "div_networkmode_id");
+//	    show_div(true, "div_networkmode_id");
 	}
 
 	/*if ((wirelessmode == 2) || ((wirelessmode == 6) && (wispmode == 0)))*/
@@ -588,6 +592,7 @@ function initValue()
 </table>
 </li>
 </span>
+
 <span id="AdvanceDTIM" class="on">
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
@@ -613,6 +618,7 @@ function initValue()
 </li>
 </span>
                 
+<span class="off">                                  
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>                
@@ -624,6 +630,7 @@ function initValue()
 </tr>  
 </table>
 </li>  
+</span>
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
@@ -642,6 +649,17 @@ function initValue()
 <option value = 16>-8 dB</option>
 <option value = 18>-9 dB(Eighth)</option>
 </select>
+</td>	
+</tr>  
+</table>
+</li>  
+
+<li class="w_text">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>                
+<td width="40%" id ="AdvanceBeaconInterval">Beacon Interval</td>
+<td>
+	<input type=text maxlength="15" size="15" value="" name="bcn_int" />
 </td>	
 </tr>  
 </table>

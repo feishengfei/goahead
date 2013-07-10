@@ -72,6 +72,7 @@
 	<message msgid="secure access policy del" msgstr="Elimina"/>
 	<message msgid="secure mac delete" msgstr="Elimina"/>
 	<message msgid="secure mac address" msgstr="Indirizzo MAC"/>
+	<message msgid="advance beacon interval" msgstr="intervallo beacon" />
 	<message msgid="advance title" msgstr="Configurazione avanzata Wireless"/>
 	<message msgid="advance rts cts" msgstr="Soglia RTS/ CTS"/>
 	<message msgid="advance frag" msgstr="Soglia di frammentazione"/>

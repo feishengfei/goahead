@@ -71,6 +71,7 @@
 	<message msgid="secure access policy del" msgstr="Bor"/>
 	<message msgid="secure mac delete" msgstr="Eliminar"/>
 	<message msgid="secure mac address" msgstr="Dirección MAC"/>
+	<message msgid="advance beacon interval" msgstr="intervalo de baliza" />
 	<message msgid="advance title" msgstr="Configuración inalámbrica avanzada"/>
 	<message msgid="advance rts cts" msgstr="Umbral RTS/CTS"/>
 	<message msgid="advance frag" msgstr="Umbral de fragmentación"/>

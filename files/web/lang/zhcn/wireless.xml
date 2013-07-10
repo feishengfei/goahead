@@ -72,6 +72,7 @@
 	<message msgid="secure access policy del" msgstr="删除"/>
 	<message msgid="secure mac delete" msgstr="删除"/>
 	<message msgid="secure mac address" msgstr="MAC 地址"/>
+	<message msgid="advance beacon interval" msgstr="信标间隔" />
 	<message msgid="advance title" msgstr="高级无线设置"/>
 	<message msgid="advance rts cts" msgstr="RTS/CTS 临界值"/>
 	<message msgid="advance frag" msgstr="分片临界值"/>

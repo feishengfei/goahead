@@ -83,6 +83,7 @@
 <message msgid="mac repeater refresh" msgstr="Refresh"/>
 
 <!-- for Advance web pages -->
+<message msgid="advance beacon interval" msgstr="Beacon Interval" />
 <message msgid="advance title" msgstr="Wireless Advanced Setup" />
 <message msgid="advance rts cts" msgstr="RTS/CTS  Threshold" />
 <message msgid="advance frag" msgstr="Fragmentation  Threshold" />

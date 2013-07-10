@@ -71,6 +71,7 @@
 	<message msgid="secure access policy del" msgstr="Löschen"/>
 	<message msgid="secure mac delete" msgstr="Löschen"/>
 	<message msgid="secure mac address" msgstr="MAC-Adresse"/>
+	<message msgid="advance beacon interval" msgstr="Bakenintervall" />
 	<message msgid="advance title" msgstr="Erweiterte drahtlose Installation"/>
 	<message msgid="advance rts cts" msgstr="RTS/CTS-Schwelle"/>
 	<message msgid="advance frag" msgstr="Fragmentierungsschwelle"/>

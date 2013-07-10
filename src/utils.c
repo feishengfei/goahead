@@ -5643,6 +5643,16 @@ static int getCfgZero(int eid, webs_t wp, int argc, char_t **argv)
 		sprintf(reValue, "%d", tmp_val);
 		value = reValue;
     }/* Ended By Bruce Liu */
+	else if(!strcmp(field, "beacon")) //Beacon Interval
+	{
+		if (!strcmp(ModeTmpBuf, "ap")){
+			ezplib_get_attr_val("wl_ap_advanced_rule", 0, "bcn", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		}else {
+			ezplib_get_attr_val("wl_advanced_rule", 0, "bcn", buf, TMP_LEN, EZPLIB_USE_CLI); 
+		}
+		strcpy(reValue, buf);
+		value = reValue;			
+	}
     else if(!strcmp(field, "TxBurst")) //Guard Interval
 	{
 		if (!strcmp(ModeTmpBuf, "ap")){

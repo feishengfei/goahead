@@ -72,6 +72,7 @@
 	<message msgid="secure access policy del" msgstr="Suppr"/>
 	<message msgid="secure mac delete" msgstr="Supprimer"/>
 	<message msgid="secure mac address" msgstr="Adresse MAC"/>
+	<message msgid="advance beacon interval" msgstr="intervalle de balise" />
 	<message msgid="advance title" msgstr="Installation avancée sans fil"/>
 	<message msgid="advance rts cts" msgstr="Seuil RTS/CTS"/>
 	<message msgid="advance frag" msgstr="Seuil de fragmentation"/>

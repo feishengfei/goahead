@@ -71,6 +71,7 @@
 	<message msgid="secure access policy del" msgstr="Sil"/>
 	<message msgid="secure mac delete" msgstr="Sil"/>
 	<message msgid="secure mac address" msgstr="MAC Adresi"/>
+	<message msgid="advance beacon interval" msgstr="işaret aralığı" />
 	<message msgid="advance title" msgstr="Kablosuz Gelişmiş Ayar"/>
 	<message msgid="advance rts cts" msgstr="RTS/CTS  Eşiği"/>
 	<message msgid="advance frag" msgstr="Parçalama Eşiği"/>
