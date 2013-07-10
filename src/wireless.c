@@ -45,6 +45,34 @@ void WPSRestart(void); // Aaron 2009/8/13 move to here!
 #define RTPRIV_IOCTL_GET_MAC_TABLE		(SIOCIWFIRSTPRIV + 0x0F)
 #define RTPRIV_IOCTL_GET_RADAR_STATUS		(SIOCIWFIRSTPRIV + 0x0B)
 
+#define CHANNEL_MAX_2G 32
+#define MAC_ADDR_LENGTH 18
+
+typedef struct Channel_s
+{
+	unsigned char chan_number;
+	unsigned int frequency;
+}Channel_t;
+
+typedef struct StationInfo_s
+{
+	unsigned char Addr[MAC_ADDR_LENGTH];
+	unsigned int  ConnectedTime;
+}StationInfo_t;
+
+
+typedef struct ChannelListInfo_s
+{
+	int num;
+	Channel_t channel_list[CHANNEL_MAX_2G];
+}ChannelListInfo_t;
+
+typedef struct StationListInfo_s
+{
+	int sta_num;
+	StationInfo_t *sta_list;
+}StationListInfo_t;
+
 /*
  * RT2860, RTINIC, RT2561
  */
@@ -1062,37 +1090,59 @@ static int getWlan11gExtChannelsFreq(int eid, webs_t wp, int argc, char_t **argv
 
 	if (channel ==0){
 	    websWrite(wp, T("<option value=0 selected>      AUTO        </option>"));
-	}else if (channel >= 1 && channel <= 4){
-	    websWrite(wp, T("<option value=0 selected>Channel-0%d %dMHz</option>\n"),channel+4, 2412+5*(channel+3));
-	}else if (channel >= 5 && channel <= 10){
+	}
+	else if (channel >= 1 && channel <= 4){
+	    websWrite(wp, T("<option value=0 selected>Channel-0%d %dMHz</option>\n"),
+	    	channel+4, 2412+5*(channel+3));
+	}
+	else if (channel >= 5 && channel <= 10){
 	    if (channel == 5){
-		websWrite(wp, T("<option value=0%s>Channel-01 2412MHz</option>\n"),(ext_channel_idx == 0)? " selected" : "");
-		websWrite(wp, T("<option value=1%s>Channel-09 2452MHz</option>\n"),(ext_channel_idx == 1)? " selected" : "");	    	
-	    }else if (channel >= 6 && channel <= 7){
-		websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
-		websWrite(wp, T("<option value=1%s>Channel-%d %dMHz</option>\n"),(ext_channel_idx == 1)? " selected" : "",channel+4, 2412+5*(channel+3));
-  	    }else if (channel >= 8 && channel <= 9){
-		if ((value == NULL) || (!strcmp(value, "")) ||
-			(!strcmp(value, "TW")) ||
-			(!strcmp(value, "FR")) || (!strcmp(value, "IE")) ||
-			(!strcmp(value, "JP")) || (!strcmp(value, "CN")) ||
-			(!strcmp(value, "HK"))) {
-				websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
-				websWrite(wp, T("<option value=1%s>Channel-%d %dMHz</option>\n"),(ext_channel_idx == 1)? " selected" : "",channel+4, 2412+5*(channel+3));
-	    	}else{
-			websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
-		}
-  	    }else if (channel == 10){
+		websWrite(wp, T("<option value=0%s>Channel-01 2412MHz</option>\n"),
+			(ext_channel_idx == 0)? " selected" : "");
+		websWrite(wp, T("<option value=1%s>Channel-09 2452MHz</option>\n"),
+			(ext_channel_idx == 1)? " selected" : "");	    	
+	    }
+	    else if(channel >= 6 && channel <= 7){
+			websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),
+				(ext_channel_idx == 0)? " selected" : "",
+				channel-4, 2412+5*(channel-5));
+			websWrite(wp, T("<option value=1%s>Channel-%d %dMHz</option>\n"),
+				(ext_channel_idx == 1)? " selected" : "",
+				channel+4, 2412+5*(channel+3));
+  	    }
+  	    else if (channel >= 8 && channel <= 9){
+			if ((value == NULL) || (!strcmp(value, "")) ||
+				(!strcmp(value, "TW")) || (!strcmp(value, "FR")) || 
+				(!strcmp(value, "IE")) || (!strcmp(value, "JP")) || 
+				(!strcmp(value, "CN")) || (!strcmp(value, "HK")) ) {
+					websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),
+						(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
+					websWrite(wp, T("<option value=1%s>Channel-%d %dMHz</option>\n"),
+						(ext_channel_idx == 1)? " selected" : "",channel+4, 2412+5*(channel+3));
+			}
+			else{
+				websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),
+					(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
+			}
+  	    }
+  	    else if (channel == 10){
   	    	if ((value == NULL) || (!strcmp(value, ""))){
-  	    		websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
-			websWrite(wp, T("<option value=1%s>Channel-%d %dMHz</option>\n"),(ext_channel_idx == 1)? " selected" : "",channel+4, 2412+5*(channel+3));
-  		}else{
-  			websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
-  		}	
+  	    		websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),
+  	    			(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
+				websWrite(wp, T("<option value=1%s>Channel-%d %dMHz</option>\n"),
+					(ext_channel_idx == 1)? " selected" : "",channel+4, 2412+5*(channel+3));
+			}
+			else{
+				websWrite(wp, T("<option value=0%s>Channel-0%d %dMHz</option>\n"),
+					(ext_channel_idx == 0)? " selected" : "",channel-4, 2412+5*(channel-5));
+			}	
   	    }		
-	}else if (channel >= 11 && channel <= 13){
-		websWrite(wp, T("<option value=0 selected>Channel-0%d %dMHz</option>\n"),channel-4, 2412+5*(channel-4));
-	}else if (channel == 14){
+	}
+	else if (channel >= 11 && channel <= 13){
+		websWrite(wp, T("<option value=0 selected>Channel-0%d %dMHz</option>\n"),
+			channel-4, 2412+5*(channel-4));
+	}
+	else if (channel == 14){
 		websWrite(wp, T("<option value=0 selected>Channel-10 2457MHz</option>\n"));		
 	}
 
@@ -7780,6 +7830,67 @@ char* mask2prefix2(char *mask)
     return mask;
 }
 
+static int Channellist(int eid, webs_t wp,int argc, char_t **argv)
+{
+	ChannelListInfo_t t;
+	memset(&t, 0, sizeof(ChannelListInfo_t));
+
+	int num;
+	Channel_t *channel_list;
+
+	//TODO feak channel_list
+	t.num = 11;
+	int i = 0;
+	for ( i = 0; i< t.num; i++) {
+		t.channel_list[i].chan_number = i+1;
+		t.channel_list[i].frequency = 2412 + i*5;
+	}
+
+	/* get selected channel */
+
+	/* op mode : normal/ap/ur/wisp/wisp_ur*/
+	char buf[32];
+	ezplib_get_attr_val("wl_mode_rule", 0, "mode", buf, 32, EZPLIB_USE_CLI);
+	if (!strcmp(buf, "ap")){
+		ezplib_get_attr_val("wl_ap_basic_rule", 0, 
+			"channel", buf, 32, EZPLIB_USE_CLI);
+	}else {
+		ezplib_get_attr_val("wl_basic_rule", 0, 
+			"channel", buf, 32, EZPLIB_USE_CLI);
+	}
+	int chan = atoi(buf);
+
+	websWrite(wp, T("new Array(\n"));
+	for ( i = 0; i< t.num; i++) {
+		websWrite(wp, T("new Array(\"Channel-%d %dMHz\",\"\",\"%d\",\"%d\",\"%d\",\"0\"),\n"), 
+			t.channel_list[i].chan_number,
+			t.channel_list[i].frequency,
+			t.channel_list[i].chan_number,
+			t.channel_list[i].chan_number >=5 ? 1 : 0,
+			t.channel_list[i].chan_number <=7 ? 1 : 0 );
+	}
+	websWrite(wp, T("new Array(\"End of Channel\",\"\",\"0\",\"0\",\"0\",\"0\"))\n"));
+
+/* channel, selected, index, ext_u, ext_l, dfs
+	
+	var channelBGN=new Array(
+		new Array("2412MHz (Channel 1)","","1","0","1","0"),
+		new Array("2417MHz (Channel 2)","","2","0","1","0"),
+		new Array("2422MHz (Channel 3)","","3","0","1","0"),
+		new Array("2427MHz (Channel 4)","","4","0","1","0"),
+		new Array("2432MHz (Channel 5)","","5","1","1","0"),
+		new Array("2437MHz (Channel 6)","","6","1","1","0"),
+		new Array("2442MHz (Channel 7)","","7","1","1","0"),
+		new Array("2447MHz (Channel 8)","","8","1","0","0"),
+		new Array("2452MHz (Channel 9)","","9","1","0","0"),
+		new Array("2457MHz (Channel 10)","","10","1","0","0"),
+		new Array("2462MHz (Channel 11)","","11","1","0","0"),
+		new Array("SmartSelect","","0","0","0","0"), 
+		new Array("End of Channel","","0","0","0","0"))
+*/
+	return 0;
+}
+
 void APGeneral(webs_t wp, char_t *path, char_t *query)
 {
 	char_t *ssid, *bssid_num, *set_bssid_num;
@@ -8088,17 +8199,23 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 		ezplib_replace_attr("wl0_basic_rule", 7, "isolation", "0");
 	}		
 
-	/* Network Mode */
-	wirelessmode = websGetVar(wp, T("wirelessmode"), T("0"));
-	ezplib_replace_attr("wl_mode_rule", 0, "mode", wirelessmode);
-	
-	/* Channel Bandwidth */
-	n_bandwidth = websGetVar(wp, T("wirelessmode"), T("0"));	
+	/* op mode : normal/ap/ur/wisp/wisp_ur*/
 	char ModeTmpBuf[32];
 	ezplib_get_attr_val("wl_mode_rule", 0, "mode", ModeTmpBuf, 32, EZPLIB_USE_CLI);
+
+	/* Network Mode 11bgn / 11an */
+	wirelessmode = websGetVar(wp, T("wirelessmode"), T("0"));
+	if (!strcmp(ModeTmpBuf, "ap")){
+		ezplib_replace_attr("wl_ap_basic_rule", 0, "net_mode", wirelessmode);
+	} else {
+		ezplib_replace_attr("wl_basic_rule", 0, "net_mode", wirelessmode);
+	}
+	
+	/* Channel Bandwidth HT20 / HT20_40*/
+	n_bandwidth = websGetVar(wp, T("n_bandwidth"), T("0"));	
 	if (!strcmp(ModeTmpBuf, "ap")){
 		ezplib_replace_attr("wl_ap_advanced_rule", 0, "htbw", n_bandwidth); 
-	}else {
+	} else {
 		ezplib_replace_attr("wl_advanced_rule", 0, "htbw", n_bandwidth); 
 	}
 	
@@ -8108,27 +8225,35 @@ void APGeneral(webs_t wp, char_t *path, char_t *query)
 	if (!strncmp(auto_channel, "1", 2))
 	sz11gChannel = "0";
 	nvram_set("AP_Channel", sz11gChannel);
-	ezplib_replace_attr("wl_ap_basic_rule", 0, "channel", sz11gChannel);
+	if (!strcmp(ModeTmpBuf, "ap")){
+		ezplib_replace_attr("wl_ap_basic_rule", 0, "channel", sz11gChannel);
+	} else {
+		ezplib_replace_attr("wl_basic_rule", 0, "channel", sz11gChannel);
+	}
 
 	/* Extension Channel */
 	n_extcha = websGetVar(wp, T("n_extcha"), T("0"));
-	ezplib_replace_attr("wl_advanced_rule", 0, "extcha", n_extcha);
+	char extcha_str[4] = {};
+	if(	!strcmp(n_extcha, "-1")) {
+		sprintf(extcha_str, "%d", atoi(sz11gChannel) - 4 );
+	}
+	else if( !strcmp(n_extcha, "1")) {
+		sprintf(extcha_str, "%d", atoi(sz11gChannel) + 4 );
+	}
 
+	if (strcmp(n_extcha, "0") && !strcmp(ModeTmpBuf, "ap")){
+		ezplib_replace_attr("wl_ap_advanced_rule", 0, "extcha", extcha_str);
+	} else {
+		ezplib_replace_attr("wl_advanced_rule", 0, "extcha", extcha_str);
+	}
 
 	/*Communicate between wireless clients with diff SSIDs*/
-	main_intra_bss = websGetVar(wp, T("MainIntraBSS"), T(""));
-	if (!strncmp(main_intra_bss, "0", 2)){
-		ezplib_replace_attr("wl_ap_basic_rule", 0, "bisolation", "0");		
-	}else{
-		ezplib_replace_attr("wl_ap_basic_rule", 0, "bisolation", "1");		
-	}	
-
-	printf("setter:\r\n");
-	printf("Network Mode:%s\r\n", wirelessmode);
-	printf("Channel Bandwidth:%s\r\n", n_bandwidth);
-	printf("Channel Selection:%s(%s)\r\n", sz11gChannel, auto_channel);
-	printf("Extension Channel:%s\r\n", n_extcha);
-	printf("MainIntraBSS:%s\r\n", main_intra_bss);
+	main_intra_bss = websGetVar(wp, T("MainIntraBSS"), T("0"));
+	if (!strcmp(ModeTmpBuf, "ap")){
+		ezplib_replace_attr("wl_ap_basic_rule", 0, "bisolation", main_intra_bss);		
+	}else {
+		ezplib_replace_attr("wl_basic_rule", 0, "bisolation", main_intra_bss);		
+	}
 
 		
 
@@ -12176,6 +12301,8 @@ int WLAN_EZSecurity(int setting)
 void formDefineWireless(void) {
 	websFormDefine(T("wifiAPGeneral"), wifiAPGeneral);
 	websFormDefine(T("wifiAPGeneral5G"), wifiAPGeneral5G);
+//
+	websAspDefine(T("Channellist"), Channellist);
 #if 1
 	websAspDefine(T("getWlan11aChannels"), getWlan11aChannels);
 	websAspDefine(T("getWlan11bChannels"), getWlan11bChannels);

@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Pragma" content="no-cache">
 <script type="text/javascript" src="/lang/b28n.js"></script>
+<script type="text/javascript" src="/channel_sel.js"></script>
 <title>.::Welcome to <% getCfgGeneral(1, 'SystemName'); %>::.</title>
 <link href="images/inside.css" rel="stylesheet" type="text/css" />
 <link href="images/table.css" rel="stylesheet" type="text/css" />
@@ -29,6 +30,8 @@ var bm_en = <% getCfgZero(1, "RL_QoSEnable"); %>;
 
 var uBW = "<% QoSGetInfo("RL_QoSUploadBw"); %>";
 var dBW = "<% QoSGetInfo("RL_QoSDownloadBw"); %>";
+
+var channelBGN = <% Channellist(); %>;
 
 var changed = 0;
 var old_MBSSID;
@@ -66,13 +69,6 @@ function show_div(show,id) {
 		document.getElementById(id).className  = "off" ;
 }
 
-function clickAutoChannel()
-{
-	if (document.security_form.Auto_Channel.checked == true)
-		document.security_form.sz11gChannel.disabled = true;
-	else
-		document.security_form.sz11gChannel.disabled = false;	
-}
 
 
 function checkMac(str){
@@ -404,18 +400,37 @@ function parseAllData(str)
 	}
 }
 
+function clickAutoChannel()
+{
+	if (document.wireless_basic.Auto_Channel.checked == true) {
+		document.wireless_basic.sz11gChannel.disabled = true;
+		show_div(false, "div_extension_channel");	
+		document.wireless_basic.n_extcha.disabled = true;
+	}
+	else {
+		document.wireless_basic.sz11gChannel.disabled = false;	
+		if (document.wireless_basic.n_bandwidth.options.selectedIndex == 1)
+		{
+			show_div(true, "div_extension_channel");	
+			document.wireless_basic.n_extcha.disabled = false;
+		}
+	}
+}
+
 function Channel_BandWidth_onChange()
 {
-	if (document.security_form.n_bandwidth.options.selectedIndex == 0)
+	if (document.wireless_basic.n_bandwidth.options.selectedIndex == 0)
 	{
 		show_div(false, "div_extension_channel");	
-		document.security_form.n_extcha.disabled = true;
-		
+		document.wireless_basic.n_extcha.disabled = true;
 	}
 	else
 	{
-		show_div(true, "div_extension_channel");	
-		document.security_form.n_extcha.disabled = false;
+		if (document.wireless_basic.Auto_Channel.checked == false) {
+			show_div(true, "div_extension_channel");	
+			document.wireless_basic.n_extcha.disabled = false;
+			refreshExtChannel();
+		}
 	}
 	parent.adjustMyFrameHeight();
 }
@@ -446,14 +461,14 @@ function checkData()
 	return true;//Arthur Chow 2009-06-09
 	
 	var securitymode;
-	securitymode = document.security_form.security_mode.value;
+	securitymode = document.wireless_basic.security_mode.value;
 
 	if (securitymode == "OPEN" || securitymode == "SHARED" ||securitymode == "WEPAUTO")
 	{
 		if(! check_Wep(securitymode) )
 			return false;
 	}else if (securitymode == "WPAPSK" || securitymode == "WPA2PSK" || securitymode == "WPAPSKWPA2PSK" /* || security_mode == 5 */){
-		var keyvalue = document.security_form.passphrase.value;
+		var keyvalue = document.wireless_basic.passphrase.value;
 
 		if (keyvalue.length == 0){
 			alert('Please input wpapsk key!');
@@ -465,16 +480,16 @@ function checkData()
 			return false;
 		}
 		
-		if(checkInjection(document.security_form.passphrase.value) == false){
+		if(checkInjection(document.wireless_basic.passphrase.value) == false){
 			alert('Invalid characters in Pass Phrase.');
 			return false;
 		}
 
-		if(checkAllNum(document.security_form.keyRenewalInterval.value) == false){
+		if(checkAllNum(document.wireless_basic.keyRenewalInterval.value) == false){
 			alert('Please input a valid key renewal interval');
 			return false;
 		}
-		if(document.security_form.keyRenewalInterval.value < 60){
+		if(document.wireless_basic.keyRenewalInterval.value < 60){
 			alert('Warning: A short key renewal interval.');
 		}
 		if(check_wpa() == false)
@@ -483,8 +498,8 @@ function checkData()
 	//802.1x
 	else if (securitymode == "IEEE8021X") // 802.1x
 	{
-		if( document.security_form.ieee8021x_wep[0].checked == false &&
-			document.security_form.ieee8021x_wep[1].checked == false){
+		if( document.wireless_basic.ieee8021x_wep[0].checked == false &&
+			document.wireless_basic.ieee8021x_wep[1].checked == false){
 			alert('Please choose the 802.1x WEP option.');
 			return false;
 		}
@@ -500,13 +515,13 @@ function checkData()
 	{
 		if(check_wpa() == false)
 			return false;
-		if( document.security_form.PreAuthentication[0].checked == false &&
-			document.security_form.PreAuthentication[1].checked == false){
+		if( document.wireless_basic.PreAuthentication[0].checked == false &&
+			document.wireless_basic.PreAuthentication[1].checked == false){
 			alert('Please choose the Pre-Authentication options.');
 			return false;
 		}
 
-		if(!document.security_form.PMKCachePeriod.value.length){
+		if(!document.wireless_basic.PMKCachePeriod.value.length){
 			alert('Please input the PMK Cache Period.');
 			return false;
 		}
@@ -519,11 +534,11 @@ function checkData()
 
 function check_wpa()
 {
-		if(checkAllNum(document.security_form.keyRenewalInterval.value) == false){
+		if(checkAllNum(document.wireless_basic.keyRenewalInterval.value) == false){
 			alert('Please input a valid key renewal interval');
 			return false;
 		}
-		if(document.security_form.keyRenewalInterval.value < 60){
+		if(document.wireless_basic.keyRenewalInterval.value < 60){
 			alert('Warning: A short key renewal interval.');
 		}
 		return true;
@@ -531,35 +546,35 @@ function check_wpa()
 
 function check_radius()
 {
-	if(!document.security_form.RadiusServerIP.value.length){
+	if(!document.wireless_basic.RadiusServerIP.value.length){
 		alert('Please input the radius server ip address.');
 		return false;		
 	}
-	if(!document.security_form.RadiusServerPort.value.length){
+	if(!document.wireless_basic.RadiusServerPort.value.length){
 		alert('Please input the radius server port number.');
 		return false;		
 	}
-	if(!document.security_form.RadiusServerSecret.value.length){
+	if(!document.wireless_basic.RadiusServerSecret.value.length){
 		alert('Please input the radius server shared secret.');
 		return false;		
 	}
 
-	if(checkIpAddr(document.security_form.RadiusServerIP) == false){
+	if(checkIpAddr(document.wireless_basic.RadiusServerIP) == false){
 		alert('Please input a valid radius server ip address.');
 		return false;		
 	}
-	if( (checkRange(document.security_form.RadiusServerPort.value, 1, 1, 65535)==false) ||
-		(checkAllNum(document.security_form.RadiusServerPort.value)==false)){
+	if( (checkRange(document.wireless_basic.RadiusServerPort.value, 1, 1, 65535)==false) ||
+		(checkAllNum(document.wireless_basic.RadiusServerPort.value)==false)){
 		alert('Please input a valid radius server port number.');
 		return false;		
 	}
-	if(checkStrictInjection(document.security_form.RadiusServerSecret.value)==false){
+	if(checkStrictInjection(document.wireless_basic.RadiusServerSecret.value)==false){
 		alert('The shared secret contains invalid characters.');
 		return false;		
 	}
 
-	if(document.security_form.RadiusServerSessionTimeout.value.length){
-		if(checkAllNum(document.security_form.RadiusServerSessionTimeout.value)==false){
+	if(document.wireless_basic.RadiusServerSessionTimeout.value.length){
+		if(checkAllNum(document.wireless_basic.RadiusServerSessionTimeout.value)==false){
 			alert('Please input a valid session timeout number or u may left it empty.');
 			return false;	
 		}	
@@ -585,22 +600,22 @@ function securityMode(c_f)
 	show_div(false, "wpa_PMK_Cache_Period");
 	show_div(false, "wpa_preAuthentication");
 	
-	document.security_form.passphrase.disabled = true;
-	document.security_form.keyRenewalInterval.disabled = true;
-	document.security_form.PMKCachePeriod.disabled = true;
-	document.security_form.PreAuthentication.disabled = true;
+	document.wireless_basic.passphrase.disabled = true;
+	document.wireless_basic.keyRenewalInterval.disabled = true;
+	document.wireless_basic.PMKCachePeriod.disabled = true;
+	document.wireless_basic.PreAuthentication.disabled = true;
 
 	// 802.1x
 	show_div(false, "div_radius_server");
 	show_div(false, "div_8021x_wep");
-	document.security_form.ieee8021x_wep.disable = true;
-	document.security_form.RadiusServerIP.disable = true;
-	document.security_form.RadiusServerPort.disable = true;
-	document.security_form.RadiusServerSecret.disable = true;	
-	document.security_form.RadiusServerSessionTimeout.disable = true;
-	document.security_form.RadiusServerIdleTimeout.disable = true;	
+	document.wireless_basic.ieee8021x_wep.disable = true;
+	document.wireless_basic.RadiusServerIP.disable = true;
+	document.wireless_basic.RadiusServerPort.disable = true;
+	document.wireless_basic.RadiusServerSecret.disable = true;	
+	document.wireless_basic.RadiusServerSessionTimeout.disable = true;
+	document.wireless_basic.RadiusServerIdleTimeout.disable = true;	
 
-	security_mode = document.security_form.security_mode.value;
+	security_mode = document.wireless_basic.security_mode.value;
 
 	if (security_mode == "OPEN" || security_mode == "SHARED" ||security_mode == "WEPAUTO"){
 		showWep(security_mode);
@@ -611,10 +626,10 @@ function securityMode(c_f)
 			show_div(true, "div_wpapsk_compatible");
 		}	
 		show_div(true, "wpa_passphrase");
-		document.security_form.passphrase.disabled = false;
+		document.wireless_basic.passphrase.disabled = false;
 
 		show_div(true, "wpa_key_renewal_interval");
-		document.security_form.keyRenewalInterval.disabled = false;
+		document.wireless_basic.keyRenewalInterval.disabled = false;
 	}else if (security_mode == "WPA" || security_mode == "WPA2" || security_mode == "WPA1WPA2") //wpa enterprise
 	{
 	
@@ -623,30 +638,30 @@ function securityMode(c_f)
 		}
 		
 		show_div(true, "wpa_key_renewal_interval");
-		document.security_form.keyRenewalInterval.disabled = false;
+		document.wireless_basic.keyRenewalInterval.disabled = false;
 	
 		<!-- 802.1x -->
 		show_div(true, "div_radius_server");
-		document.security_form.RadiusServerIP.disable = false;
-		document.security_form.RadiusServerPort.disable = false;
-		document.security_form.RadiusServerSecret.disable = false;	
-		document.security_form.RadiusServerSessionTimeout.disable = false;
-		document.security_form.RadiusServerIdleTimeout.disable = false;	
+		document.wireless_basic.RadiusServerIP.disable = false;
+		document.wireless_basic.RadiusServerPort.disable = false;
+		document.wireless_basic.RadiusServerSecret.disable = false;	
+		document.wireless_basic.RadiusServerSessionTimeout.disable = false;
+		document.wireless_basic.RadiusServerIdleTimeout.disable = false;	
 
 		if(security_mode == "WPA2"){
 			show_div(true, "wpa_preAuthentication");
-			document.security_form.PreAuthentication.disabled = false;
+			document.wireless_basic.PreAuthentication.disabled = false;
 			show_div(true, "wpa_PMK_Cache_Period");
-			document.security_form.PMKCachePeriod.disabled = false;
+			document.wireless_basic.PMKCachePeriod.disabled = false;
 		}
 	}else if (security_mode == "IEEE8021X"){ // 802.1X-WEP
 		show_div(true, "div_8021x_wep");
 		show_div(true, "div_radius_server");
-		document.security_form.ieee8021x_wep.disable = false;
-		document.security_form.RadiusServerIP.disable = false;
-		document.security_form.RadiusServerPort.disable = false;
-		document.security_form.RadiusServerSecret.disable = false;	
-		document.security_form.RadiusServerSessionTimeout.disable = false;
+		document.wireless_basic.ieee8021x_wep.disable = false;
+		document.wireless_basic.RadiusServerIP.disable = false;
+		document.wireless_basic.RadiusServerPort.disable = false;
+		document.wireless_basic.RadiusServerSecret.disable = false;	
+		document.wireless_basic.RadiusServerSessionTimeout.disable = false;
 	}
 	
 	show_div(true, "div_note2_id");
@@ -669,35 +684,35 @@ function check_Wep(securitymode)
 {
 	var defaultid, i;
 	for (i=0; i<=3; i++){	
-		if (document.security_form.DefWEPKey[i].checked == true){
+		if (document.wireless_basic.DefWEPKey[i].checked == true){
 			defaultid = i;
 		}
 	}	
 	defaultid = defaultid+1;
 
 	if ( defaultid == 1 )
-		var keyvalue = document.security_form.wep_key_1.value;
+		var keyvalue = document.wireless_basic.wep_key_1.value;
 	else if (defaultid == 2)
-		var keyvalue = document.security_form.wep_key_2.value;
+		var keyvalue = document.wireless_basic.wep_key_2.value;
 	else if (defaultid == 3)
-		var keyvalue = document.security_form.wep_key_3.value;
+		var keyvalue = document.wireless_basic.wep_key_3.value;
 	else if (defaultid == 4)
-		var keyvalue = document.security_form.wep_key_4.value;
+		var keyvalue = document.wireless_basic.wep_key_4.value;
 
 	if (keyvalue.length == 0 &&  (securitymode == "SHARED" || securitymode == "OPEN")){ // shared wep  || md5
 		alert('Please input wep key'+defaultid+' !');
 		return false;
 	}
 
-	var keylength = document.security_form.wep_key_1.value.length;
+	var keylength = document.wireless_basic.wep_key_1.value.length;
 	if (keylength != 0){
-		if (document.security_form.WEPKey_Code[0].checked == true){ //ASCII
+		if (document.wireless_basic.WEPKey_Code[0].checked == true){ //ASCII
 			if (document.getElementById("wep_encry").selectedIndex == 0 ){ // 64-bits (ASCII)
 				if(keylength != 5) {
 					alert('Please input 5 characters of wep key1 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_1.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_1.value)== false){
 					alert('Wep key1 contains invalid characters.');
 					return false;
 				}
@@ -706,7 +721,7 @@ function check_Wep(securitymode)
 					alert('Please input 13 characters of wep key1 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_1.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_1.value)== false){
 					alert('Wep key1 contains invalid characters.');
 					return false;
 				}
@@ -717,7 +732,7 @@ function check_Wep(securitymode)
 					alert('Please input 10 characters of wep key1 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_1.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_1.value) == false){
 					alert('Invalid Wep key1 format!');
 					return false;
 				}			
@@ -726,7 +741,7 @@ function check_Wep(securitymode)
 					alert('Please input 26 characters of wep key1 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_1.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_1.value) == false){
 					alert('Invalid Wep key1 format!');
 					return false;
 				}							
@@ -735,15 +750,15 @@ function check_Wep(securitymode)
 		}
 	}
 
-	var keylength = document.security_form.wep_key_2.value.length;
+	var keylength = document.wireless_basic.wep_key_2.value.length;
 	if (keylength != 0){
-		if (document.security_form.WEPKey_Code[0].checked == true){ //ASCII
+		if (document.wireless_basic.WEPKey_Code[0].checked == true){ //ASCII
 			if (document.getElementById("wep_encry").selectedIndex == 0 ){ // 64-bits (ASCII)
 				if(keylength != 5) {
 					alert('Please input 5 characters of wep key2 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_2.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_2.value)== false){
 					alert('Wep key2 contains invalid characters.');
 					return false;
 				}
@@ -752,7 +767,7 @@ function check_Wep(securitymode)
 					alert('Please input 13 characters of wep key2 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_2.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_2.value)== false){
 					alert('Wep key2 contains invalid characters.');
 					return false;
 				}
@@ -763,7 +778,7 @@ function check_Wep(securitymode)
 					alert('Please input 10 characters of wep key2 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_2.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_2.value) == false){
 					alert('Invalid Wep key2 format!');
 					return false;
 				}			
@@ -772,7 +787,7 @@ function check_Wep(securitymode)
 					alert('Please input 26 characters of wep key2 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_2.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_2.value) == false){
 					alert('Invalid Wep key2 format!');
 					return false;
 				}							
@@ -781,15 +796,15 @@ function check_Wep(securitymode)
 		}
 	}
 
-	var keylength = document.security_form.wep_key_3.value.length;
+	var keylength = document.wireless_basic.wep_key_3.value.length;
 	if (keylength != 0){
-		if (document.security_form.WEPKey_Code[0].checked == true){ //ASCII
+		if (document.wireless_basic.WEPKey_Code[0].checked == true){ //ASCII
 			if (document.getElementById("wep_encry").selectedIndex == 0 ){ // 64-bits (ASCII)
 				if(keylength != 5) {
 					alert('Please input 5 characters of wep key3 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_3.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_3.value)== false){
 					alert('Wep key3 contains invalid characters.');
 					return false;
 				}
@@ -798,7 +813,7 @@ function check_Wep(securitymode)
 					alert('Please input 13 characters of wep key3 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_3.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_3.value)== false){
 					alert('Wep key3 contains invalid characters.');
 					return false;
 				}
@@ -809,7 +824,7 @@ function check_Wep(securitymode)
 					alert('Please input 10 characters of wep key3 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_3.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_3.value) == false){
 					alert('Invalid Wep key3 format!');
 					return false;
 				}			
@@ -818,7 +833,7 @@ function check_Wep(securitymode)
 					alert('Please input 26 characters of wep key3 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_3.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_3.value) == false){
 					alert('Invalid Wep key3 format!');
 					return false;
 				}							
@@ -827,15 +842,15 @@ function check_Wep(securitymode)
 		}
 	}	
 
-	var keylength = document.security_form.wep_key_4.value.length;
+	var keylength = document.wireless_basic.wep_key_4.value.length;
 	if (keylength != 0){
-		if (document.security_form.WEPKey_Code[0].checked == true){ //ASCII
+		if (document.wireless_basic.WEPKey_Code[0].checked == true){ //ASCII
 			if (document.getElementById("wep_encry").selectedIndex == 0 ){ // 64-bits (ASCII)
 				if(keylength != 5) {
 					alert('Please input 5 characters of wep key4 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_4.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_4.value)== false){
 					alert('Wep key4 contains invalid characters.');
 					return false;
 				}
@@ -844,7 +859,7 @@ function check_Wep(securitymode)
 					alert('Please input 13 characters of wep key4 !');
 					return false;
 				}
-				if(checkInjection(document.security_form.wep_key_4.value)== false){
+				if(checkInjection(document.wireless_basic.wep_key_4.value)== false){
 					alert('Wep key4 contains invalid characters.');
 					return false;
 				}
@@ -855,7 +870,7 @@ function check_Wep(securitymode)
 					alert('Please input 10 characters of wep key4 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_4.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_4.value) == false){
 					alert('Invalid Wep key4 format!');
 					return false;
 				}			
@@ -864,7 +879,7 @@ function check_Wep(securitymode)
 					alert('Please input 26 characters of wep key4 !');
 					return false;
 				}
-				if(checkHex(document.security_form.wep_key_4.value) == false){
+				if(checkHex(document.wireless_basic.wep_key_4.value) == false){
 					alert('Invalid Wep key4 format!');
 					return false;
 				}							
@@ -879,102 +894,102 @@ function check_Wep(securitymode)
 
 function check_same_ssid(){
       for (var i = 1; i < 8; i++){
-		if (eval("document.security_form.mssid_"+i).value != ""){
+		if (eval("document.wireless_basic.mssid_"+i).value != ""){
 			if (i == 1){
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_1).value ){
+				if (eval(document.wireless_basic.ssid).value == eval(document.wireless_basic.mssid_1).value ){
 					return false;	
 				}
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_2).value ){
+				if (eval(document.wireless_basic.ssid).value == eval(document.wireless_basic.mssid_2).value ){
 					return false;	
 				}
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_3).value ){
+				if (eval(document.wireless_basic.ssid).value == eval(document.wireless_basic.mssid_3).value ){
 					return false;	
 				}	
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_4).value ){
+				if (eval(document.wireless_basic.ssid).value == eval(document.wireless_basic.mssid_4).value ){
 					return false;	
 				}	
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_5).value ){
+				if (eval(document.wireless_basic.ssid).value == eval(document.wireless_basic.mssid_5).value ){
 					return false;	
 				}	
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_6).value ){
+				if (eval(document.wireless_basic.ssid).value == eval(document.wireless_basic.mssid_6).value ){
 					return false;	
 				}	
-				if (eval(document.security_form.ssid).value == eval(document.security_form.mssid_7).value ){
+				if (eval(document.wireless_basic.ssid).value == eval(document.wireless_basic.mssid_7).value ){
 					return false;	
 				}	
 			}
 			else if (i == 2){
-				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_2).value ){
+				if (eval(document.wireless_basic.mssid_1).value == eval(document.wireless_basic.mssid_2).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_3).value ){
+				if (eval(document.wireless_basic.mssid_1).value == eval(document.wireless_basic.mssid_3).value ){
 					return false;	
 				}			
-				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_4).value ){
+				if (eval(document.wireless_basic.mssid_1).value == eval(document.wireless_basic.mssid_4).value ){
 					return false;	
 				}			
-				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_5).value ){
+				if (eval(document.wireless_basic.mssid_1).value == eval(document.wireless_basic.mssid_5).value ){
 					return false;	
 				}			
-				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_6).value ){
+				if (eval(document.wireless_basic.mssid_1).value == eval(document.wireless_basic.mssid_6).value ){
 					return false;	
 				}			
-				if (eval(document.security_form.mssid_1).value == eval(document.security_form.mssid_7).value ){
+				if (eval(document.wireless_basic.mssid_1).value == eval(document.wireless_basic.mssid_7).value ){
 					return false;	
 				}			
 			}
 			else if (i == 3){
-				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_3).value ){
+				if (eval(document.wireless_basic.mssid_2).value == eval(document.wireless_basic.mssid_3).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_4).value ){
+				if (eval(document.wireless_basic.mssid_2).value == eval(document.wireless_basic.mssid_4).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_5).value ){
+				if (eval(document.wireless_basic.mssid_2).value == eval(document.wireless_basic.mssid_5).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_6).value ){
+				if (eval(document.wireless_basic.mssid_2).value == eval(document.wireless_basic.mssid_6).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_2).value == eval(document.security_form.mssid_7).value ){
+				if (eval(document.wireless_basic.mssid_2).value == eval(document.wireless_basic.mssid_7).value ){
 					return false;	
 				}
 			}
 			else if (i == 4){
-				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_4).value ){
+				if (eval(document.wireless_basic.mssid_3).value == eval(document.wireless_basic.mssid_4).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_5).value ){
+				if (eval(document.wireless_basic.mssid_3).value == eval(document.wireless_basic.mssid_5).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_6).value ){
+				if (eval(document.wireless_basic.mssid_3).value == eval(document.wireless_basic.mssid_6).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_3).value == eval(document.security_form.mssid_7).value ){
+				if (eval(document.wireless_basic.mssid_3).value == eval(document.wireless_basic.mssid_7).value ){
 					return false;	
 				}
 			}
 			else if (i == 5){
-				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_5).value ){
+				if (eval(document.wireless_basic.mssid_4).value == eval(document.wireless_basic.mssid_5).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_6).value ){
+				if (eval(document.wireless_basic.mssid_4).value == eval(document.wireless_basic.mssid_6).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_4).value == eval(document.security_form.mssid_7).value ){
+				if (eval(document.wireless_basic.mssid_4).value == eval(document.wireless_basic.mssid_7).value ){
 					return false;	
 				}
 			}
 			else if (i == 6){
-				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_6).value ){
+				if (eval(document.wireless_basic.mssid_5).value == eval(document.wireless_basic.mssid_6).value ){
 					return false;	
 				}
-				if (eval(document.security_form.mssid_5).value == eval(document.security_form.mssid_7).value ){
+				if (eval(document.wireless_basic.mssid_5).value == eval(document.wireless_basic.mssid_7).value ){
 					return false;	
 				}
 			}
 			else if (i == 7){
-				if (eval(document.security_form.mssid_6).value == eval(document.security_form.mssid_7).value ){
+				if (eval(document.wireless_basic.mssid_6).value == eval(document.wireless_basic.mssid_7).value ){
 					return false;	
 				}
 			}
@@ -992,66 +1007,66 @@ function submit_apply()
 	    return false;
 	}
 	
-	if (((document.security_form.mssid_1.value == "") && (document.security_form.hidemssid_1.checked == true)) ||
-	    ((document.security_form.mssid_2.value == "") && (document.security_form.hidemssid_2.checked == true)) ||
-	    ((document.security_form.mssid_3.value == "") && (document.security_form.hidemssid_3.checked == true)) ||
-	    ((document.security_form.mssid_4.value == "") && (document.security_form.hidemssid_4.checked == true)) ||
-	    ((document.security_form.mssid_5.value == "") && (document.security_form.hidemssid_5.checked == true)) ||
-	    ((document.security_form.mssid_6.value == "") && (document.security_form.hidemssid_6.checked == true)) ||
-	    ((document.security_form.mssid_7.value == "") && (document.security_form.hidemssid_7.checked == true)) 
+	if (((document.wireless_basic.mssid_1.value == "") && (document.wireless_basic.hidemssid_1.checked == true)) ||
+	    ((document.wireless_basic.mssid_2.value == "") && (document.wireless_basic.hidemssid_2.checked == true)) ||
+	    ((document.wireless_basic.mssid_3.value == "") && (document.wireless_basic.hidemssid_3.checked == true)) ||
+	    ((document.wireless_basic.mssid_4.value == "") && (document.wireless_basic.hidemssid_4.checked == true)) ||
+	    ((document.wireless_basic.mssid_5.value == "") && (document.wireless_basic.hidemssid_5.checked == true)) ||
+	    ((document.wireless_basic.mssid_6.value == "") && (document.wireless_basic.hidemssid_6.checked == true)) ||
+	    ((document.wireless_basic.mssid_7.value == "") && (document.wireless_basic.hidemssid_7.checked == true)) 
 		 ){
 		alert("SSID field cannot empty when you select hide function");
 		return false;
 	}	
 		
-	if (((document.security_form.mssid_1.value == "") && (document.security_form.IntraBSS1.checked == true)) ||
-	    ((document.security_form.mssid_2.value == "") && (document.security_form.IntraBSS2.checked == true)) ||
-	    ((document.security_form.mssid_3.value == "") && (document.security_form.IntraBSS3.checked == true)) ||
-	    ((document.security_form.mssid_4.value == "") && (document.security_form.IntraBSS4.checked == true)) ||
-	    ((document.security_form.mssid_5.value == "") && (document.security_form.IntraBSS5.checked == true)) ||
-	    ((document.security_form.mssid_6.value == "") && (document.security_form.IntraBSS6.checked == true)) ||
-	    ((document.security_form.mssid_7.value == "") && (document.security_form.IntraBSS7.checked == true)) 
+	if (((document.wireless_basic.mssid_1.value == "") && (document.wireless_basic.IntraBSS1.checked == true)) ||
+	    ((document.wireless_basic.mssid_2.value == "") && (document.wireless_basic.IntraBSS2.checked == true)) ||
+	    ((document.wireless_basic.mssid_3.value == "") && (document.wireless_basic.IntraBSS3.checked == true)) ||
+	    ((document.wireless_basic.mssid_4.value == "") && (document.wireless_basic.IntraBSS4.checked == true)) ||
+	    ((document.wireless_basic.mssid_5.value == "") && (document.wireless_basic.IntraBSS5.checked == true)) ||
+	    ((document.wireless_basic.mssid_6.value == "") && (document.wireless_basic.IntraBSS6.checked == true)) ||
+	    ((document.wireless_basic.mssid_7.value == "") && (document.wireless_basic.IntraBSS7.checked == true)) 
 		 ){
 		alert("SSID field cannot empty");
 		return false;
 	}
 		
-	if (document.security_form.ssid.value == "")
+	if (document.wireless_basic.ssid.value == "")
 	{
 		alert("Please enter SSID!");
-		document.security_form.ssid.focus();
-		document.security_form.ssid.select();
+		document.wireless_basic.ssid.focus();
+		document.wireless_basic.ssid.select();
 		return false;
 	}
-	if(checkInjection(document.security_form.ssid.value) == false){
-		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
-		return false;
-	}
-	if(checkInjection(document.security_form.mssid_1.value) == false){
+	if(checkInjection(document.wireless_basic.ssid.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}
-	if(checkInjection(document.security_form.mssid_2.value) == false){
+	if(checkInjection(document.wireless_basic.mssid_1.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}
-	if(checkInjection(document.security_form.mssid_3.value) == false){
+	if(checkInjection(document.wireless_basic.mssid_2.value) == false){
+		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
+		return false;
+	}
+	if(checkInjection(document.wireless_basic.mssid_3.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}	
-	if(checkInjection(document.security_form.mssid_4.value) == false){
+	if(checkInjection(document.wireless_basic.mssid_4.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}	
-	if(checkInjection(document.security_form.mssid_5.value) == false){
+	if(checkInjection(document.wireless_basic.mssid_5.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}	
-	if(checkInjection(document.security_form.mssid_6.value) == false){
+	if(checkInjection(document.wireless_basic.mssid_6.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}	
-	if(checkInjection(document.security_form.mssid_7.value) == false){
+	if(checkInjection(document.wireless_basic.mssid_7.value) == false){
 		alert('System do not support specific \^\|\$ \,\"\`\%\&\; characters.');
 		return false;
 	}	
@@ -1063,7 +1078,7 @@ function submit_apply()
 
 	for (i = 1; i < 8; i++)
 	{
-		if (eval("document.security_form.mssid_"+i).value != "")
+		if (eval("document.wireless_basic.mssid_"+i).value != "")
 		{
 			if (i == 8)
 			{
@@ -1076,91 +1091,91 @@ function submit_apply()
 		}
 	}
 
-	document.security_form.bssid_num.value = submit_ssid_num;		
+	document.wireless_basic.bssid_num.value = submit_ssid_num;		
 
 
-	if(document.security_form.mssid_1.value == "")
-		document.security_form.bssid_num1.value = "0";
+	if(document.wireless_basic.mssid_1.value == "")
+		document.wireless_basic.bssid_num1.value = "0";
 	else
-		document.security_form.bssid_num1.value = "1";
+		document.wireless_basic.bssid_num1.value = "1";
 	
-	if(document.security_form.mssid_2.value == "")
-		document.security_form.bssid_num2.value = "0";
+	if(document.wireless_basic.mssid_2.value == "")
+		document.wireless_basic.bssid_num2.value = "0";
 	else
-		document.security_form.bssid_num2.value = "1";
+		document.wireless_basic.bssid_num2.value = "1";
 
-	if(document.security_form.mssid_3.value == "")
-		document.security_form.bssid_num3.value = "0";
+	if(document.wireless_basic.mssid_3.value == "")
+		document.wireless_basic.bssid_num3.value = "0";
 	else
-		document.security_form.bssid_num3.value = "1";	
+		document.wireless_basic.bssid_num3.value = "1";	
 
-	if(document.security_form.mssid_4.value == "")
-		document.security_form.bssid_num4.value = "0";
+	if(document.wireless_basic.mssid_4.value == "")
+		document.wireless_basic.bssid_num4.value = "0";
 	else
-		document.security_form.bssid_num4.value = "1";	
+		document.wireless_basic.bssid_num4.value = "1";	
 
-	if(document.security_form.mssid_5.value == "")
-		document.security_form.bssid_num5.value = "0";
+	if(document.wireless_basic.mssid_5.value == "")
+		document.wireless_basic.bssid_num5.value = "0";
 	else
-		document.security_form.bssid_num5.value = "1";	
+		document.wireless_basic.bssid_num5.value = "1";	
 
-	if(document.security_form.mssid_6.value == "")
-		document.security_form.bssid_num6.value = "0";
+	if(document.wireless_basic.mssid_6.value == "")
+		document.wireless_basic.bssid_num6.value = "0";
 	else
-		document.security_form.bssid_num6.value = "1";	
+		document.wireless_basic.bssid_num6.value = "1";	
 
-	if(document.security_form.mssid_7.value == "")
-		document.security_form.bssid_num7.value = "0";
+	if(document.wireless_basic.mssid_7.value == "")
+		document.wireless_basic.bssid_num7.value = "0";
 	else
-		document.security_form.bssid_num7.value = "1";	
+		document.wireless_basic.bssid_num7.value = "1";	
 
 
-	if(	(document.security_form.ssid.value == "") || 
-		(document.security_form.mssid_1.value == "") || 
-		(document.security_form.mssid_2.value == "") || 
-		(document.security_form.mssid_3.value == "") ||
-		(document.security_form.mssid_4.value == "") ||
-		(document.security_form.mssid_5.value == "") ||
-		(document.security_form.mssid_6.value == "") ||
-		(document.security_form.mssid_7.value == "") 
+	if(	(document.wireless_basic.ssid.value == "") || 
+		(document.wireless_basic.mssid_1.value == "") || 
+		(document.wireless_basic.mssid_2.value == "") || 
+		(document.wireless_basic.mssid_3.value == "") ||
+		(document.wireless_basic.mssid_4.value == "") ||
+		(document.wireless_basic.mssid_5.value == "") ||
+		(document.wireless_basic.mssid_6.value == "") ||
+		(document.wireless_basic.mssid_7.value == "") 
 	){
 		alert("Please enter SSID!");
 		return false;
 	}
 
-	if ((wirelessmode == 0) && (document.security_form.wlanguest.checked == true)){
-		if(document.security_form.wlanguestip.value == ""){
+	if ((wirelessmode == 0) && (document.wireless_basic.wlanguest.checked == true)){
+		if(document.wireless_basic.wlanguestip.value == ""){
 			alert("Error. IP address is empty.");
 			return false;
 		}
-		if(!checkIpAddrX(document.security_form.wlanguestip, false)){
+		if(!checkIpAddrX(document.wireless_basic.wlanguestip, false)){
 			alert('IP address format error.');
 			return false;
 		}
 		
-		if(document.security_form.wlanguestmask.value == ""){
+		if(document.wireless_basic.wlanguestmask.value == ""){
 			alert("Error. Invalid Subnet Mask.");
 			return false;
 		}
-	    if (!checkIpAddrX(document.security_form.wlanguestmask, true)){
+	    if (!checkIpAddrX(document.wireless_basic.wlanguestmask, true)){
 	    	alert("Error. Invalid Subnet Mask.");
 		    return false;
 		}
 		
-		if (document.security_form.guestmaxbw.value == "" ){
+		if (document.wireless_basic.guestmaxbw.value == "" ){
 			alert("The value of bandwitdth can not accept empty.");
 			return false;
 		}
 		
 		
 		//
-		if(document.security_form.wlanguestBW.checked == true){
+		if(document.wireless_basic.wlanguestBW.checked == true){
 			if(bm_en == 0){
 				alert("Please Enable Bandwidth Management");
 				return false;
 			}
 			
-			dguest=atoi(document.security_form.guestmaxbw.value, 1);
+			dguest=atoi(document.wireless_basic.guestmaxbw.value, 1);
 			ddbw=atoi(dBW, 1);
 			dubw=atoi(uBW, 1);	
 			if(ddbw >= dubw)
@@ -1176,13 +1191,13 @@ function submit_apply()
 			return false;
 			}
 			/*
-			if (document.security_form.guestmaxbw.value < 64 || document.security_form.guestmaxbw.value > 32768 ){
+			if (document.wireless_basic.guestmaxbw.value < 64 || document.wireless_basic.guestmaxbw.value > 32768 ){
 			alert("Please set value between 64~32768");
 			return false;
 			}*/
 		}
 		
-		if ( checkSubnet(document.security_form.wlanguestip.value, document.security_form.wlanguestmask.value, document.security_form.lanIP.value)) {
+		if ( checkSubnet(document.wireless_basic.wlanguestip.value, document.wireless_basic.wlanguestmask.value, document.wireless_basic.lanIP.value)) {
         		alert('Invalid  ip address!');
         		return false;
     	}
@@ -1193,7 +1208,7 @@ function submit_apply()
 		changed = 0;
 		
 		showWebMessage(2, "");
-		document.security_form.submit();
+		document.wireless_basic.submit();
 	}
 }
 
@@ -1230,7 +1245,7 @@ function LoadFields(MBSSID)
 
 	// Now, 4 Keys type are same, so only get the first key to display HEX or ASCII. It's OK
 	if (Key1Type[MBSSID] == "0"){
-		document.security_form.WEPKey_Code[1].checked = true; //hex
+		document.wireless_basic.WEPKey_Code[1].checked = true; //hex
 
 		if (Key1Str[MBSSID] != ""){
 			if (Key1Str[MBSSID].length > 10){
@@ -1258,7 +1273,7 @@ function LoadFields(MBSSID)
 			}		
 		}
 	}else{
-		document.security_form.WEPKey_Code[0].checked = true; //ASCII
+		document.wireless_basic.WEPKey_Code[0].checked = true; //ASCII
 
 		if (Key1Str[MBSSID] != ""){
 			if (Key1Str[MBSSID].length > 5){
@@ -1287,18 +1302,18 @@ function LoadFields(MBSSID)
 		}
 	}
 
-	document.security_form.DefWEPKey[0].checked= false;
-	document.security_form.DefWEPKey[1].checked= false;
-	document.security_form.DefWEPKey[2].checked= false;
-	document.security_form.DefWEPKey[3].checked= false;
+	document.wireless_basic.DefWEPKey[0].checked= false;
+	document.wireless_basic.DefWEPKey[1].checked= false;
+	document.wireless_basic.DefWEPKey[2].checked= false;
+	document.wireless_basic.DefWEPKey[3].checked= false;
 	
 	var defkey_index = parseInt(DefaultKeyID[MBSSID]) - 1;
 //	var defkey_index = parseInt(DefaultWEPKey[MBSSID]) - 1;
 	
 	if ( (defkey_index >= 0) && (defkey_index <= 3) ){
-	     document.security_form.DefWEPKey[defkey_index].checked= true;
+	     document.wireless_basic.DefWEPKey[defkey_index].checked= true;
 	}else {
-	     document.security_form.DefWEPKey[0].checked= true;	
+	     document.wireless_basic.DefWEPKey[0].checked= true;	
 	}     
 
 	// Static WEP 	
@@ -1331,16 +1346,16 @@ if  ((LastAuthMode == "WEPAUTO") || (LastAuthMode == "SHARED")){
 	if(AuthMode[MBSSID] == "WPAPSKWPA2PSK"){
 		if(wpsenable ==0){	
 		document.getElementById("security_mode").selectedIndex = 4;	
-	   	document.security_form.wpapsk_compatible.checked = true;	
+	   	document.wireless_basic.wpapsk_compatible.checked = true;	
 	   	}else{
 			document.getElementById("security_mode").selectedIndex = 3;
-	   		document.security_form.wpapsk_compatible.checked = true;	   	
+	   		document.wireless_basic.wpapsk_compatible.checked = true;	   	
 	   	}
 	}
  	
 	if(AuthMode[MBSSID] == "WPA1WPA2"){
 	   document.getElementById("security_mode").selectedIndex = 5;		
-	   document.security_form.wpa_compatible.checked = true;	
+	   document.wireless_basic.wpa_compatible.checked = true;	
 	}
  	
 	document.getElementById("passphrase").value = WPAPSK[MBSSID];
@@ -1348,16 +1363,16 @@ if  ((LastAuthMode == "WEPAUTO") || (LastAuthMode == "SHARED")){
 	document.getElementById("PMKCachePeriod").value = PMKCachePeriod[MBSSID];
 	
 	if(PreAuth[MBSSID] == "0")
-		document.security_form.PreAuthentication[0].checked = true;
+		document.wireless_basic.PreAuthentication[0].checked = true;
 	else
-		document.security_form.PreAuthentication[1].checked = true;
+		document.wireless_basic.PreAuthentication[1].checked = true;
 
 	//802.1x wep
 	if(IEEE8021X[MBSSID] == "1"){
 		if(EncrypType[MBSSID] == "WEP")
-			document.security_form.ieee8021x_wep[1].checked = true;
+			document.wireless_basic.ieee8021x_wep[1].checked = true;
 		else
-			document.security_form.ieee8021x_wep[0].checked = true;
+			document.wireless_basic.ieee8021x_wep[0].checked = true;
 	}
 	
 	document.getElementById("RadiusServerIP").value = RADIUS_Server[MBSSID];
@@ -1376,14 +1391,14 @@ function selectMBSSIDChanged()
 	if(changed){
 		ret = confirm("Are you sure to ignore changed?");
 		if(!ret){
-			document.security_form.ssidIndex.options.selectedIndex = old_MBSSID;
+			document.wireless_basic.ssidIndex.options.selectedIndex = old_MBSSID;
 			return false;
 		}
 		else
 			changed = 0;
 	}
 
-	var selected = document.security_form.ssidIndex.options.selectedIndex;
+	var selected = document.wireless_basic.ssidIndex.options.selectedIndex;
 
 	// backup for user cancel action
 	old_MBSSID = selected;
@@ -1704,24 +1719,24 @@ function initAll()
 	var PhyMode  = '<% getCfgZero(1, "WirelessMode"); %>';
 	var ht_bw = '<% getCfgZero(1, "HT_BW"); %>';
 
-	// HT BW
+	/* HT20 / HT20_40 */
 	if (1*ht_bw == 0)
 	{
-		document.security_form.n_bandwidth.options.selectedIndex = 0;
+		document.wireless_basic.n_bandwidth.options.selectedIndex = 0;
 		show_div(false, "div_extension_channel");		
-		document.security_form.n_extcha.disabled = true;
+		document.wireless_basic.n_extcha.disabled = true;
 	}
 	else
 	{
-		document.security_form.n_bandwidth.options.selectedIndex = 1;
+		document.wireless_basic.n_bandwidth.options.selectedIndex = 1;
 		show_div(true, "div_extension_channel");		
-		document.security_form.n_extcha.disabled = false;
+		document.wireless_basic.n_extcha.disabled = false;
 	}
 
-
+	/* 11bgn / 11an */
 	PhyMode = 1*PhyMode;
 	if (PhyMode == 9)
-		document.security_form.wirelessmode.options.selectedIndex = 0;
+		document.wireless_basic.wirelessmode.options.selectedIndex = 0;
 
 	var t = document.getElementById("GeneralRadioStatus");		
 	if (nv_radio_off == "ON")
@@ -1731,165 +1746,166 @@ function initAll()
 		
 /*
 	if (Enable_SSID == "1"){
-		document.security_form.enablessid.checked = true;
+		document.wireless_basic.enablessid.checked = true;
 	}else{
-		document.security_form.enablessid.checked = false;
+		document.wireless_basic.enablessid.checked = false;
 	}
 */
 
 	if (Enable_SSID1 == "1"){
-		document.security_form.enablessid1.checked = true;
+		document.wireless_basic.enablessid1.checked = true;
 	}else{
-		document.security_form.enablessid1.checked = false;
+		document.wireless_basic.enablessid1.checked = false;
 	}
 	if (Enable_SSID2 == "1"){
-		document.security_form.enablessid2.checked = true;
+		document.wireless_basic.enablessid2.checked = true;
 	}else{
-		document.security_form.enablessid2.checked = false;
+		document.wireless_basic.enablessid2.checked = false;
 	}
 	if (Enable_SSID3 == "1"){
-		document.security_form.enablessid3.checked = true;
+		document.wireless_basic.enablessid3.checked = true;
 	}else{
-		document.security_form.enablessid3.checked = false;
+		document.wireless_basic.enablessid3.checked = false;
 	}
 	if (Enable_SSID4 == "1"){
-		document.security_form.enablessid4.checked = true;
+		document.wireless_basic.enablessid4.checked = true;
 	}else{
-		document.security_form.enablessid4.checked = false;
+		document.wireless_basic.enablessid4.checked = false;
 	}
 	if (Enable_SSID5 == "1"){
-		document.security_form.enablessid5.checked = true;
+		document.wireless_basic.enablessid5.checked = true;
 	}else{
-		document.security_form.enablessid5.checked = false;
+		document.wireless_basic.enablessid5.checked = false;
 	}
 	if (Enable_SSID6 == "1"){
-		document.security_form.enablessid6.checked = true;
+		document.wireless_basic.enablessid6.checked = true;
 	}else{
-		document.security_form.enablessid6.checked = false;
+		document.wireless_basic.enablessid6.checked = false;
 	}
 	if (Enable_SSID7 == "1"){
-		document.security_form.enablessid7.checked = true;
+		document.wireless_basic.enablessid7.checked = true;
 	}else{
-		document.security_form.enablessid7.checked = false;
+		document.wireless_basic.enablessid7.checked = false;
 	}
 		
 	if (broadcastssidEnable == "1"){
-		document.security_form.hidessid.checked = true;
+		document.wireless_basic.hidessid.checked = true;
 	}else{
-		document.security_form.hidessid.checked = false;
+		document.wireless_basic.hidessid.checked = false;
 	}
 	if (broadcastssidEnable1 == "1"){
-		document.security_form.hidemssid_1.checked = true;
+		document.wireless_basic.hidemssid_1.checked = true;
 	}else{
-		document.security_form.hidemssid_1.checked = false;
+		document.wireless_basic.hidemssid_1.checked = false;
 	}
 	if (broadcastssidEnable2 == "1"){
-		document.security_form.hidemssid_2.checked = true;
+		document.wireless_basic.hidemssid_2.checked = true;
 	}else{
-		document.security_form.hidemssid_2.checked = false;
+		document.wireless_basic.hidemssid_2.checked = false;
 	}
 	if (broadcastssidEnable3 == "1"){
-		document.security_form.hidemssid_3.checked = true;
+		document.wireless_basic.hidemssid_3.checked = true;
 	}else{
-		document.security_form.hidemssid_3.checked = false;
+		document.wireless_basic.hidemssid_3.checked = false;
 	}
 	if (broadcastssidEnable4 == "1"){
-		document.security_form.hidemssid_4.checked = true;
+		document.wireless_basic.hidemssid_4.checked = true;
 	}else{
-		document.security_form.hidemssid_4.checked = false;
+		document.wireless_basic.hidemssid_4.checked = false;
 	}
 	if (broadcastssidEnable5 == "1"){
-		document.security_form.hidemssid_5.checked = true;
+		document.wireless_basic.hidemssid_5.checked = true;
 	}else{
-		document.security_form.hidemssid_5.checked = false;
+		document.wireless_basic.hidemssid_5.checked = false;
 	}
 	if (broadcastssidEnable6 == "1"){
-		document.security_form.hidemssid_6.checked = true;
+		document.wireless_basic.hidemssid_6.checked = true;
 	}else{
-		document.security_form.hidemssid_6.checked = false;
+		document.wireless_basic.hidemssid_6.checked = false;
 	}
 	if (broadcastssidEnable7 == "1"){
-		document.security_form.hidemssid_7.checked = true;
+		document.wireless_basic.hidemssid_7.checked = true;
 	}else{
-		document.security_form.hidemssid_7.checked = false;
+		document.wireless_basic.hidemssid_7.checked = false;
 	}
 	
-	if (Intra_BSS == "0"){
-		document.security_form.IntraBSS.checked = true;
+	if (Intra_BSS == "1"){
+		document.wireless_basic.IntraBSS.checked = true;
 	}else{
-		document.security_form.IntraBSS.checked = false;
+		document.wireless_basic.IntraBSS.checked = false;
 	}
 	
-	if (Intra_BSS1 == "0"){
-		document.security_form.IntraBSS1.checked = true;
+	if (Intra_BSS1 == "1"){
+		document.wireless_basic.IntraBSS1.checked = true;
 	}else{
-		document.security_form.IntraBSS1.checked = false;
+		document.wireless_basic.IntraBSS1.checked = false;
 	}
-	if (Intra_BSS2 == "0"){
-		document.security_form.IntraBSS2.checked = true;
+	if (Intra_BSS2 == "1"){
+		document.wireless_basic.IntraBSS2.checked = true;
 	}else{
-		document.security_form.IntraBSS2.checked = false;
+		document.wireless_basic.IntraBSS2.checked = false;
 	}
-	if (Intra_BSS3 == "0"){
-		document.security_form.IntraBSS3.checked = true;
+	if (Intra_BSS3 == "1"){
+		document.wireless_basic.IntraBSS3.checked = true;
 	}else{
-		document.security_form.IntraBSS3.checked = false;
+		document.wireless_basic.IntraBSS3.checked = false;
 	}
-	if (Intra_BSS4 == "0"){
-		document.security_form.IntraBSS4.checked = true;
+	if (Intra_BSS4 == "1"){
+		document.wireless_basic.IntraBSS4.checked = true;
 	}else{
-		document.security_form.IntraBSS4.checked = false;
+		document.wireless_basic.IntraBSS4.checked = false;
 	}
-	if (Intra_BSS5 == "0"){
-		document.security_form.IntraBSS5.checked = true;
+	if (Intra_BSS5 == "1"){
+		document.wireless_basic.IntraBSS5.checked = true;
 	}else{
-		document.security_form.IntraBSS5.checked = false;
+		document.wireless_basic.IntraBSS5.checked = false;
 	}
-	if (Intra_BSS6 == "0"){
-		document.security_form.IntraBSS6.checked = true;
+	if (Intra_BSS6 == "1"){
+		document.wireless_basic.IntraBSS6.checked = true;
 	}else{
-		document.security_form.IntraBSS6.checked = false;
+		document.wireless_basic.IntraBSS6.checked = false;
 	}
-	if (Intra_BSS7 == "0"){
-		document.security_form.IntraBSS7.checked = true;
+	if (Intra_BSS7 == "1"){
+		document.wireless_basic.IntraBSS7.checked = true;
 	}else{
-		document.security_form.IntraBSS7.checked = false;
+		document.wireless_basic.IntraBSS7.checked = false;
 	}
 
-	if (MainIntra_BSS == "0"){
-		document.security_form.MainIntraBSS.checked = true;
+	if (MainIntra_BSS == "1"){
+		document.wireless_basic.MainIntraBSS.checked = true;
 	}else{
-		document.security_form.MainIntraBSS.checked = false;
+		document.wireless_basic.MainIntraBSS.checked = false;
 	}
 
 
 	if (nv_channel == 0){
-		document.security_form.Auto_Channel.checked = true;
-		document.security_form.sz11gChannel.disabled = true;
+		document.wireless_basic.Auto_Channel.checked = true;
+		document.wireless_basic.sz11gChannel.disabled = true;
 	}else{
-		document.security_form.Auto_Channel.checked = false;
+		document.wireless_basic.Auto_Channel.checked = false;
 	}	
 
 	if (nv_channel != 0)
-	    document.security_form.sz11gChannel.options.selectedIndex = nv_channel-1;
-	    	
+	    document.wireless_basic.sz11gChannel.options.selectedIndex = nv_channel-1;
+/*	    	
 	if (1*apcli_include == 1)
 	{
-		document.security_form.mssid_7.disabled = true;
+		document.wireless_basic.mssid_7.disabled = true;
 	}	    	
+*/
 		
 // WLAN Guest
 	if (wlan_guest_en == 1)
-		document.security_form.wlanguest.checked = true;
+		document.wireless_basic.wlanguest.checked = true;
 	else
-		document.security_form.wlanguest.checked = false;
+		document.wireless_basic.wlanguest.checked = false;
 		
 	if (wlan_guest_bw_en == 0)
-		document.security_form.wlanguestBW.checked = false;
+		document.wireless_basic.wlanguestBW.checked = false;
 	else
-		document.security_form.wlanguestBW.checked = true;		
+		document.wireless_basic.wlanguestBW.checked = true;		
 		
-	//document.security_form.guest_priority.selectedIndex = wlan_guest_bw_priority - 1;
+	//document.wireless_basic.guest_priority.selectedIndex = wlan_guest_bw_priority - 1;
 	
 	//route mode
 	if (wirelessmode == 0){
@@ -1925,6 +1941,9 @@ function initAll()
 	show_div(true, "div_note2_id");
 
 	wirelessModeChange();
+	updateChannel();
+	SetChannelIdx(nv_channel)
+	refreshExtChannel();
 	
 	makeRequest("/goform/wirelessGetSecurity", "n/a", securityHandler);
 	parent.adjustMyFrameHeight();
@@ -1932,14 +1951,14 @@ function initAll()
 
 function UpdateMBSSIDList()
 {
-	document.security_form.ssidIndex.length = 0;
+	document.wireless_basic.ssidIndex.length = 0;
 
 	for(var i=0; i<SSID.length; i++){
-		var j = document.security_form.ssidIndex.options.length;	
-		document.security_form.ssidIndex.options[j] = new Option(SSID[i], i, false, false);
+		var j = document.wireless_basic.ssidIndex.options.length;	
+		document.wireless_basic.ssidIndex.options[j] = new Option(SSID[i], i, false, false);
 	}
 	
-	document.security_form.ssidIndex.options.selectedIndex = defaultShownMBSSID;
+	document.wireless_basic.ssidIndex.options.selectedIndex = defaultShownMBSSID;
 	old_MBSSID = defaultShownMBSSID;
 }
 
@@ -1977,10 +1996,10 @@ function parse40WEPkey(str)
 	var fields_str = new Array();
 	fields_str = str.split("\r");
 
-	document.security_form.wep_key_1.value = fields_str[0];
-	document.security_form.wep_key_2.value = fields_str[1];
-	document.security_form.wep_key_3.value = fields_str[2];
-	document.security_form.wep_key_4.value = fields_str[3];
+	document.wireless_basic.wep_key_1.value = fields_str[0];
+	document.wireless_basic.wep_key_2.value = fields_str[1];
+	document.wireless_basic.wep_key_3.value = fields_str[2];
+	document.wireless_basic.wep_key_4.value = fields_str[3];
 }
 
 function parse128WEPkey(str)
@@ -1988,10 +2007,10 @@ function parse128WEPkey(str)
 	var fields_str = new Array();
 	fields_str = str.split("\r");
 
-	document.security_form.wep_key_1.value = fields_str[0];
-	document.security_form.wep_key_2.value = fields_str[0];
-	document.security_form.wep_key_3.value = fields_str[0];
-	document.security_form.wep_key_4.value = fields_str[0];
+	document.wireless_basic.wep_key_1.value = fields_str[0];
+	document.wireless_basic.wep_key_2.value = fields_str[0];
+	document.wireless_basic.wep_key_3.value = fields_str[0];
+	document.wireless_basic.wep_key_4.value = fields_str[0];
 }
 
 function get40wepeyHandler(){
@@ -2017,9 +2036,9 @@ function get128wepeyHandler(){
 function generate_wep()
 {
 	var passphrase;
-	passphrase = document.security_form.wep_passphrase.value;
+	passphrase = document.wireless_basic.wep_passphrase.value;
 
-	document.security_form.WEPKey_Code[1].checked = true; //Hex	
+	document.wireless_basic.WEPKey_Code[1].checked = true; //Hex	
 	if (document.getElementById("wep_encry").selectedIndex == 1){ // get 128 bits WEP KEY
 		makeRequest("/goform/wifiget128wepkey", passphrase, get128wepeyHandler);
 	}else{ // get 40 bits WEP KEY
@@ -2029,7 +2048,7 @@ function generate_wep()
 
 function clickwlanguest()
 {
-	if (document.security_form.wlanguest.checked == true){
+	if (document.wireless_basic.wlanguest.checked == true){
 		show_div(true, "div_wlanguestIP_id");
 		show_div(true, "div_wlanguestMASK_id");
 		show_div(false, "div_wlanguestBW_id");
@@ -2048,7 +2067,7 @@ function clickwlanguest()
 </script>
 </head>
 <body onload="initAll()">
-<form method="post" name="security_form" action="/goform/wifiAPGeneral">
+<form method="post" name="wireless_basic" action="/goform/wifiAPGeneral">
 <div id="table">
 <ul>
 <li class="table_content">
@@ -2076,6 +2095,7 @@ function clickwlanguest()
 <input type="hidden" name="bssid_num5" value="">
 <input type="hidden" name="bssid_num6" value="">
 <input type="hidden" name="bssid_num7" value="">
+
 
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
@@ -2361,7 +2381,7 @@ function clickwlanguest()
 <tr>
 <td id="AdvanceHTChannelBW" width="180" nowrap>Channel BandWidth :</td>
 <td width="150">
-<select name="n_bandwidth" id="n_bandwidth" size="1" onChange="Channel_BandWidth_onChange()">
+<select name="n_bandwidth" id="n_bandwidth" size="1" onChange="Channel_BandWidth_onChange();updateChannel();refreshExtChannel()">
 <option value=0>20 &nbsp; </option>
 <option value=1>20/40 </option>
 </td>
@@ -2376,8 +2396,7 @@ function clickwlanguest()
 <tr>
 <td id ="GeneralChannelSelect" width="180" nowrap>Channel Selection :</td>
 <td width="150">
-	<select id="sz11gChannel" name="sz11gChannel" size="1">
-	<% getWlan11gChannelsFreq(); %>
+	<select id="sz11gChannel" name="sz11gChannel" size="1" onChange="refreshExtChannel()" >
 	</select>                        
 </td>
 <td width="*">
@@ -2395,7 +2414,6 @@ function clickwlanguest()
 <td id="AdvanceHTExtChannel" width="180" nowrap>Extension Channel :</td>
 <td width="150">
 	<select id="n_extcha" name="n_extcha" size="1">
-	<% getWlan11gExtChannelsFreq(); %>
 	</select>
 </td>
 <td width="*">&nbsp;</td>
@@ -2414,11 +2432,10 @@ function clickwlanguest()
 </table>
 </li>
 
-<!-- Main Intra-BSS/SSID checkbox -->
 <li class="w_text">
 <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
 <tr>
-<td width="40%"><input name="MainIntraBSS" type="checkbox" value="0" />
+<td width="40%"><input name="MainIntraBSS" type="checkbox" value=1 />
 <font id ="Main_IntraBSS">Communication between wireless clients with different SSIDs</font> 
 </td>
 <td>&nbsp;</td>
