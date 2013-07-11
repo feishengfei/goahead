@@ -3391,188 +3391,34 @@ if (strcmp(wds_mode,"1")){
 /* goform/wifiAdvanced */
 static void wifiAdvanced(webs_t wp, char_t *path, char_t *query)
 {
-#if 1	
-	char_t	*n_mode, *n_bandwidth, *n_gi, *n_mcs, *n_rdg, *n_extcha, *n_amsdu;
-	char_t	*n_autoba, *n_badecline;
-	char_t	*tx_stream, *rx_stream;
-	char_t     *dtim,*tx_burst,*antenna_mode, *distance;
-	int is_n = 0;
-    int tmp_distance;
+	char_t *dtim;
+	char_t *tx_power;
+	char_t *bcn_int;
 
-
-	char_t *rts = websGetVar(wp, T("rts"), T("2346"));
-
-	char_t *fragment = websGetVar(wp, T("fragment"), T("2346"));
-		
-	char_t *wIntraBSS = websGetVar(wp, T("IntraBSS"), T(""));
+	dtim = websGetVar(wp,T("dtim"),T("1"));
+	tx_power = websGetVar(wp, T("tx_power"), T("0"));
+	bcn_int = websGetVar(wp, T("bcn_int"), T("100"));
 
 	char ModeTmpBuf[32];
     ezplib_get_attr_val("wl_mode_rule", 0, "mode", ModeTmpBuf, 32, EZPLIB_USE_CLI);
-// Tommy, Enable Intra-BSS, 2009/4/1 02:58
-	if (0 == strlen(wIntraBSS)) {
-		wIntraBSS = "1";
-	}else{
-		wIntraBSS = "0";
-	}
-
-	char_t *tx_power = websGetVar(wp, T("tx_power"), T("0"));
-
-	char_t *wirelessmode = websGetVar(wp, T("wirelessmode"), T("9")); //9: bgn mode
-	
-	char *wifimode = atoi(wirelessmode);
-	
-//	nvram_bufset(RT2860_NVRAM, "WirelessMode", wirelessmode);
-
-	n_mode = websGetVar(wp, T("n_mode"), T("0"));
-	n_bandwidth = websGetVar(wp, T("n_bandwidth"), T("0"));
-	n_gi = websGetVar(wp, T("n_gi"), T("0"));
-	//n_mcs = websGetVar(wp, T("n_mcs"), T("33"));
-	//n_rdg = websGetVar(wp, T("n_rdg"), T("0"));
-	n_extcha = websGetVar(wp, T("n_extcha"), T("0"));
-	dtim = websGetVar(wp,T("dtim"),T("1"));
-    /* Added by Bruce Liu, 2013-1-9 */
-    distance = websGetVar(wp, T("distance"),T("1"));
-    /* Ended by Bruce Liu */
-	tx_burst = websGetVar(wp,T("tx_burst"),T("1"));
-	antenna_mode = websGetVar(wp,T("antenna_mode"),T("1"));
-	//n_amsdu = websGetVar(wp, T("n_amsdu"), T("0"));
-	//n_autoba = websGetVar(wp, T("n_autoba"), T("0"));
-	//n_badecline = websGetVar(wp, T("n_badecline"), T("0"));
-	//tx_stream = websGetVar(wp, T("tx_stream"), T("0"));
-	//rx_stream = websGetVar(wp, T("rx_stream"), T("0"));
-/*	
-	if (!strncmp(wirelessmode, "4", 2))
-		nvram_bufset(RT2860_NVRAM, "BasicRate", "351");
-	else if (!strncmp(wirelessmode, "8", 2) || !strncmp(wirelessmode, "9", 2))
-		is_n = 1;
-		
-// deal WDS phy mode problem
-#if 1
-	char *wdsphymode = nvram_bufget(RT2860_NVRAM, "WdsPhyMode");
-
-	if (wifimode == 0){ // 11 B G mixed
-		if (strncmp(wdsphymode, "CCK", 4) && strncmp(wdsphymode, "OFDM", 5)){
-			nvram_bufset(RT2860_NVRAM, "WdsPhyMode", "OFDM");
-		}	
-	}else if (wifimode == 1){ // 11 B
-		nvram_bufset(RT2860_NVRAM, "WdsPhyMode", "CCK");
-	}else if (wifimode == 4){ // 11 G
-		if (strncmp(wdsphymode, "CCK", 4) && strncmp(wdsphymode, "OFDM", 5)){
-			nvram_bufset(RT2860_NVRAM, "WdsPhyMode", "OFDM");
-		}
-	}else if (wifimode == 9){ // 11 B G N mixed
-	// None
-	}
-#endif
-*/
-
-	//HT_OpMode, HT_BW, HT_GI, HT_MCS, HT_RDG, HT_EXTCHA, HT_AMSDU, HT_TxStream, HT_RxStream
-//	if (is_n) {
-//		nvram_bufset(RT2860_NVRAM, "HT_OpMode", n_mode);
-#if 0
-		ezplib_replace_attr("wl_advanced_rule", 0, "opmode", n_mode);
-
-//		nvram_bufset(RT2860_NVRAM, "HT_BW", n_bandwidth);
-
-		ezplib_replace_attr("wl_advanced_rule", 0, "htbw", n_bandwidth);
-	
-//		nvram_bufset(RT2860_NVRAM, "HT_GI", n_gi);
-
-		ezplib_replace_attr("wl_advanced_rule", 0, "gi", n_gi);
-	
-		//nvram_bufset(RT2860_NVRAM, "HT_MCS", n_mcs);
-		//nvram_bufset(RT2860_NVRAM, "HT_RDG", n_rdg);
-//		nvram_bufset(RT2860_NVRAM, "HT_EXTCHA", n_extcha);
-
-		ezplib_replace_attr("wl_advanced_rule", 0, "extcha", n_extcha);
-		
-		//nvram_bufset(RT2860_NVRAM, "HT_AMSDU", n_amsdu);
-		//nvram_bufset(RT2860_NVRAM, "HT_AutoBA", n_autoba);
-		//nvram_bufset(RT2860_NVRAM, "HT_BADecline", n_badecline);
-//	}			
-
-	//nvram_bufset(RT2860_NVRAM, "HT_TxStream", tx_stream);
-	//nvram_bufset(RT2860_NVRAM, "HT_RxStream", rx_stream);
-
-//	nvram_bufset(RT2860_NVRAM, "RTSThreshold", rts);
-
-	ezplib_replace_attr("wl_advanced_rule", 0, "rts", rts);	
-
-//	nvram_bufset(RT2860_NVRAM, "FragThreshold", fragment);
-
-	ezplib_replace_attr("wl_advanced_rule", 0, "frag", fragment);	
-	ezplib_replace_attr("wl_advanced_rule", 0, "dtim", dtim);
-    
-    /* Added by Bruce Liu, 2013-1-9 */
-    tmp_distance = atoi(distance);
-    tmp_distance = tmp_distance * 1000; /* convert unit from km to m */
-    sprintf(distance, "%d", tmp_distance);
-    ezplib_replace_attr("wl_advanced_rule", 0, "distance", distance);
-    /* Ended by Bruce Liu */
-    
-	ezplib_replace_attr("wl_advanced_rule", 0, "txburst", tx_burst);	
-	ezplib_replace_attr("wl_advanced_rule", 0, "antennamode", antenna_mode);	
-	
-	// Tommy, Enable Intra-BSS, 2009/4/1 02:58
-	//nvram_bufset(RT2860_NVRAM, "NoForwarding",   atoi(wIntraBSS)   ? "1" : "0" );			
-//	nvram_bufset(RT2860_NVRAM, "NoForwarding", wIntraBSS);
-#endif
 	if (!strcmp(ModeTmpBuf, "ap")){
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "opmode", n_mode);
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "htbw", n_bandwidth);
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "gi", n_gi);
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "extcha", n_extcha);
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "rts", rts);
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "frag", fragment);
 		ezplib_replace_attr("wl_ap_advanced_rule", 0, "dtim", dtim);
-			
-		tmp_distance = atoi(distance);
-		tmp_distance = tmp_distance * 1000; /* convert unit from km to m */
-		sprintf(distance, "%d", tmp_distance);
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "distance", distance);
-			
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "txburst", tx_burst);	
-		ezplib_replace_attr("wl_ap_advanced_rule", 0, "antennamode", antenna_mode);
-
-		ezplib_replace_attr("wl_ap_basic_rule", 0, "bisolation", wIntraBSS);
 		ezplib_replace_attr("wl_ap_basic_rule", 0, "txpower", tx_power);
-		ezplib_replace_attr("wl_ap_basic_rule", 0, "net_mode", wirelessmode);
-	}else {
-		ezplib_replace_attr("wl_advanced_rule", 0, "opmode", n_mode);
-		ezplib_replace_attr("wl_advanced_rule", 0, "htbw", n_bandwidth);
-		ezplib_replace_attr("wl_advanced_rule", 0, "gi", n_gi);
-		ezplib_replace_attr("wl_advanced_rule", 0, "extcha", n_extcha);
-		ezplib_replace_attr("wl_advanced_rule", 0, "rts", rts);
-		ezplib_replace_attr("wl_advanced_rule", 0, "frag", fragment);
+		ezplib_replace_attr("wl_ap_advanced_rule", 0, "bcn", bcn_int);
+	}
+	else {
 		ezplib_replace_attr("wl_advanced_rule", 0, "dtim", dtim);
-			
-		tmp_distance = atoi(distance);
-		tmp_distance = tmp_distance * 1000; /* convert unit from km to m */
-		sprintf(distance, "%d", tmp_distance);
-		ezplib_replace_attr("wl_advanced_rule", 0, "distance", distance);
-			
-		ezplib_replace_attr("wl_advanced_rule", 0, "txburst", tx_burst);	
-		ezplib_replace_attr("wl_advanced_rule", 0, "antennamode", antenna_mode);
-		ezplib_replace_attr("wl_basic_rule", 0, "bisolation", wIntraBSS);
 		ezplib_replace_attr("wl_basic_rule", 0, "txpower", tx_power);
-		ezplib_replace_attr("wl_basic_rule", 0, "net_mode", wirelessmode);
+		ezplib_replace_attr("wl_advanced_rule", 0, "bcn", bcn_int);
 	}
 
-	system("/sbin/ezp-wl0-ctrl advance");	
-	
-	system("/sbin/ezp-wl0-ctrl basic");
-//	nvram_commit(RT2860_NVRAM);
 	nvram_commit();	
+	//TODO by Frank Zhou
 
-	//initInternet();
-//	reconfig_wireless(RT2860_NVRAM);
-		
-	
 #if 1//Arthur Chow 2009-03-06		
 		setWebMessage(0, NULL);
 #endif			
 	websRedirect(wp, "local/advance/wlan_advance.asp");	
-#endif	
 }	
 
 

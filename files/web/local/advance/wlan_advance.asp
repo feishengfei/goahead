@@ -67,6 +67,23 @@ function CheckValue()
 {
 	if (submit_apply() == false)
 	    return false;
+	/* Check beacon interval */
+	if (document.wireless_advanced.bcn_int.value == "" )
+	{
+		alert('Please specify Beacon Interval');
+		document.wireless_advanced.bcn_int.focus();
+		document.wireless_advanced.bcn_int.select();
+		return false;
+	}
+	if (isNaN(document.wireless_advanced.bcn_int.value) || 
+		document.wireless_advanced.bcn_int.value < 100 || 
+		document.wireless_advanced.bcn_int.value > 1000)
+	{
+		alert('Invalid Beacon Interval');
+		document.wireless_advanced.bcn_int.focus();
+		document.wireless_advanced.bcn_int.select();
+		return false;
+	}
 	
 	// Check RTS
 	if (document.wireless_advanced.rts.value == "" )
@@ -202,7 +219,7 @@ function wirelessModeChange()
 //		show_div(true, "div_ht_phy_1_4");
 		show_div(false, "div_ht_phy_1_6");
 		
-		Channel_BandWidth_onClick();
+//		Channel_BandWidth_onClick();
 		
 		show_div(false, "div_ht_phy_2_1");
 		show_div(false, "div_ht_phy_2_2");
@@ -380,6 +397,7 @@ function initValue()
 	document.wireless_advanced.dtim.value = dtim;
 	
 	document.wireless_advanced.distance.value = distance;
+	document.wireless_advanced.bcn_int.value = beacon;
 
 	if (txPower == 0){
 		document.wireless_advanced.tx_power.options.selectedIndex = 0;
@@ -659,7 +677,7 @@ function initValue()
 <tr>                
 <td width="40%" id ="AdvanceBeaconInterval">Beacon Interval</td>
 <td>
-	<input type=text maxlength="15" size="15" value="" name="bcn_int" />
+	<input type=text maxlength="15" size="15" name="bcn_int" />(100-1000)ms
 </td>	
 </tr>  
 </table>
