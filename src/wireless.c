@@ -47,6 +47,7 @@ void WPSRestart(void); // Aaron 2009/8/13 move to here!
 
 #define CHANNEL_MAX_2G 32
 #define MAC_ADDR_LENGTH 18
+#define STATIONLIST_MAX_2G 32
 
 typedef struct Channel_s
 {
@@ -54,23 +55,22 @@ typedef struct Channel_s
 	unsigned int frequency;
 }Channel_t;
 
-typedef struct StationInfo_s
-{
-	unsigned char Addr[MAC_ADDR_LENGTH];
-	unsigned int  ConnectedTime;
-}StationInfo_t;
-
-
 typedef struct ChannelListInfo_s
 {
 	int num;
 	Channel_t channel_list[CHANNEL_MAX_2G];
 }ChannelListInfo_t;
 
+typedef struct StationInfo_s
+{
+	unsigned char Addr[MAC_ADDR_LENGTH];
+	unsigned int  ConnectedTime;
+}StationInfo_t;
+
 typedef struct StationListInfo_s
 {
 	int sta_num;
-	StationInfo_t *sta_list;
+	StationInfo_t sta_list[STATIONLIST_MAX_2G];
 }StationListInfo_t;
 
 /*
@@ -1817,285 +1817,150 @@ static int getmacrepeaterStaInfo(int eid, webs_t wp, int argc, char_t **argv)
           }
     }
 
+/*
+typedef struct StationInfo_s
+{
+	unsigned char Addr[MAC_ADDR_LENGTH];
+	unsigned int  ConnectedTime;
+}StationInfo_t;
 
+typedef struct StationListInfo_s
+{
+	int sta_num;
+	StationInfo_t sta_list[STATIONLIST_MAX_2G];
+}StationListInfo_t;
+*/
+static int getTimeZone()
+{
+	int timezone = 0;
+
+	char TempBuf[32];
+	ezplib_get_attr_val("ntp_rule", 0, "zone", TempBuf, 32, EZPLIB_USE_CLI);
+
+	if (!strcmp(TempBuf, "UTC12")){
+		timezone = 60 * 60 * (-12);
+	}else if (!strcmp(TempBuf, "UTC11")){
+		timezone = 60 * 60 * (-11);
+	}else if (!strcmp(TempBuf, "UTC10")){
+		timezone = 60 * 60 * (-10);
+	}else if (!strcmp(TempBuf, "NAST9NADT,M3.2.0/2,M11.1.0/2")){
+		timezone = 60 * 60 * (-9);
+	}else if (!strcmp(TempBuf, "PST8PDT,M3.2.0/2,M11.1.0/2")){
+		timezone = 60 * 60 * (-8);
+	}else if (!strcmp(TempBuf, "UTC7")){
+		timezone = 60 * 60 * (-7);
+	}else if (!strcmp(TempBuf, "UTC6")){
+		timezone = 60 * 60 * (-6);
+	}else if (!strcmp(TempBuf, "CST6CDT,M3.2.0/2,M11.1.0/2")){
+		timezone = 60 * 60 * (-6);
+	}else if (!strcmp(TempBuf, "UTC5")){
+		timezone = 60 * 60 * (-5);
+	}else if (!strcmp(TempBuf, "EST5EDT,M3.2.0/2,M11.1.0/2")){
+		timezone = 60 * 60 * (-5);
+	}else if (!strcmp(TempBuf, "UTC4")){
+		timezone = 60 * 60 * (-4);
+	}else if (!strcmp(TempBuf, "AST4ADT,M3.2.0/2,M11.1.0/2")){
+		timezone = 60 * 60 * (-4);
+	}else if (!strcmp(TempBuf, "BRWST4BRWDT,M10.3.0/0,M2.5.0/0")){
+		timezone = 60 * 60 * (-4);
+	}else if (!strcmp(TempBuf, "NST3:30NDT,M3.2.0/0:01,M11.1.0/0:01")){
+		timezone = 60 * 60 * (-3);
+	}else if (!strcmp(TempBuf, "WGST3WGDT,M3.5.6/22,M10.5.6/23")){
+		timezone = 60 * 60 * (-3);
+	}else if (!strcmp(TempBuf, "BRST3BRDT,M10.3.0/0,M2.5.0/0")){
+		timezone = 60 * 60 * (-3);
+	}else if (!strcmp(TempBuf, "UTC3")){
+		timezone = 60 * 60 * (-10);
+	}else if (!strcmp(TempBuf, "UTC2")){
+		timezone = 60 * 60 * (-2);
+	}else if (!strcmp(TempBuf, "STD1DST,M3.5.0/2,M10.5.0/2")){
+		timezone = 60 * 60 * (-1);
+	}else if (!strcmp(TempBuf, "UTC0")){
+		timezone = 60 * 60 * 0;
+	}else if (!strcmp(TempBuf, "GMT0BST,M3.5.0/2,M10.5.0/2")){
+		timezone = 60 * 60 * 0;
+	}else if (!strcmp(TempBuf, "UTC-1")){
+		timezone = 60 * 60 * 1;
+	}else if (!strcmp(TempBuf, "STD-1DST,M3.5.0/2,M10.5.0/2")){
+		timezone = 60 * 60 * 1;
+	}else if (!strcmp(TempBuf, "UTC-2")){
+		timezone = 60 * 60 * 2;
+	}else if (!strcmp(TempBuf, "STD-2DST,M3.5.0/2,M10.5.0/2")){
+		timezone = 60 * 60 * 2;
+	}else if (!strcmp(TempBuf, "UTC-3")){
+		timezone = 60 * 60 * 3;
+	}else if (!strcmp(TempBuf, "UTC-4")){
+		timezone = 60 * 60 * 4;
+	}else if (!strcmp(TempBuf, "UTC-5")){
+		timezone = 60 * 60 * 5;
+	}else if (!strcmp(TempBuf, "UTC-5:30")){
+		timezone = 19800 ;
+	}else if (!strcmp(TempBuf, "UTC-6")){
+		timezone = 60 * 60 * 6;
+	}else if (!strcmp(TempBuf, "UTC-7")){
+		timezone = 60 * 60 * 7;
+	}else if (!strcmp(TempBuf, "UTC-8")){
+		timezone = 60 * 60 * 8;
+	}else if (!strcmp(TempBuf, "UTC-9")){
+		timezone = 60 * 60 * 9;
+	}else if (!strcmp(TempBuf, "CST-9:30CST,M10.5.0/2,M3.5.0/3")){
+		timezone = 60 * 60 * 9;
+	}else if (!strcmp(TempBuf, "UTC-10")){
+		timezone = 60 * 60 * 10;
+	}else if (!strcmp(TempBuf, "STD-10DST,M10.5.0/2,M3.5.0/2")){
+		timezone = 60 * 60 * 10;
+	}else if (!strcmp(TempBuf, "UTC-11")){
+		timezone = 60 * 60 * 11;
+	}else if (!strcmp(TempBuf, "UTC-12")){
+		timezone = 60 * 60 * 12;
+	}else if (!strcmp(TempBuf, "STD-12DST,M10.5.0/2,M3.5.0/2")){
+		timezone = 60 * 60 * 12;
+	}
+	return timezone;
+}
 
 // Tommy , 2009/1/21 05:43
 static int getwifiStaInfo(int eid, webs_t wp, int argc, char_t **argv)
 {
-	int updays, uphours, upminutes, upseconds;
-	unsigned long conntimes;	
-	int i, s;
-	struct iwreq iwr;
-	RT_802_11_MAC_TABLE table = {0};
+	int i;
+	long sec;
+	date d;
+	int timezone = getTimeZone();
 
-	s = socket(AF_INET, SOCK_DGRAM, 0);
-	strncpy(iwr.ifr_name, "rai0", IFNAMSIZ);
-	iwr.u.data.pointer = (caddr_t) &table;
-	if (s < 0) {
-		websError(wp, 500, "ioctl sock failed!");
-		return -1;
+	StationListInfo_t sli;
+	//feak
+	sli.sta_num=12;
+	srandom(time(NULL));
+	for (i = 0; i < sli.sta_num; i++) {
+		sprintf(sli.sta_list[i].Addr, "%02X:%02X:%02X:%02X:%02X:%02X", 
+			random()%256, random()%256, random()%256, 
+			random()%256, random()%256, random()%256 );
+		sli.sta_list[i].ConnectedTime = time(NULL) + random()%24*3600;
 	}
 
-	if (ioctl(s, RTPRIV_IOCTL_GET_MAC_TABLE, &iwr) < 0) {
-		websError(wp, 500, "ioctl -> RTPRIV_IOCTL_GET_MAC_TABLE failed!");
-		close(s);
-		return -1;
-	}
-      // printf("%s====>%d table.Num=%lu\n",__func__,__LINE__,table.Num);
-	
-#if 1
-	for (i = 0; i < table.Num; i++) {
+	for (i = 0; i < sli.sta_num; i++) {
 		websWrite(wp, T("<li class=\"w_text\">"));
 		websWrite(wp, T("<table width=\"95%%\" border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"0\">"));
 		websWrite(wp, T("<tr >"));
 		websWrite(wp, T("<td  width=\"10%%\"><center><span class='table_left'>%d</span></center></td>"),
 				i+1);			
-		websWrite(wp, T("<td  width=\"30%%\"><center><span class='table_font'>%02X:%02X:%02X:%02X:%02X:%02X</span></center></td>"),
-				table.Entry[i].Addr[0], table.Entry[i].Addr[1],
-				table.Entry[i].Addr[2], table.Entry[i].Addr[3],
-				table.Entry[i].Addr[4], table.Entry[i].Addr[5]);
-#if 1
+		websWrite(wp, T("<td  width=\"30%%\"><center><span class='table_font'>%s</span></center></td>"),
+				sli.sta_list[i].Addr);
 		websWrite(wp, T("<td  width=\"65%%\"><center><span class='table_right'>"));
-//printf("AssociationTime = %lu\n",table.Entry[i].AssociationTime);
-	//unsigned long sec;
-	long sec;
-	date d;
-	int timezone;
-	
-#if 1
-		char TempBuf[32];
-       //printf("%s====>%d\n",__func__,__LINE__);
-		
-		ezplib_get_attr_val("ntp_rule", 0, "zone", TempBuf, 32, EZPLIB_USE_CLI);
-		
-		if (!strcmp(TempBuf, "UTC12")){
-			timezone = 60 * 60 * (-12);
-		}else if (!strcmp(TempBuf, "UTC11")){
-			timezone = 60 * 60 * (-11);
-		}else if (!strcmp(TempBuf, "UTC10")){
-			timezone = 60 * 60 * (-10);
-		}else if (!strcmp(TempBuf, "NAST9NADT,M3.2.0/2,M11.1.0/2")){
-			timezone = 60 * 60 * (-9);
-		}else if (!strcmp(TempBuf, "PST8PDT,M3.2.0/2,M11.1.0/2")){
-			timezone = 60 * 60 * (-8);
-		}else if (!strcmp(TempBuf, "UTC7")){
-			timezone = 60 * 60 * (-7);
-		}else if (!strcmp(TempBuf, "UTC6")){
-			timezone = 60 * 60 * (-6);
-		}else if (!strcmp(TempBuf, "CST6CDT,M3.2.0/2,M11.1.0/2")){
-			timezone = 60 * 60 * (-6);
-		}else if (!strcmp(TempBuf, "UTC5")){
-			timezone = 60 * 60 * (-5);
-		}else if (!strcmp(TempBuf, "EST5EDT,M3.2.0/2,M11.1.0/2")){
-			timezone = 60 * 60 * (-5);
-		}else if (!strcmp(TempBuf, "UTC4")){
-			timezone = 60 * 60 * (-4);
-		}else if (!strcmp(TempBuf, "AST4ADT,M3.2.0/2,M11.1.0/2")){
-			timezone = 60 * 60 * (-4);
-		}else if (!strcmp(TempBuf, "BRWST4BRWDT,M10.3.0/0,M2.5.0/0")){
-			timezone = 60 * 60 * (-4);
-		}else if (!strcmp(TempBuf, "NST3:30NDT,M3.2.0/0:01,M11.1.0/0:01")){
-			timezone = 60 * 60 * (-3);
-		}else if (!strcmp(TempBuf, "WGST3WGDT,M3.5.6/22,M10.5.6/23")){
-			timezone = 60 * 60 * (-3);
-		}else if (!strcmp(TempBuf, "BRST3BRDT,M10.3.0/0,M2.5.0/0")){
-			timezone = 60 * 60 * (-3);
-		}else if (!strcmp(TempBuf, "UTC3")){
-			timezone = 60 * 60 * (-10);
-		}else if (!strcmp(TempBuf, "UTC2")){
-			timezone = 60 * 60 * (-2);
-		}else if (!strcmp(TempBuf, "STD1DST,M3.5.0/2,M10.5.0/2")){
-			timezone = 60 * 60 * (-1);
-		}else if (!strcmp(TempBuf, "UTC0")){
-			timezone = 60 * 60 * 0;
-		}else if (!strcmp(TempBuf, "GMT0BST,M3.5.0/2,M10.5.0/2")){
-			timezone = 60 * 60 * 0;
-		}else if (!strcmp(TempBuf, "UTC-1")){
-			timezone = 60 * 60 * 1;
-		}else if (!strcmp(TempBuf, "STD-1DST,M3.5.0/2,M10.5.0/2")){
-			timezone = 60 * 60 * 1;
-		}else if (!strcmp(TempBuf, "UTC-2")){
-			timezone = 60 * 60 * 2;
-		}else if (!strcmp(TempBuf, "STD-2DST,M3.5.0/2,M10.5.0/2")){
-			timezone = 60 * 60 * 2;
-		}else if (!strcmp(TempBuf, "UTC-3")){
-			timezone = 60 * 60 * 3;
-		}else if (!strcmp(TempBuf, "UTC-4")){
-			timezone = 60 * 60 * 4;
-		}else if (!strcmp(TempBuf, "UTC-5")){
-			timezone = 60 * 60 * 5;
-		}else if (!strcmp(TempBuf, "UTC-5:30")){
-			timezone = 19800 ;
-		}else if (!strcmp(TempBuf, "UTC-6")){
-			timezone = 60 * 60 * 6;
-		}else if (!strcmp(TempBuf, "UTC-7")){
-			timezone = 60 * 60 * 7;
-		}else if (!strcmp(TempBuf, "UTC-8")){
-			timezone = 60 * 60 * 8;
-		}else if (!strcmp(TempBuf, "UTC-9")){
-			timezone = 60 * 60 * 9;
-		}else if (!strcmp(TempBuf, "CST-9:30CST,M10.5.0/2,M3.5.0/3")){
-			timezone = 60 * 60 * 9;
-		}else if (!strcmp(TempBuf, "UTC-10")){
-			timezone = 60 * 60 * 10;
-		}else if (!strcmp(TempBuf, "STD-10DST,M10.5.0/2,M3.5.0/2")){
-			timezone = 60 * 60 * 10;
-		}else if (!strcmp(TempBuf, "UTC-11")){
-			timezone = 60 * 60 * 11;
-		}else if (!strcmp(TempBuf, "UTC-12")){
-			timezone = 60 * 60 * 12;
-		}else if (!strcmp(TempBuf, "STD-12DST,M10.5.0/2,M3.5.0/2")){
-			timezone = 60 * 60 * 12;
-		}
-#else	
-	//char *tz = nvram_bufget(RT2860_NVRAM, "TZ");
-	char *tz;
-	
-	if (!strcmp(tz, "UCT_-11")){
-		timezone = 60 * 60 * (-11);
-	}else if (!strcmp(tz, "UCT_-10")){
-		timezone = 60 * 60 * (-10);
-	}else if (!strcmp(tz, "NAS_-09")){
-		timezone = 60 * 60 * (-9);
-	}else if (!strcmp(tz, "PST_-08")){
-		timezone = 60 * 60 * (-8);
-	}else if (!strcmp(tz, "MST_-07")){
-		timezone = 60 * 60 * (-7);
-	}else if ( (!strcmp(tz, "CST_-06")) || (!strcmp(tz, "UCT_-06")) ){
-		timezone = 60 * 60 * (-6);
-	}else if ( (!strcmp(tz, "UCT_-05")) || (!strcmp(tz, "EST_-05")) ){
-		timezone = 60 * 60 * (-5);
-	}else if ( (!strcmp(tz, "AST_-04")) || (!strcmp(tz, "UCT_-04")) ){
-		timezone = 60 * 60 * (-4);
-	}else if ( (!strcmp(tz, "UCT_-03")) || (!strcmp(tz, "EBS_-03")) ){
-		timezone = 60 * 60 * (-3);
-	}else if (!strcmp(tz, "NOR_-02")){
-		timezone = 60 * 60 * (-2);
-	}else if (!strcmp(tz, "EUT_-01")){
-		timezone = 60 * 60 * (-1);
-	}else if ( (!strcmp(tz, "UCT_000")) || (!strcmp(tz, "GMT_000")) ){
-		timezone = 60 * 60 * 0;
-	}else if ( (!strcmp(tz, "MET_001")) || (!strcmp(tz, "MEZ_001")) || (!strcmp(tz, "UCT_001")) ){
-		timezone = 60 * 60 * 1;
-	}else if ( (!strcmp(tz, "EET_002")) || (!strcmp(tz, "SAS_002")) ){
-		timezone = 60 * 60 * 2;
-	}else if ( (!strcmp(tz, "IST_003")) || (!strcmp(tz, "MSK_003")) ){
-		timezone = 60 * 60 * 3;		
-	}else if (!strcmp(tz, "UCT_004")){
-		timezone = 60 * 60 * 4;
-	}else if (!strcmp(tz, "UCT_005")){
-		timezone = 60 * 60 * 5;
-	}else if (!strcmp(tz, "UCT_006")){
-		timezone = 60 * 60 * 6;
-	}else if (!strcmp(tz, "UCT_007")){
-		timezone = 60 * 60 * 7;
-	}else if ( (!strcmp(tz, "CST_008")) || (!strcmp(tz, "CCT_008")) || (!strcmp(tz, "SST_008")) || (!strcmp(tz, "AWS_008")) ){
-		timezone = 60 * 60 * 8;																								
-	}else if ( (!strcmp(tz, "JST_009")) || (!strcmp(tz, "KST_009")) ){
-		timezone = 60 * 60 * 9;
-	}else if ( (!strcmp(tz, "UCT_010")) || (!strcmp(tz, "AES_010"))){
-		timezone = 60 * 60 * 10;
-	}else if (!strcmp(tz, "UCT_011")){
-		timezone = 60 * 60 * 11;		
-	}else if ( (!strcmp(tz, "UCT_012")) || (!strcmp(tz, "NZS_012")) ){
-		timezone = 60 * 60 * 12;
-	}
-#endif
 
-	sec = table.Entry[i].ConnectedTime - 1; // -1 : if (pEntry->StaConnectTime == 1){ } in linux-2.6.21.x\drivers\net\wireless\rt2860v2\ap\ap.c
-	
-// Deal with time zone	
-	sec = sec + timezone;
-
-	d=sec2date(sec);
-	
-#if 0
-printf("%s%d:%s%d:%s%d %d/%s%d/%s%d", (d.hour < 10) ? "0" : "", d.hour,
-					(d.min < 10) ? "0" : "", d.min,
-					(d.sec < 10) ? "0" : "", d.sec,
-					 d.year,
-					(d.month < 10) ? "0" : "", d.month,
-					(d.day < 10) ? "0" : "", d.day);	
-#endif	
-	//printf("##### The date of AssociationTime: %d-%d-%d %d:%d:%d\n",d.year,d.month,d.day,d.hour,d.min,d.sec);
-	//websWrite(wp, T("%d:%d:%d %d/%d/%d"), d.hour,d.min,d.sec,d.year,d.month,d.day);
-/*	websWrite(wp, T("%s%d:%s%d:%s%d %d/%s%d/%s%d"), (d.hour < 10) ? "0" : "", d.hour,
-							(d.min < 10) ? "0" : "", d.min,
-							(d.sec < 10) ? "0" : "", d.sec,
-							 d.year,
-							(d.month < 10) ? "0" : "", d.month,
-							(d.day < 10) ? "0" : "", d.day);
-*/
-   websWrite(wp, T("%s%d:%s%d:%s%d "), (d.hour < 10) ? "0" : "", d.hour,
-                                                        (d.min < 10) ? "0" : "", d.min,
-                                                        (d.sec < 10) ? "0" : "", d.sec);
-#else
-// Tommy , add Sation Connected Time ,2009/1/20 11:38
-		conntimes = (unsigned long)table.Entry[i].ConnectedTime;
-
-		updays = (int) conntimes / (60*60*24);
-		upminutes = (int) conntimes / 60;
-		uphours = (upminutes / 60) % 24;
-		upminutes %= 60;
-		upseconds = ((int) conntimes)%60;
-	
-		websWrite(wp, T("<td  width=\"65%%\"><center><span class='table_right'>"));
-		
-		if (updays){
-			websWrite(wp, T("%d day%s, %d hour%s, %d min%s, %d sec%s") , 
-			updays, (updays != 1) ? "s" : "",
-			uphours, (uphours != 1) ? "s" : "",
-			upminutes, (upminutes != 1) ? "s" : "",
-			upseconds, (upseconds != 1) ? "s" : "");
-		}else if (uphours){
-			websWrite(wp, T("%d hour%s, %d min%s, %d sec%s") , 
-			uphours, (uphours != 1) ? "s" : "",
-			upminutes, (upminutes != 1) ? "s" : "",
-			upseconds, (upseconds != 1) ? "s" : "");
-		}else if (upminutes){
-	        	websWrite(wp, T("%d min%s, %d sec%s") , 
-			upminutes, (upminutes != 1) ? "s" : "",
-			upseconds, (upseconds != 1) ? "s" : "");
-		}else{
-			websWrite(wp, T("%d sec%s") , 
-			upseconds, (upseconds != 1) ? "s" : "");
-		}	
-#endif			
+		sec = sli.sta_list[i].ConnectedTime;
+		// Deal with time zone	
+		sec = sec + timezone;
+		d=sec2date(sec);
+		websWrite(wp, T("%s%d:%s%d:%s%d "), (d.hour < 10) ? "0" : "", d.hour,
+				(d.min < 10) ? "0" : "", d.min,
+				(d.sec < 10) ? "0" : "", d.sec);
 		websWrite(wp, T("</span></center></td>"));
 		websWrite(wp, T("</tr>"));  			                                   
 		websWrite(wp, T("</table>"));
 		websWrite(wp, T("</li>"));
 	}
-	
-#else
-	for (i = 0; i < table.Num; i++) {
-		websWrite(wp, T("<tr><td>%d</td>"),
-				i);			
-		websWrite(wp, T("<td>%02X:%02X:%02X:%02X:%02X:%02X</td>"),
-				table.Entry[i].Addr[0], table.Entry[i].Addr[1],
-				table.Entry[i].Addr[2], table.Entry[i].Addr[3],
-				table.Entry[i].Addr[4], table.Entry[i].Addr[5]);
-				
-printf("MAC = %02X:%02X:%02X:%02X:%02X:%02X\n",table.Entry[i].Addr[0], table.Entry[i].Addr[1],
-				table.Entry[i].Addr[2], table.Entry[i].Addr[3],
-				table.Entry[i].Addr[4], table.Entry[i].Addr[5]);
-								
-		websWrite(wp, T("<td>%d</td><td>%d</td><td>%d</td>"),
-				table.Entry[i].Aid, table.Entry[i].Psm, table.Entry[i].MimoPs);
-		websWrite(wp, T("<td>%d</td><td>%s</td><td>%d</td><td>%d</td></tr>"),
-				table.Entry[i].TxRate.field.MCS,
-				(table.Entry[i].TxRate.field.BW == 0)? "20M":"40M",
-				table.Entry[i].TxRate.field.ShortGI, table.Entry[i].TxRate.field.STBC);
-// Tommy , add Sation Connected Time ,2009/1/20 11:38
-printf("ConnectedTime = %10d\n",table.Entry[i].ConnectedTime);			
-		websWrite(wp, T("<td>%10d</td>"),
-				table.Entry[i].ConnectedTime);			
-// Tommy , add association Time ,2009/1/20 11:38
-printf("AssociationTime = %lu\n",table.Entry[i].AssociationTime);
-		websWrite(wp, T("<td>%10lu</td></tr>"),table.Entry[i].AssociationTime); // sysuptime + association time				
-	}
-#endif	
-	close(s);
+
 	return 0;
 }
 
